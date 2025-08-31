@@ -287,10 +287,30 @@ class WordPressClient {
   }
 
   async getProjectsByService(serviceSlug: string): Promise<Project[]> {
-    return this.fetchFromAPI('wp/v2/proyectos', ProjectSchema, { 
+    // First, get the service by slug to get its ID
+    const services = await this.fetchFromAPI('wp/v2/servicios', ServiceSchema, { 
       status: 'publish',
-      'meta_key': 'related_service',
-      'meta_value': serviceSlug
+      slug: serviceSlug
+    });
+    
+    if (services.length === 0) {
+      return [];
+    }
+    
+    const serviceId = services[0].id;
+    
+    // Get all projects and filter by related_service ID
+    const allProjects = await this.fetchFromAPI('wp/v2/proyectos', ProjectSchema, { 
+      status: 'publish'
+    });
+    
+    // Filter projects where related_service ID matches the service ID
+    return allProjects.filter(project => {
+      const relatedServiceId = project.acf?.related_service || project.acf_fields?.related_service;
+      return relatedServiceId && 
+             (relatedServiceId === serviceId || 
+              relatedServiceId.id === serviceId ||
+              relatedServiceId.ID === serviceId);
     });
   }
 

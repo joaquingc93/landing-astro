@@ -32,8 +32,8 @@ export async function getStaticPaths() {
         }
       },
       {
-        slug: 'concrete-flooring', 
-        title: { rendered: 'Concrete Flooring' },
+        slug: 'concrete-and-floors', 
+        title: { rendered: 'Concrete and Floors' },
         content: { rendered: '<p>Expert concrete flooring solutions for residential and commercial properties. We specialize in decorative concrete, polished concrete, and durable flooring systems.</p>' },
         excerpt: { rendered: 'Professional concrete flooring installation and finishing services' },
         acf: {
@@ -132,6 +132,25 @@ const relatedProjects = await getStaticProps<Project[]>(
   () => wordpressClient.getProjectsByService(slug || ''),
   []
 );
+
+// Collect all images from all related projects
+const allProjectImages: Array<{url: string, alt: string, projectTitle: string}> = [];
+
+relatedProjects.forEach(project => {
+  // Get all images from this project (project_image_1 through project_image_6)
+  for (let i = 1; i <= 6; i++) {
+    const imageField = project.acf_fields?.[`project_image_${i}`];
+    if (imageField && imageField.url) {
+      allProjectImages.push({
+        url: imageField.url,
+        alt: imageField.alt || `${project.title.rendered} - Image ${i}`,
+        projectTitle: project.title.rendered
+      });
+    }
+  }
+});
+
+
 
 // Generate page metadata
 const pageTitle = `${currentService.title.rendered} Services in Florida | RenovaLink`;
@@ -276,14 +295,13 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
   <!-- Service Details -->
   <section class="py-20 bg-white">
     <div class="container">
-      <div class="grid lg:grid-cols-2 gap-16 items-start">
+      <div class="max-w-6xl mx-auto">
         
         <!-- Content -->
-        <div>
-          <h2 class="heading-md mb-8 animate-on-scroll">Professional {currentService.title.rendered}</h2>
+          <h2 class="heading-md mb-8 animate-on-scroll text-center">Professional {currentService.title.rendered}</h2>
           
           <!-- Service Content -->
-          <div class="prose prose-lg max-w-none text-neutral-700 mb-8 animate-on-scroll">
+          <div class="prose prose-lg max-w-none text-neutral-700 mb-8 animate-on-scroll text-center">
             <div set:html={currentService.content.rendered} />
           </div>
           
@@ -291,9 +309,12 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
           {currentService.acf?.service_features && currentService.acf.service_features.length > 0 && (
             <div class="mb-8 animate-on-scroll">
               <h3 class="text-2xl font-semibold mb-8">What's Included:</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {currentService.acf.service_features.map((feature, index) => {
                   const imageField = currentService.acf_fields?.[`service_image_${index + 1}`];
+                  const description = currentService.acf?.[`service_feature_description_${index + 1}`] || 
+                                    currentService.acf_fields?.[`service_feature_description_${index + 1}`] ||
+                                    "Professional service delivery with quality materials and expert craftsmanship.";
                   return (
                     <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-neutral-100">
                       <!-- Feature Image -->
@@ -315,14 +336,6 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
                             </div>
                           </div>
                         )}
-                        
-                        <!-- Overlay on hover -->
-                        <div class="absolute inset-0 bg-primary-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </div>
                       </div>
                       
                       <!-- Feature Content -->
@@ -338,7 +351,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
                           <div>
                             <h4 class="font-semibold text-neutral-900 mb-2">{feature}</h4>
                             <p class="text-sm text-neutral-600 leading-relaxed">
-                              Professional service delivery with quality materials and expert craftsmanship.
+                              {description}
                             </p>
                           </div>
                         </div>
@@ -407,7 +420,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
           -->
           
           <!-- CTA -->
-          <div class="animate-on-scroll">
+          <div class="animate-on-scroll text-center">
             <a 
               href="/contacto" 
               class="btn-primary text-lg px-8 py-4 shadow-lg hover:shadow-xl"
@@ -418,47 +431,13 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
               </svg>
             </a>
           </div>
-        </div>
         
-        <!-- Service Gallery -->
-        <div class="animate-on-scroll">
-          {currentService.acf?.service_gallery && currentService.acf.service_gallery.length > 0 ? (
-            <div class="space-y-6">
-              <h3 class="text-2xl font-semibold">Project Gallery</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentService.acf.service_gallery.map((image, index) => (
-                  <div class="aspect-4-3 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <img 
-                      src={getOptimizedImageUrl(image, 400, 300)}
-                      alt={image.alt || `${currentService.title.rendered} project ${index + 1}`}
-                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <!-- Fallback placeholder -->
-            <div class="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-8 text-center">
-              <div class={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${currentServiceDetails.color} rounded-2xl mb-6 shadow-lg`}>
-                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d={currentServiceDetails.icon} />
-                </svg>
-              </div>
-              <h3 class="text-2xl font-semibold text-primary-800 mb-4">{currentService.title.rendered}</h3>
-              <p class="text-primary-700">
-                Professional service delivery with certified quality assurance and comprehensive project management.
-              </p>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   </section>
   
-  <!-- Related Projects Carousel -->
-  {relatedProjects.length > 0 && (
+  <!-- Project Images Carousel -->
+  {allProjectImages.length > 0 ? (
     <section class="py-20 bg-neutral-50">
       <div class="container">
         <div class="text-center mb-16">
@@ -473,83 +452,18 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
           <!-- Carousel Wrapper -->
           <div class="overflow-hidden rounded-2xl shadow-2xl">
             <div id="projects-carousel" class="flex transition-transform duration-500 ease-in-out">
-              {relatedProjects.slice(0, 8).map((project, index) => (
-                <div class="min-w-full lg:min-w-1/2 xl:min-w-1/3 px-4">
-                  <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg h-full">
-                    <!-- Large Project Image -->
+              {allProjectImages.map((image, index) => (
+                <div class="w-full lg:w-1/2 xl:w-1/3 flex-shrink-0 px-4">
+                  <div class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                    <!-- Project Image -->
                     <div class="aspect-video overflow-hidden relative">
-                      {project.acf_fields?.project_image_1?.url ? (
-                        <img 
-                          src={project.acf_fields.project_image_1.url}
-                          alt={project.acf_fields.project_image_1.alt || project.title.rendered}
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                          <svg class="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                      )}
+                      <img 
+                        src={image.url}
+                        alt={image.alt}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                      />
                       
-                      <!-- Project Badge -->
-                      <div class="absolute top-4 left-4">
-                        <span class="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-                          Project #{index + 1}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <!-- Project Details -->
-                    <div class="p-6 flex-1 flex flex-col">
-                      <h3 class="text-xl font-bold mb-3 text-neutral-900">{project.title.rendered}</h3>
-                      
-                      <p class="text-neutral-600 text-sm mb-4 leading-relaxed line-clamp-3 flex-1">
-                        {project.excerpt?.rendered ? 
-                          project.excerpt.rendered.replace(/<[^>]*>/g, '') : 
-                          project.content.rendered.replace(/<[^>]*>/g, '').slice(0, 150) + '...'
-                        }
-                      </p>
-                      
-                      <!-- Project Metadata -->
-                      <div class="flex items-center justify-between text-sm text-neutral-500 mb-4">
-                        {project.acf?.project_location && (
-                          <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span>{project.acf.project_location}</span>
-                          </div>
-                        )}
-                        
-                        {project.acf?.project_duration && (
-                          <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>{project.acf.project_duration}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <!-- View Details Button -->
-                      <div class="flex items-center justify-between mt-auto">
-                        <button class="text-primary-600 font-medium hover:text-primary-700 transition-colors flex items-center gap-1 group">
-                          View Details 
-                          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-                        
-                        <!-- Project Type Badge -->
-                        {project.acf?.project_category_select && (
-                          <span class="bg-neutral-100 text-neutral-700 px-2 py-1 rounded text-xs font-medium capitalize">
-                            {project.acf.project_category_select}
-                          </span>
-                        )}
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -579,6 +493,30 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
           <!-- Carousel Indicators -->
           <div class="flex justify-center mt-8 space-x-2" id="carousel-indicators">
             <!-- Indicators will be generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <!-- No projects fallback -->
+    <section class="py-20 bg-neutral-50">
+      <div class="container">
+        <div class="text-center">
+          <h2 class="heading-md mb-6">Recent {currentService.title.rendered} Projects</h2>
+          <div class="bg-white rounded-2xl p-12 shadow-lg max-w-2xl mx-auto">
+            <div class="w-24 h-24 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-12 h-12 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Project Gallery Coming Soon</h3>
+            <p class="text-neutral-600 mb-6">We're currently updating our project showcase. In the meantime, contact us to see examples of our recent {currentService.title.rendered.toLowerCase()} work.</p>
+            <a href="/contacto" class="btn-primary">
+              View Our Work
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
@@ -716,10 +654,11 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
     const nextButton = document.getElementById('carousel-next');
     const indicatorsContainer = document.getElementById('carousel-indicators');
     
-    if (carousel && prevButton && nextButton) {
+    if (carousel && prevButton && nextButton && indicatorsContainer) {
       const slides = carousel.children;
       let currentIndex = 0;
       const totalSlides = slides.length;
+      
       
       // Get slides per view based on screen size
       function getSlidesPerView() {
@@ -763,9 +702,9 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         const maxIndex = totalSlides - slidesPerView;
         currentIndex = Math.max(0, Math.min(index, maxIndex));
         
-        const slideWidth = carousel.offsetWidth / slidesPerView;
-        const translateX = -(currentIndex * slideWidth);
-        carousel.style.transform = `translateX(${translateX}px)`;
+        // Calculate translation based on percentage
+        const translatePercent = -(currentIndex * (100 / slidesPerView));
+        carousel.style.transform = `translateX(${translatePercent}%)`;
         
         // Update button states
         prevButton.disabled = currentIndex === 0;

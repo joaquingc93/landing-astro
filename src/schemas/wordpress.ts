@@ -97,6 +97,11 @@ export const ServiceSchema = WPPostSchema.extend({
     service_feature_3: z.string().optional(),
     service_feature_4: z.string().optional(),
     service_feature_5: z.string().optional(),
+    service_feature_description_1: z.string().optional(),
+    service_feature_description_2: z.string().optional(),
+    service_feature_description_3: z.string().optional(),
+    service_feature_description_4: z.string().optional(),
+    service_feature_description_5: z.string().optional(),
     service_image_1: z.union([z.number(), z.string()]).optional(),
     service_image_2: z.union([z.number(), z.string()]).optional(),
     service_image_3: z.union([z.number(), z.string()]).optional(),
@@ -114,7 +119,7 @@ export const ProjectSchema = WPPostSchema.extend({
     project_type: z.string().optional(), // Project Type field
     project_location: z.string().optional(),
     project_duration: z.string().optional(),
-    related_service: z.string().optional(), // Related Service field
+    related_service: z.union([z.number(), z.string()]).optional(), // Related Service field - can be ID or string
     project_before_image: z.union([z.number(), z.string()]).optional(), // Image ID or empty string
     project_after_image: z.union([z.number(), z.string()]).optional(), // Image ID or empty string
     project_image_1: z.union([z.number(), z.string()]).optional(),

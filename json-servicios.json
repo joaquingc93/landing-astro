@@ -1,0 +1,968 @@
+[
+    {
+        "id": 91,
+        "date": "2025-08-30T21:36:01",
+        "date_gmt": "2025-08-30T21:36:01",
+        "guid": {
+            "rendered": "http://renovalinksite.local/?post_type=servicios&#038;p=91"
+        },
+        "modified": "2025-08-30T21:36:01",
+        "modified_gmt": "2025-08-30T21:36:01",
+        "slug": "residential-cleaning",
+        "status": "publish",
+        "type": "servicios",
+        "link": "http://renovalinksite.local/servicios/residential-cleaning/",
+        "title": {
+            "rendered": "Residential Cleaning"
+        },
+        "content": {
+            "rendered": "\n<p>Professional deep cleaning and residential maintenance services.<br>Specializing in post-construction cleaning, windows, carpets, and deep disinfection with certified eco-friendly products.</p>\n\n\n\n<p>Our trained team uses professional equipment and specialized technicians to ensure impeccable results with every service.</p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>Professional deep cleaning and residential maintenance services.Specializing in post-construction cleaning, windows, carpets, and deep disinfection with certified eco-friendly products. Our trained team uses professional equipment and specialized technicians to ensure impeccable results with every service.</p>\n",
+            "protected": false
+        },
+        "featured_media": 0,
+        "template": "",
+        "meta": {
+            "_acf_changed": true
+        },
+        "tipos-servicio": [],
+        "class_list": [
+            "post-91",
+            "servicios",
+            "type-servicios",
+            "status-publish",
+            "hentry"
+        ],
+        "acf": {
+            "service_icon": 92,
+            "short_description": "Professional deep cleaning and specialized residential maintenance services",
+            "service_feature_1": "Post-construction cleaning and remodeling",
+            "service_feature_2": "Professional window and glass cleaning",
+            "service_feature_3": "Deep carpet cleaning and disinfection",
+            "service_feature_4": "Deep disinfection with ecological products",
+            "service_feature_5": "Regular scheduled maintenance",
+            "service_image_1": 96,
+            "service_image_2": 93,
+            "service_image_3": 94,
+            "service_image_4": 95,
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalinksite.local/wp-json"
+        },
+        "acf_fields": {
+            "service_icon": {
+                "ID": 92,
+                "id": 92,
+                "title": "house-cleaning_4326454",
+                "filename": "house-cleaning_4326454.png",
+                "filesize": 28827,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                "link": "http://renovalinksite.local/servicios/residential-cleaning/house-cleaning_4326454/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "house-cleaning_4326454",
+                "status": "inherit",
+                "uploaded_to": 91,
+                "date": "2025-08-30 20:47:03",
+                "modified": "2025-08-30 20:47:03",
+                "menu_order": 0,
+                "mime_type": "image/png",
+                "type": "image",
+                "subtype": "png",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 512,
+                "height": 512,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454-150x150.png",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454-300x300.png",
+                    "medium-width": 300,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "medium_large-width": 512,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "large-width": 512,
+                    "large-height": 512,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "1536x1536-width": 512,
+                    "1536x1536-height": 512,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "2048x2048-width": 512,
+                    "2048x2048-height": 512,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454-400x300.png",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "project-large-width": 512,
+                    "project-large-height": 512,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/house-cleaning_4326454.png",
+                    "hero-background-width": 512,
+                    "hero-background-height": 512
+                }
+            },
+            "short_description": "Professional deep cleaning and specialized residential maintenance services",
+            "service_feature_1": "Post-construction cleaning and remodeling",
+            "service_feature_2": "Professional window and glass cleaning",
+            "service_feature_3": "Deep carpet cleaning and disinfection",
+            "service_feature_4": "Deep disinfection with ecological products",
+            "service_feature_5": "Regular scheduled maintenance",
+            "service_image_1": {
+                "ID": 96,
+                "id": 96,
+                "title": "pexels-lamiko-3616746",
+                "filename": "pexels-lamiko-3616746-scaled.jpg",
+                "filesize": 459105,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-scaled.jpg",
+                "link": "http://renovalinksite.local/servicios/residential-cleaning/pexels-lamiko-3616746/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "pexels-lamiko-3616746",
+                "status": "inherit",
+                "uploaded_to": 91,
+                "date": "2025-08-30 21:04:10",
+                "modified": "2025-08-30 21:04:10",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1707,
+                "height": 2560,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-200x300.jpg",
+                    "medium-width": 200,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-768x1152.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 1152,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-683x1024.jpg",
+                    "large-width": 683,
+                    "large-height": 1024,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-1024x1536.jpg",
+                    "1536x1536-width": 1024,
+                    "1536x1536-height": 1536,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-1365x2048.jpg",
+                    "2048x2048-width": 1365,
+                    "2048x2048-height": 2048,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-lamiko-3616746-1920x1080.jpg",
+                    "hero-background-width": 1920,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_2": {
+                "ID": 93,
+                "id": 93,
+                "title": "pexels-mastercowley-634007",
+                "filename": "pexels-mastercowley-634007-scaled.jpg",
+                "filesize": 517025,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-scaled.jpg",
+                "link": "http://renovalinksite.local/servicios/residential-cleaning/pexels-mastercowley-634007/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "pexels-mastercowley-634007",
+                "status": "inherit",
+                "uploaded_to": 91,
+                "date": "2025-08-30 21:03:48",
+                "modified": "2025-08-30 21:03:48",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 2560,
+                "height": 1707,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-300x200.jpg",
+                    "medium-width": 300,
+                    "medium-height": 200,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-768x512.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-1024x683.jpg",
+                    "large-width": 1024,
+                    "large-height": 683,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-1536x1024.jpg",
+                    "1536x1536-width": 1536,
+                    "1536x1536-height": 1024,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-2048x1365.jpg",
+                    "2048x2048-width": 2048,
+                    "2048x2048-height": 1365,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-mastercowley-634007-1920x1080.jpg",
+                    "hero-background-width": 1920,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_3": {
+                "ID": 94,
+                "id": 94,
+                "title": "pexels-michelangelo-buonarroti-4176226",
+                "filename": "pexels-michelangelo-buonarroti-4176226-scaled.jpg",
+                "filesize": 508372,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-scaled.jpg",
+                "link": "http://renovalinksite.local/servicios/residential-cleaning/pexels-michelangelo-buonarroti-4176226/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "pexels-michelangelo-buonarroti-4176226",
+                "status": "inherit",
+                "uploaded_to": 91,
+                "date": "2025-08-30 21:03:55",
+                "modified": "2025-08-30 21:03:55",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1709,
+                "height": 2560,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-200x300.jpg",
+                    "medium-width": 200,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-768x1151.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 1151,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-683x1024.jpg",
+                    "large-width": 683,
+                    "large-height": 1024,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-1025x1536.jpg",
+                    "1536x1536-width": 1025,
+                    "1536x1536-height": 1536,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-1367x2048.jpg",
+                    "2048x2048-width": 1367,
+                    "2048x2048-height": 2048,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-michelangelo-buonarroti-4176226-1920x1080.jpg",
+                    "hero-background-width": 1920,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_4": {
+                "ID": 95,
+                "id": 95,
+                "title": "pexels-daria-liudnaya-7354545",
+                "filename": "pexels-daria-liudnaya-7354545-scaled.jpg",
+                "filesize": 274519,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-scaled.jpg",
+                "link": "http://renovalinksite.local/servicios/residential-cleaning/pexels-daria-liudnaya-7354545/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "pexels-daria-liudnaya-7354545",
+                "status": "inherit",
+                "uploaded_to": 91,
+                "date": "2025-08-30 21:04:04",
+                "modified": "2025-08-30 21:04:04",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 2048,
+                "height": 2560,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-240x300.jpg",
+                    "medium-width": 240,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-768x960.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 960,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-819x1024.jpg",
+                    "large-width": 819,
+                    "large-height": 1024,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-1229x1536.jpg",
+                    "1536x1536-width": 1229,
+                    "1536x1536-height": 1536,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-1639x2048.jpg",
+                    "2048x2048-width": 1639,
+                    "2048x2048-height": 2048,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/pexels-daria-liudnaya-7354545-1920x1080.jpg",
+                    "hero-background-width": 1920,
+                    "hero-background-height": 1080
+                }
+            },
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalinksite.local/wp-json"
+        },
+        "featured_image_url": null,
+        "_links": {
+            "self": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios/91",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios"
+                }
+            ],
+            "about": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/types/servicios"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/media?parent=91"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "service_type",
+                    "embeddable": true,
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/tipos-servicio?post=91"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    },
+    {
+        "id": 64,
+        "date": "2025-08-24T15:16:22",
+        "date_gmt": "2025-08-24T15:16:22",
+        "guid": {
+            "rendered": "http://renovalinksite.local/?post_type=servicios&#038;p=64"
+        },
+        "modified": "2025-08-31T10:25:33",
+        "modified_gmt": "2025-08-31T10:25:33",
+        "slug": "concrete-and-floors",
+        "status": "publish",
+        "type": "servicios",
+        "link": "http://renovalinksite.local/servicios/concrete-and-floors/",
+        "title": {
+            "rendered": "Concrete and Floors"
+        },
+        "content": {
+            "rendered": "\n<p>Specialists in the installation and finishing of polished concrete floors,<br>stain-resistant treatments, decorative finishes, and professional repair<br>of cracks and structural damage.</p>\n\n\n\n<p>We use advanced polishing and sealing techniques that guarantee<br>durability and superior aesthetics for residential and commercial spaces.</p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>Specialists in the installation and finishing of polished concrete floors,stain-resistant treatments, decorative finishes, and professional repairof cracks and structural damage. We use advanced polishing and sealing techniques that guaranteedurability and superior aesthetics for residential and commercial spaces.</p>\n",
+            "protected": false
+        },
+        "featured_media": 0,
+        "template": "",
+        "meta": {
+            "_acf_changed": true
+        },
+        "tipos-servicio": [],
+        "class_list": [
+            "post-64",
+            "servicios",
+            "type-servicios",
+            "status-publish",
+            "hentry"
+        ],
+        "acf": {
+            "service_icon": 65,
+            "short_description": "Professional installation and finishing of concrete floors with specialized treatments",
+            "service_feature_1": "Concrete repair",
+            "service_feature_2": "Concrete leveling",
+            "service_feature_3": "Concrete Steps Repair",
+            "service_feature_4": "Concrete Driveway",
+            "service_feature_5": "Stamped Concrete",
+            "service_image_1": 119,
+            "service_image_2": 121,
+            "service_image_3": 122,
+            "service_image_4": 120,
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "acf_fields": {
+            "service_icon": {
+                "ID": 65,
+                "id": 65,
+                "title": "cement-brick_14679912",
+                "filename": "cement-brick_14679912.png",
+                "filesize": 25219,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/cement-brick_14679912/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "cement-brick_14679912",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:11:17",
+                "modified": "2025-08-24 15:11:17",
+                "menu_order": 0,
+                "mime_type": "image/png",
+                "type": "image",
+                "subtype": "png",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 512,
+                "height": 512,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-150x150.png",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-300x300.png",
+                    "medium-width": 300,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "medium_large-width": 512,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "large-width": 512,
+                    "large-height": 512,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "1536x1536-width": 512,
+                    "1536x1536-height": 512,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "2048x2048-width": 512,
+                    "2048x2048-height": 512,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-400x300.png",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "project-large-width": 512,
+                    "project-large-height": 512,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "hero-background-width": 512,
+                    "hero-background-height": 512
+                }
+            },
+            "short_description": "Professional installation and finishing of concrete floors with specialized treatments",
+            "service_feature_1": "Concrete repair",
+            "service_feature_2": "Concrete leveling",
+            "service_feature_3": "Concrete Steps Repair",
+            "service_feature_4": "Concrete Driveway",
+            "service_feature_5": "Stamped Concrete",
+            "service_image_1": {
+                "ID": 119,
+                "id": 119,
+                "title": "concrete repair",
+                "filename": "concrete-repair.jpg",
+                "filesize": 68400,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/concrete-repair/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "concrete-repair",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-31 10:23:18",
+                "modified": "2025-08-31 10:23:18",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 591,
+                "height": 349,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair-300x177.jpg",
+                    "medium-width": 300,
+                    "medium-height": 177,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "medium_large-width": 591,
+                    "medium_large-height": 349,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "large-width": 591,
+                    "large-height": 349,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "1536x1536-width": 591,
+                    "1536x1536-height": 349,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "2048x2048-width": 591,
+                    "2048x2048-height": 349,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "project-large-width": 591,
+                    "project-large-height": 349,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-repair.jpg",
+                    "hero-background-width": 591,
+                    "hero-background-height": 349
+                }
+            },
+            "service_image_2": {
+                "ID": 121,
+                "id": 121,
+                "title": "concrete-leveling",
+                "filename": "concrete-leveling.jpg",
+                "filesize": 49141,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/concrete-leveling/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "concrete-leveling",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-31 10:23:28",
+                "modified": "2025-08-31 10:23:28",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 608,
+                "height": 360,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling-300x178.jpg",
+                    "medium-width": 300,
+                    "medium-height": 178,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "medium_large-width": 608,
+                    "medium_large-height": 360,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "large-width": 608,
+                    "large-height": 360,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "1536x1536-width": 608,
+                    "1536x1536-height": 360,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "2048x2048-width": 608,
+                    "2048x2048-height": 360,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "project-large-width": 608,
+                    "project-large-height": 360,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-leveling.jpg",
+                    "hero-background-width": 608,
+                    "hero-background-height": 360
+                }
+            },
+            "service_image_3": {
+                "ID": 122,
+                "id": 122,
+                "title": "concrete-steps-repair",
+                "filename": "concrete-steps-repair.jpg",
+                "filesize": 87192,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/concrete-steps-repair/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "concrete-steps-repair",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-31 10:23:28",
+                "modified": "2025-08-31 10:23:28",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 586,
+                "height": 347,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair-300x178.jpg",
+                    "medium-width": 300,
+                    "medium-height": 178,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "medium_large-width": 586,
+                    "medium_large-height": 347,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "large-width": 586,
+                    "large-height": 347,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "1536x1536-width": 586,
+                    "1536x1536-height": 347,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "2048x2048-width": 586,
+                    "2048x2048-height": 347,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "project-large-width": 586,
+                    "project-large-height": 347,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-steps-repair.jpg",
+                    "hero-background-width": 586,
+                    "hero-background-height": 347
+                }
+            },
+            "service_image_4": {
+                "ID": 120,
+                "id": 120,
+                "title": "concrete-driveway",
+                "filename": "concrete-driveway-scaled.jpg",
+                "filesize": 511634,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-scaled.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/concrete-driveway/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "concrete-driveway",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-31 10:23:19",
+                "modified": "2025-08-31 10:23:19",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 2560,
+                "height": 1709,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-300x200.jpg",
+                    "medium-width": 300,
+                    "medium-height": 200,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-768x513.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 513,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-1024x683.jpg",
+                    "large-width": 1024,
+                    "large-height": 683,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-1536x1025.jpg",
+                    "1536x1536-width": 1536,
+                    "1536x1536-height": 1025,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-2048x1367.jpg",
+                    "2048x2048-width": 2048,
+                    "2048x2048-height": 1367,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/concrete-driveway-1920x1080.jpg",
+                    "hero-background-width": 1920,
+                    "hero-background-height": 1080
+                }
+            },
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "featured_image_url": null,
+        "_links": {
+            "self": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios/64",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios"
+                }
+            ],
+            "about": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/types/servicios"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/media?parent=64"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "service_type",
+                    "embeddable": true,
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/tipos-servicio?post=64"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    },
+    {
+        "id": 63,
+        "date": "2025-08-24T15:06:48",
+        "date_gmt": "2025-08-24T15:06:48",
+        "guid": {
+            "rendered": "http://renovalinksite.local/?post_type=servicios&#038;p=63"
+        },
+        "modified": "2025-08-24T15:06:48",
+        "modified_gmt": "2025-08-24T15:06:48",
+        "slug": "pool-remodeling",
+        "status": "publish",
+        "type": "servicios",
+        "link": "http://renovalinksite.local/servicios/pool-remodeling/",
+        "title": {
+            "rendered": "Pool remodeling"
+        },
+        "content": {
+            "rendered": "\n<p>We transform old pools into modern oases. We offer complete tile refinishing, advanced filtration systems, underwater LED lighting, and state-of-the-art non-slip finishes.</p>\n\n\n\n<p>Our specialized team handles everything from minor repairs to complete remodeling, always using top-quality materials and certified professional techniques.</p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>We transform old pools into modern oases. We offer complete tile refinishing, advanced filtration systems, underwater LED lighting, and state-of-the-art non-slip finishes. Our specialized team handles everything from minor repairs to complete remodeling, always using top-quality materials and certified professional techniques.</p>\n",
+            "protected": false
+        },
+        "featured_media": 0,
+        "template": "",
+        "meta": {
+            "_acf_changed": true
+        },
+        "tipos-servicio": [],
+        "class_list": [
+            "post-63",
+            "servicios",
+            "type-servicios",
+            "status-publish",
+            "hentry"
+        ],
+        "acf": {
+            "service_icon": 6,
+            "short_description": "Professional pool renovation with modern technology and luxury finishes",
+            "service_feature_1": "Complete renovation of tiles and coverings",
+            "service_feature_2": "Modern filtration and purification systems",
+            "service_feature_3": "Customizable underwater LED lighting",
+            "service_feature_4": "Non-slip and safety finishes",
+            "service_feature_5": "Post-installation maintenance and warranty",
+            "service_image_1": 62,
+            "service_image_2": "",
+            "service_image_3": "",
+            "service_image_4": "",
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "acf_fields": {
+            "service_icon": {
+                "ID": 6,
+                "id": 6,
+                "title": "swimming-pool_13104922",
+                "filename": "swimming-pool_13104922.png",
+                "filesize": 28231,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                "link": "http://renovalinksite.local/?attachment_id=6",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "swimming-pool_13104922",
+                "status": "inherit",
+                "uploaded_to": 5,
+                "date": "2025-08-23 21:52:47",
+                "modified": "2025-08-23 21:52:47",
+                "menu_order": 0,
+                "mime_type": "image/png",
+                "type": "image",
+                "subtype": "png",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 512,
+                "height": 512,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-150x150.png",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-300x300.png",
+                    "medium-width": 300,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "medium_large-width": 512,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "large-width": 512,
+                    "large-height": 512,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "1536x1536-width": 512,
+                    "1536x1536-height": 512,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "2048x2048-width": 512,
+                    "2048x2048-height": 512,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-400x300.png",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "project-large-width": 512,
+                    "project-large-height": 512,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "hero-background-width": 512,
+                    "hero-background-height": 512
+                }
+            },
+            "short_description": "Professional pool renovation with modern technology and luxury finishes",
+            "service_feature_1": "Complete renovation of tiles and coverings",
+            "service_feature_2": "Modern filtration and purification systems",
+            "service_feature_3": "Customizable underwater LED lighting",
+            "service_feature_4": "Non-slip and safety finishes",
+            "service_feature_5": "Post-installation maintenance and warranty",
+            "service_image_1": {
+                "ID": 62,
+                "id": 62,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 12.02.33_e1109c86",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                "filesize": 95457,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                "link": "http://renovalinksite.local/?attachment_id=62",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-12-02-33_e1109c86",
+                "status": "inherit",
+                "uploaded_to": 61,
+                "date": "2025-08-24 14:44:11",
+                "modified": "2025-08-24 14:44:11",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1320,
+                "height": 906,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-300x206.jpg",
+                    "medium-width": 300,
+                    "medium-height": 206,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-768x527.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 527,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-1024x703.jpg",
+                    "large-width": 1024,
+                    "large-height": 703,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "1536x1536-width": 1320,
+                    "1536x1536-height": 906,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "2048x2048-width": 1320,
+                    "2048x2048-height": 906,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "hero-background-width": 1320,
+                    "hero-background-height": 906
+                }
+            },
+            "service_image_2": false,
+            "service_image_3": false,
+            "service_image_4": false,
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "featured_image_url": null,
+        "_links": {
+            "self": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios/63",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios"
+                }
+            ],
+            "about": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/types/servicios"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/media?parent=63"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "service_type",
+                    "embeddable": true,
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/tipos-servicio?post=63"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+]

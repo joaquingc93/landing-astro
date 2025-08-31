@@ -6,7 +6,8 @@
       "Bash(npx:*)",
       "Bash(npm run build:*)",
       "Bash(npm run check:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []
