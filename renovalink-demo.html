@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RenovaLink - Premier remodeling specialists in Florida. Pool remodeling, concrete flooring, residential cleaning, and structural engineering services. Transform your home with Florida's trusted renovation experts.">
+    <meta name="keywords" content="pool remodeling, concrete flooring, residential cleaning, structural engineering, Florida renovation, home improvement">
+    <title>RenovaLink - Florida's Premier Remodeling Specialists | Pool, Flooring & Home Renovation</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Production CDN - Replace with your build process) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        secondary: {
+                            50: '#fefce8',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            800: '#854d0e',
+                            900: '#713f12'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./src/styles/renovalink.css">
+    
+    <!-- Meta tags for social sharing -->
+    <meta property="og:title" content="RenovaLink - Florida's Premier Remodeling Specialists">
+    <meta property="og:description" content="Transform your home with Florida's trusted renovation experts. Pool remodeling, concrete flooring, cleaning, and structural engineering.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://renovalink.com">
+    <meta property="og:image" content="https://renovalink.com/images/og-image.jpg">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RenovaLink - Florida's Premier Remodeling Specialists">
+    <meta name="twitter:description" content="Transform your home with Florida's trusted renovation experts.">
+    <meta name="twitter:image" content="https://renovalink.com/images/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body class="bg-neutral-50 text-neutral-700 antialiased">
+    <!-- Skip to main content (Accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-500 focus:text-white focus:rounded-md focus:shadow-lg">Skip to main content</a>
+
+    <!-- Preloader (Optional) -->
+    <div class="preloader fixed inset-0 z-50 bg-white flex items-center justify-center">
+        <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce"></div>
+            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-neutral-200 transition-all duration-200" aria-label="Main navigation">
+        <div class="navbar-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="navbar-content flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="navbar-logo flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">R</span>
+                    </div>
+                    <span class="navbar-logo-text text-2xl font-bold text-primary-600">RenovaLink</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="navbar-menu hidden md:flex items-center space-x-8">
+                    <a href="#home" class="navbar-link active">Home</a>
+                    <a href="#services" class="navbar-link">Services</a>
+                    <a href="#gallery" class="navbar-link">Gallery</a>
+                    <a href="#about" class="navbar-link">About</a>
+                    <a href="#testimonials" class="navbar-link">Reviews</a>
+                    <a href="#contact" class="navbar-link">Contact</a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="navbar-cta hidden md:inline-flex">
+                    <a href="#contact" class="btn-primary">Get Free Quote</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-button md:hidden inline-flex items-center justify-center p-2 text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2" aria-expanded="false" aria-label="Open main menu">
+                    <svg class="hamburger-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden absolute top-16 left-0 right-0 bg-white border-b border-neutral-200 shadow-strong transform -translate-y-full transition-transform duration-300">
+            <div class="mobile-menu-content px-4 py-6 space-y-4">
+                <a href="#home" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">Home</a>
+                <a href="#services" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">Services</a>
+                <a href="#gallery" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">Gallery</a>
+                <a href="#about" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">About</a>
+                <a href="#testimonials" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">Reviews</a>
+                <a href="#contact" class="mobile-menu-link block px-3 py-2 text-base font-medium text-neutral-700 hover:text-primary-600 hover:bg-neutral-100 rounded-md">Contact</a>
+                <div class="mobile-menu-cta mt-4">
+                    <a href="#contact" class="btn-primary w-full justify-center">Get Free Quote</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero-container relative min-h-screen flex items-center justify-center overflow-hidden" aria-labelledby="hero-title">
+            <!-- Background with overlay -->
+            <div class="hero-background absolute inset-0 z-0 bg-hero-overlay"></div>
+            
+            <!-- Background pattern -->
+            <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=');"></div>
+
+            <!-- Content -->
+            <div class="hero-content relative z-10 text-center max-w-5xl mx-auto px-6 scroll-reveal">
+                <h1 id="hero-title" class="hero-title text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-tight">
+                    Transform Your Home with 
+                    <span class="text-gradient-secondary bg-gradient-to-r from-secondary-400 to-secondary-500 bg-clip-text text-transparent">Florida's Premier</span>
+                    Remodeling Experts
+                </h1>
+                
+                <p class="hero-subtitle text-lg sm:text-xl lg:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    From stunning pool renovations to premium flooring solutions, we bring your vision to life with unmatched craftsmanship and reliability.
+                </p>
+                
+                <div class="hero-cta-group flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#contact" class="btn-cta group">
+                        Start Your Project Today
+                        <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                    <a href="#gallery" class="btn-secondary group">
+                        View Our Work
+                        <svg class="w-5 h-5 ml-2 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section-padding bg-white" aria-labelledby="services-title">
+            <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-reveal">
+                    <h2 id="services-title" class="heading-section text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6">
+                        Our Professional Services
+                    </h2>
+                    <p class="text-lead text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+                        We specialize in comprehensive home improvement solutions that enhance both beauty and functionality, backed by years of expertise in Florida's unique climate.
+                    </p>
+                </div>
+
+                <div class="services-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+                    <!-- Pool Remodeling Service -->
+                    <div class="service-card-enhanced group scroll-reveal" data-stagger>
+                        <div class="service-card-header relative p-8 bg-gradient-to-br from-neutral-50 to-white">
+                            <div class="service-card-icon-wrapper w-20 h-20 mx-auto mb-6 p-5 bg-primary-50 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                <svg class="service-card-icon w-full h-full text-primary-500 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="service-card-title text-xl font-bold text-neutral-900 mb-3 text-center">Pool Remodeling</h3>
+                            <p class="service-card-description text-neutral-600 text-center leading-relaxed">
+                                Transform your backyard oasis with modern pool renovations, tile work, and equipment upgrades.
+                            </p>
+                        </div>
+                        <div class="service-card-footer p-8 pt-0">
+                            <div class="service-card-features space-y-2">
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Tile & Surface Renewal
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Equipment Modernization
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Lighting & Features
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concrete & Flooring Service -->
+                    <div class="service-card-enhanced group scroll-reveal" data-stagger>
+                        <div class="service-card-header relative p-8 bg-gradient-to-br from-neutral-50 to-white">
+                            <div class="service-card-icon-wrapper w-20 h-20 mx-auto mb-6 p-5 bg-primary-50 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                <svg class="service-card-icon w-full h-full text-primary-500 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="service-card-title text-xl font-bold text-neutral-900 mb-3 text-center">Concrete & Flooring</h3>
+                            <p class="service-card-description text-neutral-600 text-center leading-relaxed">
+                                Premium flooring solutions from polished concrete to luxury vinyl and tile installations.
+                            </p>
+                        </div>
+                        <div class="service-card-footer p-8 pt-0">
+                            <div class="service-card-features space-y-2">
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Polished Concrete
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Luxury Vinyl & Tile
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Custom Finishes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Residential Cleaning Service -->
+                    <div class="service-card-enhanced group scroll-reveal" data-stagger>
+                        <div class="service-card-header relative p-8 bg-gradient-to-br from-neutral-50 to-white">
+                            <div class="service-card-icon-wrapper w-20 h-20 mx-auto mb-6 p-5 bg-primary-50 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                <svg class="service-card-icon w-full h-full text-primary-500 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="service-card-title text-xl font-bold text-neutral-900 mb-3 text-center">Residential Cleaning</h3>
+                            <p class="service-card-description text-neutral-600 text-center leading-relaxed">
+                                Professional cleaning services to maintain your newly renovated spaces in pristine condition.
+                            </p>
+                        </div>
+                        <div class="service-card-footer p-8 pt-0">
+                            <div class="service-card-features space-y-2">
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Deep Cleaning
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Post-Construction Cleanup
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Maintenance Programs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structural Engineering Service -->
+                    <div class="service-card-enhanced group scroll-reveal" data-stagger>
+                        <div class="service-card-header relative p-8 bg-gradient-to-br from-neutral-50 to-white">
+                            <div class="service-card-icon-wrapper w-20 h-20 mx-auto mb-6 p-5 bg-primary-50 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                <svg class="service-card-icon w-full h-full text-primary-500 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="service-card-title text-xl font-bold text-neutral-900 mb-3 text-center">Structural Engineering</h3>
+                            <p class="service-card-description text-neutral-600 text-center leading-relaxed">
+                                Expert structural assessments and engineering solutions for safe, compliant renovations.
+                            </p>
+                        </div>
+                        <div class="service-card-footer p-8 pt-0">
+                            <div class="service-card-features space-y-2">
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Structural Analysis
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Code Compliance
+                                </div>
+                                <div class="service-card-feature flex items-center text-sm text-neutral-600">
+                                    <svg class="service-card-feature-icon w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Load Calculations
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="text-center mt-16 scroll-reveal">
+                    <a href="#contact" class="btn-cta">
+                        Get Your Free Consultation
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Gallery Section -->
+        <section id="gallery" class="section-padding bg-neutral-50" aria-labelledby="gallery-title">
+            <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 scroll-reveal">
+                    <h2 id="gallery-title" class="heading-section text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6">
+                        Our Recent Projects
+                    </h2>
+                    <p class="text-lead text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+                        Explore our portfolio of successful renovations across Florida. Each project showcases our commitment to quality craftsmanship and customer satisfaction.
+                    </p>
+                </div>
+
+                <!-- Gallery Filters -->
+                <div class="gallery-filters flex flex-wrap justify-center gap-2 mb-8 scroll-reveal">
+                    <button class="gallery-filter-btn active" data-filter="all">All Projects</button>
+                    <button class="gallery-filter-btn" data-filter="pool">Pool Remodeling</button>
+                    <button class="gallery-filter-btn" data-filter="flooring">Concrete & Flooring</button>
+                    <button class="gallery-filter-btn" data-filter="cleaning">Before & After</button>
+                    <button class="gallery-filter-btn" data-filter="structural">Structural Work</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="gallery-masonry columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6">
+                    <!-- Pool Project 1 -->
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Modern Pool Renovation" data-description="Complete pool makeover with new tile and lighting">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 11.29.57_1fae8d64.jpg" alt="Modern pool renovation with contemporary tile work" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Modern Pool Renovation</h3>
+                                <p class="gallery-subtitle">Contemporary Design</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pool Project 2 -->
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Luxury Pool Upgrade" data-description="Premium finishes with LED lighting system">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 11.29.57_da1b43a3.jpg" alt="Luxury pool with LED lighting and premium finishes" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Luxury Pool Upgrade</h3>
+                                <p class="gallery-subtitle">Premium Finishes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concrete Project 1 -->
+                    <div class="gallery-item-enhanced" data-category="flooring" data-title="Polished Concrete Floor" data-description="Industrial-grade polished concrete with decorative finish">
+                        <img src="./imagenes concreto/Imagen de WhatsApp 2025-08-04 a las 11.29.15_64284fca.jpg" alt="Polished concrete floor with decorative finish" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Polished Concrete Floor</h3>
+                                <p class="gallery-subtitle">Industrial Grade</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pool Project 3 -->
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Spa Integration" data-description="Custom spa addition with waterfall feature">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 11.29.57_dedf440d.jpg" alt="Custom spa with waterfall feature" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Spa Integration</h3>
+                                <p class="gallery-subtitle">Waterfall Feature</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concrete Project 2 -->
+                    <div class="gallery-item-enhanced" data-category="flooring" data-title="Decorative Concrete" data-description="Custom stamped concrete with color treatment">
+                        <img src="./imagenes concreto/Imagen de WhatsApp 2025-08-04 a las 11.29.15_ee171f70.jpg" alt="Decorative stamped concrete with custom coloring" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Decorative Concrete</h3>
+                                <p class="gallery-subtitle">Custom Stamping</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pool Project 4 -->
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Tile Restoration" data-description="Complete tile replacement with modern patterns">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 11.29.59_551594bf.jpg" alt="Pool tile restoration with modern patterns" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Tile Restoration</h3>
+                                <p class="gallery-subtitle">Modern Patterns</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concrete Project 3 -->
+                    <div class="gallery-item-enhanced" data-category="flooring" data-title="Concrete Overlay" data-description="Decorative overlay system with texture">
+                        <img src="./imagenes concreto/Imagen de WhatsApp 2025-08-04 a las 11.29.16_1ff7b1e1.jpg" alt="Decorative concrete overlay with texture" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Concrete Overlay</h3>
+                                <p class="gallery-subtitle">Textured Finish</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional images -->
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Pool Equipment Upgrade" data-description="Modern filtration and heating systems">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 12.02.28_f7deff3b.jpg" alt="Modern pool equipment installation" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Equipment Upgrade</h3>
+                                <p class="gallery-subtitle">Modern Systems</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item-enhanced" data-category="flooring" data-title="Commercial Flooring" data-description="High-traffic concrete flooring solution">
+                        <img src="./imagenes concreto/Imagen de WhatsApp 2025-08-04 a las 11.29.16_27e057dd.jpg" alt="Commercial grade concrete flooring" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Commercial Flooring</h3>
+                                <p class="gallery-subtitle">High Traffic</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item-enhanced" data-category="pool" data-title="Complete Renovation" data-description="Full pool and deck transformation">
+                        <img src="./imagenes piscinas/Imagen de WhatsApp 2025-08-04 a las 12.02.33_e1109c86.jpg" alt="Complete pool and deck renovation" class="gallery-image w-full h-auto object-cover rounded-xl">
+                        <div class="gallery-overlay-enhanced">
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Complete Renovation</h3>
+                                <p class="gallery-subtitle">Pool & Deck</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12 scroll-reveal">
+                    <button class="btn-secondary">
+                        View More Projects
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section-padding bg-white" aria-labelledby="about-title">
+            <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                    <div class="scroll-reveal-left">
+                        <h2 id="about-title" class="heading-section text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6">
+                            Why Choose RenovaLink?
+                        </h2>
+                        <p class="text-lead text-lg text-neutral-600 mb-6">
+                            With over a decade of experience serving Florida homeowners, we've built our reputation on delivering exceptional results that stand the test of time.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-neutral-900 mb-2">Licensed & Insured</h3>
+                                    <p class="text-neutral-600">Fully licensed professionals with comprehensive insurance coverage for your peace of mind.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-secondary-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-neutral-900 mb-2">On-Time Delivery</h3>
+                                    <p class="text-neutral-600">We respect your schedule and deliver projects on time, every time, with no surprises.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-success-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-neutral-900 mb-2">Customer Satisfaction</h3>
+                                    <p class="text-neutral-600">100% satisfaction guarantee with ongoing support and maintenance for all our projects.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scroll-reveal-right">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="Professional construction team at work" class="rounded-2xl shadow-strong w-full h-auto">
+                            <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-strong p-6 max-w-xs">
+                                <div class="text-3xl font-bold text-primary-600 mb-1">10+</div>
+                                <div class="text-neutral-700">Years of Excellence</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="section-padding bg-neutral-50" aria-labelledby="testimonials-title">
+            <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-reveal">
+                    <h2 id="testimonials-title" class="heading-section text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6">
+                        What Our Clients Say
+                    </h2>
+                    <p class="text-lead text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+                        Don't just take our word for it. Here's what Florida homeowners are saying about their RenovaLink experience.
+                    </p>
+                </div>
+
+                <div class="testimonials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <div class="testimonial-card scroll-reveal" data-stagger>
+                        <div class="testimonial-content">
+                            "RenovaLink transformed our outdated pool into a modern oasis. The attention to detail and professionalism exceeded our expectations. Highly recommend!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">MJ</div>
+                            <div class="testimonial-info">
+                                <div class="testimonial-name">Maria Johnson</div>
+                                <div class="testimonial-title">Miami, FL</div>
+                                <div class="testimonial-rating">
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card scroll-reveal" data-stagger>
+                        <div class="testimonial-content">
+                            "The concrete flooring project was completed flawlessly. The team was professional, clean, and the results speak for themselves. Amazing work!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">DW</div>
+                            <div class="testimonial-info">
+                                <div class="testimonial-name">David Wilson</div>
+                                <div class="testimonial-title">Tampa, FL</div>
+                                <div class="testimonial-rating">
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card scroll-reveal" data-stagger>
+                        <div class="testimonial-content">
+                            "From start to finish, RenovaLink exceeded expectations. Communication was excellent, work quality superb, and they finished ahead of schedule."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">SR</div>
+                            <div class="testimonial-info">
+                                <div class="testimonial-name">Sarah Rodriguez</div>
+                                <div class="testimonial-title">Orlando, FL</div>
+                                <div class="testimonial-rating">
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                    <svg class="testimonial-star" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section-padding bg-primary-500" aria-labelledby="contact-title">
+            <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                    <!-- Contact Info -->
+                    <div class="scroll-reveal-left">
+                        <h2 id="contact-title" class="heading-section text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+                            Ready to Transform Your Home?
+                        </h2>
+                        <p class="text-lead text-lg text-primary-100 mb-8">
+                            Get your free consultation today and discover how we can bring your renovation dreams to life.
+                        </p>
+                        
+                        <div class="space-y-6 mb-8">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white font-semibold">Call Us</div>
+                                    <div class="text-primary-100">(555) 123-RENO</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white font-semibold">Email Us</div>
+                                    <div class="text-primary-100">hello@renovalink.com</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white font-semibold">Service Areas</div>
+                                    <div class="text-primary-100">Miami, Tampa, Orlando & Beyond</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
+                            <h3 class="text-xl font-semibold text-white mb-3">Free Consultation Includes:</h3>
+                            <ul class="space-y-2 text-primary-100">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-secondary-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    On-site assessment
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-secondary-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Detailed project estimate
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-secondary-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Timeline & material recommendations
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <div class="scroll-reveal-right">
+                        <div class="contact-form-container bg-white rounded-2xl shadow-strong p-8 lg:p-12">
+                            <form class="contact-form space-y-6" novalidate>
+                                <div class="form-group">
+                                    <label for="name" class="form-label block text-sm font-semibold text-neutral-700 mb-2">Full Name *</label>
+                                    <input type="text" id="name" name="name" required class="form-input-enhanced" placeholder="Your full name">
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="form-group">
+                                        <label for="email" class="form-label block text-sm font-semibold text-neutral-700 mb-2">Email Address *</label>
+                                        <input type="email" id="email" name="email" required class="form-input-enhanced" placeholder="your@email.com">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="phone" class="form-label block text-sm font-semibold text-neutral-700 mb-2">Phone Number *</label>
+                                        <input type="tel" id="phone" name="phone" required class="form-input-enhanced" placeholder="(555) 123-4567">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="service" class="form-label block text-sm font-semibold text-neutral-700 mb-2">Service Interest</label>
+                                    <select id="service" name="service" class="form-input-enhanced">
+                                        <option value="">Select a service</option>
+                                        <option value="pool">Pool Remodeling</option>
+                                        <option value="flooring">Concrete & Flooring</option>
+                                        <option value="cleaning">Residential Cleaning</option>
+                                        <option value="structural">Structural Engineering</option>
+                                        <option value="multiple">Multiple Services</option>
+                                        <option value="consultation">General Consultation</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="message" class="form-label block text-sm font-semibold text-neutral-700 mb-2">Project Details</label>
+                                    <textarea id="message" name="message" rows="4" class="form-input-enhanced form-textarea" placeholder="Tell us about your project, timeline, and any specific requirements..."></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="form-checkbox-container flex items-start space-x-3">
+                                        <input type="checkbox" id="consent" name="consent" required class="form-checkbox w-5 h-5 text-primary-500 border-2 border-neutral-300 rounded focus:ring-primary-500 focus:ring-offset-0 mt-0.5">
+                                        <label for="consent" class="text-sm text-neutral-600">
+                                            I agree to receive communications from RenovaLink regarding my project inquiry. You can unsubscribe at any time. *
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="form-submit-btn w-full btn-cta justify-center">
+                                    <span class="submit-text">Get Your Free Quote</span>
+                                    <svg class="w-5 h-5 ml-2 submit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </button>
+                                
+                                <p class="text-xs text-neutral-500 text-center">
+                                    By submitting this form, you agree to our privacy policy and terms of service. We typically respond within 2 hours during business hours.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-neutral-900 text-neutral-300 py-16" aria-labelledby="footer-title">
+        <div class="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="footer-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- Company Info -->
+                <div class="footer-section">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">R</span>
+                        </div>
+                        <span class="text-2xl font-bold text-white">RenovaLink</span>
+                    </div>
+                    <p class="text-neutral-400 mb-4">
+                        Florida's premier remodeling specialists, transforming homes with quality craftsmanship and unmatched reliability.
+                    </p>
+                    <div class="footer-social flex items-center space-x-4">
+                        <a href="#" class="footer-social-link" aria-label="Facebook">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.621 5.367 11.988 11.988 11.988s11.987-5.367 11.987-11.988C24.014 5.367 18.648.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.611-3.132-1.551-.684-.94-.684-2.08 0-3.02.684-.94 1.835-1.551 3.132-1.551s2.448.611 3.132 1.551c.684.94.684 2.08 0 3.02-.684.94-1.835 1.551-3.132 1.551zm7.718 0c-1.297 0-2.448-.611-3.132-1.551-.684-.94-.684-2.08 0-3.02.684-.94 1.835-1.551 3.132-1.551s2.448.611 3.132 1.551c.684.94.684 2.08 0 3.02-.684.94-1.835 1.551-3.132 1.551z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-social-link" aria-label="LinkedIn">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Services -->
+                <div class="footer-section">
+                    <h3 class="footer-title text-white font-semibold text-lg mb-4">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#services" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Pool Remodeling</a></li>
+                        <li><a href="#services" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Concrete & Flooring</a></li>
+                        <li><a href="#services" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Residential Cleaning</a></li>
+                        <li><a href="#services" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Structural Engineering</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company -->
+                <div class="footer-section">
+                    <h3 class="footer-title text-white font-semibold text-lg mb-4">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">About Us</a></li>
+                        <li><a href="#gallery" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Portfolio</a></li>
+                        <li><a href="#testimonials" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Testimonials</a></li>
+                        <li><a href="#contact" class="footer-link text-neutral-400 hover:text-white transition-colors duration-200">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div class="footer-section">
+                    <h3 class="footer-title text-white font-semibold text-lg mb-4">Contact Info</h3>
+                    <div class="space-y-3">
+                        <div class="text-neutral-400">
+                            <div class="font-semibold text-white">Phone</div>
+                            <div>(555) 123-RENO</div>
+                        </div>
+                        <div class="text-neutral-400">
+                            <div class="font-semibold text-white">Email</div>
+                            <div>hello@renovalink.com</div>
+                        </div>
+                        <div class="text-neutral-400">
+                            <div class="font-semibold text-white">Service Areas</div>
+                            <div>Miami, Tampa, Orlando</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="footer-copyright text-neutral-400 text-sm">
+                    © 2024 RenovaLink. All rights reserved. Licensed & Insured in Florida.
+                </div>
+                <div class="flex items-center space-x-6 mt-4 md:mt-0 text-sm text-neutral-400">
+                    <a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors duration-200">Licensing Info</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="./src/scripts/renovalink-interactions.js"></script>
+    
+    <!-- Additional CSS for modal states -->
+    <style>
+        /* Modal styles */
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        #gallery-modal.active {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Enhanced button styles */
+        .btn-primary, .btn-secondary, .btn-cta {
+            transition: all 200ms ease;
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(250, 204, 21, 0.4);
+        }
+        
+        /* Improved focus states for accessibility */
+        .keyboard-navigation *:focus {
+            outline: 2px solid #0ea5e9;
+            outline-offset: 2px;
+        }
+        
+        /* High contrast improvements */
+        .high-contrast .btn-primary,
+        .high-contrast .btn-secondary,
+        .high-contrast .btn-cta {
+            border: 2px solid currentColor;
+        }
+        
+        /* Reduced motion improvements */
+        .reduce-motion * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    </style>
+</body>
+</html>

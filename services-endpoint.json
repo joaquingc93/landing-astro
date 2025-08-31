@@ -1,0 +1,593 @@
+[
+    {
+        "id": 64,
+        "date": "2025-08-24T15:16:22",
+        "date_gmt": "2025-08-24T15:16:22",
+        "guid": {
+            "rendered": "http://renovalinksite.local/?post_type=servicios&#038;p=64"
+        },
+        "modified": "2025-08-24T15:16:22",
+        "modified_gmt": "2025-08-24T15:16:22",
+        "slug": "concrete-and-floors",
+        "status": "publish",
+        "type": "servicios",
+        "link": "http://renovalinksite.local/servicios/concrete-and-floors/",
+        "title": {
+            "rendered": "Concrete and Floors"
+        },
+        "content": {
+            "rendered": "\n<p>Specialists in the installation and finishing of polished concrete floors,<br>stain-resistant treatments, decorative finishes, and professional repair<br>of cracks and structural damage.</p>\n\n\n\n<p>We use advanced polishing and sealing techniques that guarantee<br>durability and superior aesthetics for residential and commercial spaces.</p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>Specialists in the installation and finishing of polished concrete floors,stain-resistant treatments, decorative finishes, and professional repairof cracks and structural damage. We use advanced polishing and sealing techniques that guaranteedurability and superior aesthetics for residential and commercial spaces.</p>\n",
+            "protected": false
+        },
+        "featured_media": 0,
+        "template": "",
+        "meta": {
+            "_acf_changed": true
+        },
+        "tipos-servicio": [],
+        "class_list": [
+            "post-64",
+            "servicios",
+            "type-servicios",
+            "status-publish",
+            "hentry"
+        ],
+        "acf": {
+            "service_icon": 65,
+            "short_description": "Professional installation and finishing of concrete floors with specialized treatments",
+            "service_feature_1": "Concrete repair",
+            "service_feature_2": "Concrete leveling",
+            "service_feature_3": "Concrete Steps Repair",
+            "service_feature_4": "Concrete Driveway",
+            "service_feature_5": "Stamped Concrete",
+            "service_image_1": 66,
+            "service_image_2": 67,
+            "service_image_3": 68,
+            "service_image_4": 69,
+            "cta_text": "Get Quote for This Service",
+            "cta_link": " http://renovalink.local/contacto"
+        },
+        "acf_fields": {
+            "service_icon": {
+                "ID": 65,
+                "id": 65,
+                "title": "cement-brick_14679912",
+                "filename": "cement-brick_14679912.png",
+                "filesize": 25219,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/cement-brick_14679912/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "cement-brick_14679912",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:11:17",
+                "modified": "2025-08-24 15:11:17",
+                "menu_order": 0,
+                "mime_type": "image/png",
+                "type": "image",
+                "subtype": "png",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 512,
+                "height": 512,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-150x150.png",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-300x300.png",
+                    "medium-width": 300,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "medium_large-width": 512,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "large-width": 512,
+                    "large-height": 512,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "1536x1536-width": 512,
+                    "1536x1536-height": 512,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "2048x2048-width": 512,
+                    "2048x2048-height": 512,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912-400x300.png",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "project-large-width": 512,
+                    "project-large-height": 512,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/cement-brick_14679912.png",
+                    "hero-background-width": 512,
+                    "hero-background-height": 512
+                }
+            },
+            "short_description": "Professional installation and finishing of concrete floors with specialized treatments",
+            "service_feature_1": "Concrete repair",
+            "service_feature_2": "Concrete leveling",
+            "service_feature_3": "Concrete Steps Repair",
+            "service_feature_4": "Concrete Driveway",
+            "service_feature_5": "Stamped Concrete",
+            "service_image_1": {
+                "ID": 66,
+                "id": 66,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 11.29.15_ee171f70",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70.jpg",
+                "filesize": 182380,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/imagen-de-whatsapp-2025-08-04-a-las-11-29-15_ee171f70/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-11-29-15_ee171f70",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:14:26",
+                "modified": "2025-08-24 15:14:26",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1320,
+                "height": 1279,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-300x291.jpg",
+                    "medium-width": 300,
+                    "medium-height": 291,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-768x744.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 744,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-1024x992.jpg",
+                    "large-width": 1024,
+                    "large-height": 992,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70.jpg",
+                    "1536x1536-width": 1320,
+                    "1536x1536-height": 1279,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70.jpg",
+                    "2048x2048-width": 1320,
+                    "2048x2048-height": 1279,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.15_ee171f70-1320x1080.jpg",
+                    "hero-background-width": 1320,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_2": {
+                "ID": 67,
+                "id": 67,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 11.29.16_1ff7b1e1",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1.jpg",
+                "filesize": 145873,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/imagen-de-whatsapp-2025-08-04-a-las-11-29-16_1ff7b1e1/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-11-29-16_1ff7b1e1",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:14:27",
+                "modified": "2025-08-24 15:14:27",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1302,
+                "height": 1270,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-300x293.jpg",
+                    "medium-width": 300,
+                    "medium-height": 293,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-768x749.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 749,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-1024x999.jpg",
+                    "large-width": 1024,
+                    "large-height": 999,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1.jpg",
+                    "1536x1536-width": 1302,
+                    "1536x1536-height": 1270,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1.jpg",
+                    "2048x2048-width": 1302,
+                    "2048x2048-height": 1270,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_1ff7b1e1-1302x1080.jpg",
+                    "hero-background-width": 1302,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_3": {
+                "ID": 68,
+                "id": 68,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 11.29.16_27e057dd",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd.jpg",
+                "filesize": 200282,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/imagen-de-whatsapp-2025-08-04-a-las-11-29-16_27e057dd/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-11-29-16_27e057dd",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:14:28",
+                "modified": "2025-08-24 15:14:28",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1320,
+                "height": 1295,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-300x294.jpg",
+                    "medium-width": 300,
+                    "medium-height": 294,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-768x753.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 753,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-1024x1005.jpg",
+                    "large-width": 1024,
+                    "large-height": 1005,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd.jpg",
+                    "1536x1536-width": 1320,
+                    "1536x1536-height": 1295,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd.jpg",
+                    "2048x2048-width": 1320,
+                    "2048x2048-height": 1295,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_27e057dd-1320x1080.jpg",
+                    "hero-background-width": 1320,
+                    "hero-background-height": 1080
+                }
+            },
+            "service_image_4": {
+                "ID": 69,
+                "id": 69,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 11.29.16_bf74d9f1",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1.jpg",
+                "filesize": 173610,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1.jpg",
+                "link": "http://renovalinksite.local/servicios/concrete-and-floors/imagen-de-whatsapp-2025-08-04-a-las-11-29-16_bf74d9f1/",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-11-29-16_bf74d9f1",
+                "status": "inherit",
+                "uploaded_to": 64,
+                "date": "2025-08-24 15:14:30",
+                "modified": "2025-08-24 15:14:30",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1320,
+                "height": 1232,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-300x280.jpg",
+                    "medium-width": 300,
+                    "medium-height": 280,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-768x717.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 717,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-1024x956.jpg",
+                    "large-width": 1024,
+                    "large-height": 956,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1.jpg",
+                    "1536x1536-width": 1320,
+                    "1536x1536-height": 1232,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1.jpg",
+                    "2048x2048-width": 1320,
+                    "2048x2048-height": 1232,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-11.29.16_bf74d9f1-1320x1080.jpg",
+                    "hero-background-width": 1320,
+                    "hero-background-height": 1080
+                }
+            },
+            "cta_text": "Get Quote for This Service",
+            "cta_link": " http://renovalink.local/contacto"
+        },
+        "featured_image_url": null,
+        "_links": {
+            "self": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios/64",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios"
+                }
+            ],
+            "about": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/types/servicios"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/media?parent=64"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "service_type",
+                    "embeddable": true,
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/tipos-servicio?post=64"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    },
+    {
+        "id": 63,
+        "date": "2025-08-24T15:06:48",
+        "date_gmt": "2025-08-24T15:06:48",
+        "guid": {
+            "rendered": "http://renovalinksite.local/?post_type=servicios&#038;p=63"
+        },
+        "modified": "2025-08-24T15:06:48",
+        "modified_gmt": "2025-08-24T15:06:48",
+        "slug": "pool-remodeling",
+        "status": "publish",
+        "type": "servicios",
+        "link": "http://renovalinksite.local/servicios/pool-remodeling/",
+        "title": {
+            "rendered": "Pool remodeling"
+        },
+        "content": {
+            "rendered": "\n<p>We transform old pools into modern oases. We offer complete tile refinishing, advanced filtration systems, underwater LED lighting, and state-of-the-art non-slip finishes.</p>\n\n\n\n<p>Our specialized team handles everything from minor repairs to complete remodeling, always using top-quality materials and certified professional techniques.</p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>We transform old pools into modern oases. We offer complete tile refinishing, advanced filtration systems, underwater LED lighting, and state-of-the-art non-slip finishes. Our specialized team handles everything from minor repairs to complete remodeling, always using top-quality materials and certified professional techniques.</p>\n",
+            "protected": false
+        },
+        "featured_media": 0,
+        "template": "",
+        "meta": {
+            "_acf_changed": true
+        },
+        "tipos-servicio": [],
+        "class_list": [
+            "post-63",
+            "servicios",
+            "type-servicios",
+            "status-publish",
+            "hentry"
+        ],
+        "acf": {
+            "service_icon": 6,
+            "short_description": "Professional pool renovation with modern technology and luxury finishes",
+            "service_feature_1": "Complete renovation of tiles and coverings",
+            "service_feature_2": "Modern filtration and purification systems",
+            "service_feature_3": "Customizable underwater LED lighting",
+            "service_feature_4": "Non-slip and safety finishes",
+            "service_feature_5": "Post-installation maintenance and warranty",
+            "service_image_1": 62,
+            "service_image_2": "",
+            "service_image_3": "",
+            "service_image_4": "",
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "acf_fields": {
+            "service_icon": {
+                "ID": 6,
+                "id": 6,
+                "title": "swimming-pool_13104922",
+                "filename": "swimming-pool_13104922.png",
+                "filesize": 28231,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                "link": "http://renovalinksite.local/?attachment_id=6",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "swimming-pool_13104922",
+                "status": "inherit",
+                "uploaded_to": 5,
+                "date": "2025-08-23 21:52:47",
+                "modified": "2025-08-23 21:52:47",
+                "menu_order": 0,
+                "mime_type": "image/png",
+                "type": "image",
+                "subtype": "png",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 512,
+                "height": 512,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-150x150.png",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-300x300.png",
+                    "medium-width": 300,
+                    "medium-height": 300,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "medium_large-width": 512,
+                    "medium_large-height": 512,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "large-width": 512,
+                    "large-height": 512,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "1536x1536-width": 512,
+                    "1536x1536-height": 512,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "2048x2048-width": 512,
+                    "2048x2048-height": 512,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922-400x300.png",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "project-large-width": 512,
+                    "project-large-height": 512,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/swimming-pool_13104922.png",
+                    "hero-background-width": 512,
+                    "hero-background-height": 512
+                }
+            },
+            "short_description": "Professional pool renovation with modern technology and luxury finishes",
+            "service_feature_1": "Complete renovation of tiles and coverings",
+            "service_feature_2": "Modern filtration and purification systems",
+            "service_feature_3": "Customizable underwater LED lighting",
+            "service_feature_4": "Non-slip and safety finishes",
+            "service_feature_5": "Post-installation maintenance and warranty",
+            "service_image_1": {
+                "ID": 62,
+                "id": 62,
+                "title": "Imagen de WhatsApp 2025-08-04 a las 12.02.33_e1109c86",
+                "filename": "Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                "filesize": 95457,
+                "url": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                "link": "http://renovalinksite.local/?attachment_id=62",
+                "alt": "",
+                "author": "1",
+                "description": "",
+                "caption": "",
+                "name": "imagen-de-whatsapp-2025-08-04-a-las-12-02-33_e1109c86",
+                "status": "inherit",
+                "uploaded_to": 61,
+                "date": "2025-08-24 14:44:11",
+                "modified": "2025-08-24 14:44:11",
+                "menu_order": 0,
+                "mime_type": "image/jpeg",
+                "type": "image",
+                "subtype": "jpeg",
+                "icon": "http://renovalinksite.local/wp-includes/images/media/default.png",
+                "width": 1320,
+                "height": 906,
+                "sizes": {
+                    "thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-150x150.jpg",
+                    "thumbnail-width": 150,
+                    "thumbnail-height": 150,
+                    "medium": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-300x206.jpg",
+                    "medium-width": 300,
+                    "medium-height": 206,
+                    "medium_large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-768x527.jpg",
+                    "medium_large-width": 768,
+                    "medium_large-height": 527,
+                    "large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-1024x703.jpg",
+                    "large-width": 1024,
+                    "large-height": 703,
+                    "1536x1536": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "1536x1536-width": 1320,
+                    "1536x1536-height": 906,
+                    "2048x2048": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "2048x2048-width": 1320,
+                    "2048x2048-height": 906,
+                    "project-thumbnail": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-400x300.jpg",
+                    "project-thumbnail-width": 400,
+                    "project-thumbnail-height": 300,
+                    "project-large": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86-800x600.jpg",
+                    "project-large-width": 800,
+                    "project-large-height": 600,
+                    "hero-background": "http://renovalinksite.local/wp-content/uploads/2025/08/Imagen-de-WhatsApp-2025-08-04-a-las-12.02.33_e1109c86.jpg",
+                    "hero-background-width": 1320,
+                    "hero-background-height": 906
+                }
+            },
+            "service_image_2": false,
+            "service_image_3": false,
+            "service_image_4": false,
+            "cta_text": "Get Quote for This Service",
+            "cta_link": "http://renovalink.local/contacto"
+        },
+        "featured_image_url": null,
+        "_links": {
+            "self": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios/63",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/servicios"
+                }
+            ],
+            "about": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/types/servicios"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/media?parent=63"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "service_type",
+                    "embeddable": true,
+                    "href": "http://renovalinksite.local/wp-json/wp/v2/tipos-servicio?post=63"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+]

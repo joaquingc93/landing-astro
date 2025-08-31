@@ -1,0 +1,885 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { wordpressClient, getStaticProps, ACFHelpers } from '@/lib/wordpress-client';
+import { getOptimizedImageUrl, generateMetaDescription } from '@/lib/utils';
+import type { Service, Project } from '@/schemas/wordpress';
+
+// Generate static paths for all services
+export async function getStaticPaths() {
+  console.log('🔍 Attempting to fetch services from WordPress...');
+  console.log('🔗 WordPress URL:', process.env.WORDPRESS_API_URL);
+  try {
+    const services = await wordpressClient.getAllServices();
+    console.log('✅ Successfully fetched', services.length, 'services from WordPress');
+    console.log('📄 Service slugs:', services.map(s => s.slug));
+    
+    return services.map(service => ({
+      params: { slug: service.slug },
+      props: { service },
+    }));
+  } catch (error) {
+    console.error('❌ Failed to fetch services for static paths:', error);
+    // Return fallback paths with mock service data
+    const fallbackServices = [
+      {
+        slug: 'pool-remodeling',
+        title: { rendered: 'Pool Remodeling' },
+        content: { rendered: '<p>Professional pool remodeling services to transform your backyard oasis. From resurfacing to complete renovations, we handle every aspect of pool renovation with quality craftsmanship.</p>' },
+        excerpt: { rendered: 'Transform your pool with our professional remodeling services' },
+        acf: {
+          short_description: 'Transform your pool with our professional remodeling services including resurfacing, tile work, and equipment upgrades.',
+          service_features: ['Pool Resurfacing', 'Tile Installation', 'Equipment Upgrade', 'Lighting Systems', 'Water Features']
+        }
+      },
+      {
+        slug: 'concrete-flooring', 
+        title: { rendered: 'Concrete Flooring' },
+        content: { rendered: '<p>Expert concrete flooring solutions for residential and commercial properties. We specialize in decorative concrete, polished concrete, and durable flooring systems.</p>' },
+        excerpt: { rendered: 'Professional concrete flooring installation and finishing services' },
+        acf: {
+          short_description: 'Professional concrete flooring installation including polished concrete, decorative finishes, and industrial-grade solutions.',
+          service_features: ['Polished Concrete', 'Decorative Finishes', 'Epoxy Coatings', 'Crack Repair', 'Surface Preparation']
+        }
+      },
+      {
+        slug: 'residential-cleaning',
+        title: { rendered: 'Residential Cleaning' },
+        content: { rendered: '<p>Complete residential cleaning services for homes and apartments. Our professional team provides thorough cleaning with eco-friendly products and attention to detail.</p>' },
+        excerpt: { rendered: 'Professional residential cleaning services for your home' },
+        acf: {
+          short_description: 'Comprehensive residential cleaning services including regular maintenance, deep cleaning, and specialized cleaning tasks.',
+          service_features: ['Deep Cleaning', 'Regular Maintenance', 'Eco-Friendly Products', 'Kitchen & Bathroom', 'Window Cleaning']
+        }
+      },
+      {
+        slug: 'technical-support',
+        title: { rendered: 'Technical Support' },
+        content: { rendered: '<p>Professional technical support and engineering services for construction projects. Our certified engineers provide structural analysis, project planning, and technical consultation.</p>' },
+        excerpt: { rendered: 'Expert technical support and engineering consultation services' },
+        acf: {
+          short_description: 'Professional technical support including structural engineering, project consultation, and technical analysis for construction projects.',
+          service_features: ['Structural Analysis', 'Project Planning', 'Code Compliance', 'Technical Drawings', 'Site Inspection']
+        }
+      }
+    ];
+    
+    return fallbackServices.map(service => ({
+      params: { slug: service.slug },
+      props: { service },
+    }));
+  }
+}
+
+const { service } = Astro.props as { service: Service };
+const { slug } = Astro.params;
+
+// If service is not provided (fallback), fetch it
+let currentService: Service | null = service;
+if (!currentService && slug) {
+  currentService = await getStaticProps(
+    () => wordpressClient.getServiceBySlug(slug),
+    null
+  );
+}
+
+// If still no service, return 404
+if (!currentService) {
+  return new Response(null, { status: 404, statusText: 'Service not found' });
+}
+
+// Process ACF fields - convert individual fields to arrays for template compatibility
+if (currentService.acf) {
+  // Convert individual feature fields to array
+  const features = [];
+  for (let i = 1; i <= 5; i++) {
+    const feature = currentService.acf[`service_feature_${i}`];
+    if (feature && feature.trim()) {
+      features.push(feature);
+    }
+  }
+  
+  // Convert individual image fields to gallery array using acf_fields data
+  const gallery = [];
+  for (let i = 1; i <= 4; i++) {
+    const imageField = currentService.acf_fields?.[`service_image_${i}`];
+    // Only process if it's an object with url (not empty string or false)
+    if (imageField && typeof imageField === 'object' && imageField.url) {
+      gallery.push({
+        id: imageField.ID || imageField.id,
+        url: imageField.url,
+        alt: imageField.alt || '',
+        title: imageField.title || '',
+        width: imageField.width,
+        height: imageField.height,
+        mime_type: imageField.mime_type,
+        sizes: imageField.sizes
+      });
+    }
+  }
+  
+  currentService = {
+    ...currentService,
+    acf: {
+      ...currentService.acf,
+      service_features: features,
+      service_gallery: gallery
+    }
+  };
+}
+
+// Fetch related projects for this service using the related_service field
+const relatedProjects = await getStaticProps<Project[]>(
+  () => wordpressClient.getProjectsByService(slug || ''),
+  []
+);
+
+// Generate page metadata
+const pageTitle = `${currentService.title.rendered} Services in Florida | RenovaLink`;
+const pageDescription = generateMetaDescription(
+  currentService.excerpt?.rendered || currentService.content.rendered,
+  160
+);
+
+// Service details for structured data
+const serviceStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": currentService.title.rendered,
+  "description": pageDescription,
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "RenovaLink",
+    "url": "https://renovalink.com"
+  },
+  "serviceType": currentService.title.rendered,
+  "areaServed": {
+    "@type": "State",
+    "name": "Florida"
+  }
+};
+
+// Service icons and colors mapping
+const serviceDetails = {
+  'pool-remodeling': {
+    icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
+    color: 'from-blue-500 to-blue-700',
+    category: 'Pool & Water Features'
+  },
+  'concrete-flooring': {
+    icon: 'M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z',
+    color: 'from-gray-500 to-gray-700',
+    category: 'Concrete & Flooring'
+  },
+  'residential-cleaning': {
+    icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+    color: 'from-green-500 to-green-700',
+    category: 'Cleaning Services'
+  },
+  'technical-support': {
+    icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+    color: 'from-purple-500 to-purple-700',
+    category: 'Technical & Engineering'
+  }
+};
+
+const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails] || serviceDetails['technical-support'];
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={`https://renovalink.com/servicios/${slug}`}
+  type="service"
+  schema={serviceStructuredData}
+>
+  
+  <!-- Hero Section -->
+  <section class="pt-20 pb-16 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white relative overflow-hidden">
+    
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+      <svg width="60" height="60" viewBox="0 0 60 60" class="w-full h-full">
+        <defs>
+          <pattern id="service-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="m 60,0 L 0,0 0,60" fill="none" stroke="white" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#service-grid)" />
+      </svg>
+    </div>
+    
+    <div class="container relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        
+        <!-- Breadcrumb -->
+        <nav class="mb-8" aria-label="Breadcrumb">
+          <ol class="flex items-center justify-center space-x-2 text-sm text-primary-200">
+            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="/servicios" class="hover:text-white transition-colors">Services</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-white font-medium">{currentService.title.rendered}</li>
+          </ol>
+        </nav>
+        
+        <!-- Service Category Badge -->
+        <div class="mb-6">
+          <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-100 border border-white/20">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d={currentServiceDetails.icon} />
+            </svg>
+            {currentServiceDetails.category}
+          </span>
+        </div>
+        
+        <!-- Service Title -->
+        <h1 class="heading-xl mb-6 text-white animate-on-scroll">
+          {currentService.title.rendered}
+          <span class="block text-secondary-400 mt-2">in Florida</span>
+        </h1>
+        
+        <!-- Service Description -->
+        <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto animate-on-scroll">
+          {currentService.acf?.short_description || 
+            (currentService.excerpt?.rendered ? 
+              currentService.excerpt.rendered.replace(/<[^>]*>/g, '') : 
+              currentService.content.rendered.replace(/<[^>]*>/g, '').slice(0, 200) + '...')
+          }
+        </p>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-on-scroll">
+          <a 
+            href="/contacto" 
+            class="btn-secondary text-lg px-8 py-4 shadow-2xl hover:shadow-secondary-500/25 hover:-translate-y-1 transform transition-all duration-300"
+          >
+            Get Free Estimate
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+          
+          <a 
+            href="tel:+1-305-XXX-XXXX" 
+            class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700 shadow-lg"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Call Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Service Details -->
+  <section class="py-20 bg-white">
+    <div class="container">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        
+        <!-- Content -->
+        <div>
+          <h2 class="heading-md mb-8 animate-on-scroll">Professional {currentService.title.rendered}</h2>
+          
+          <!-- Service Content -->
+          <div class="prose prose-lg max-w-none text-neutral-700 mb-8 animate-on-scroll">
+            <div set:html={currentService.content.rendered} />
+          </div>
+          
+          <!-- Service Features with Images Grid -->
+          {currentService.acf?.service_features && currentService.acf.service_features.length > 0 && (
+            <div class="mb-8 animate-on-scroll">
+              <h3 class="text-2xl font-semibold mb-8">What's Included:</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentService.acf.service_features.map((feature, index) => {
+                  const imageField = currentService.acf_fields?.[`service_image_${index + 1}`];
+                  return (
+                    <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-neutral-100">
+                      <!-- Feature Image -->
+                      <div class="aspect-video overflow-hidden bg-gradient-to-br from-primary-50 to-primary-100 relative">
+                        {imageField?.url ? (
+                          <img 
+                            src={imageField.url}
+                            alt={imageField.alt || feature}
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div class="w-full h-full flex items-center justify-center">
+                            <div class="text-center">
+                              <svg class="w-12 h-12 text-primary-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                              </svg>
+                              <p class="text-primary-600 text-sm font-medium">Service Feature</p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        <!-- Overlay on hover -->
+                        <div class="absolute inset-0 bg-primary-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      <!-- Feature Content -->
+                      <div class="p-5">
+                        <div class="flex items-start gap-3">
+                          <div class="flex-shrink-0 mt-1">
+                            <div class="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
+                              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                              </svg>
+                            </div>
+                          </div>
+                          <div>
+                            <h4 class="font-semibold text-neutral-900 mb-2">{feature}</h4>
+                            <p class="text-sm text-neutral-600 leading-relaxed">
+                              Professional service delivery with quality materials and expert craftsmanship.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Bottom accent line -->
+                      <div class="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <!-- Features Summary -->
+              <div class="mt-8 p-6 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl border border-primary-100">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-lg text-neutral-900 mb-2">Complete Service Package</h4>
+                    <p class="text-neutral-700 mb-3">
+                      Our comprehensive {currentService.title.rendered.toLowerCase()} service includes all {currentService.acf.service_features.length} essential components for a successful project completion.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-sm text-neutral-600 shadow-sm">
+                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        Licensed & Insured
+                      </span>
+                      <span class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-sm text-neutral-600 shadow-sm">
+                        <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        Quality Guaranteed
+                      </span>
+                      <span class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-sm text-neutral-600 shadow-sm">
+                        <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                        Timely Completion
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <!-- Price Range - commented out since field is not configured in WordPress
+          {currentService.acf?.price_range && (
+            <div class="mb-8 animate-on-scroll">
+              <h3 class="text-2xl font-semibold mb-4">Investment Range:</h3>
+              <div class="inline-flex items-center px-6 py-3 bg-primary-50 text-primary-700 rounded-lg text-lg font-semibold">
+                {currentService.acf.price_range}
+              </div>
+              <p class="text-sm text-neutral-600 mt-2">
+                *Final pricing depends on project scope, materials, and timeline. Free estimates available.
+              </p>
+            </div>
+          )}
+          -->
+          
+          <!-- CTA -->
+          <div class="animate-on-scroll">
+            <a 
+              href="/contacto" 
+              class="btn-primary text-lg px-8 py-4 shadow-lg hover:shadow-xl"
+            >
+              Request Consultation
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Service Gallery -->
+        <div class="animate-on-scroll">
+          {currentService.acf?.service_gallery && currentService.acf.service_gallery.length > 0 ? (
+            <div class="space-y-6">
+              <h3 class="text-2xl font-semibold">Project Gallery</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentService.acf.service_gallery.map((image, index) => (
+                  <div class="aspect-4-3 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img 
+                      src={getOptimizedImageUrl(image, 400, 300)}
+                      alt={image.alt || `${currentService.title.rendered} project ${index + 1}`}
+                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <!-- Fallback placeholder -->
+            <div class="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-8 text-center">
+              <div class={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${currentServiceDetails.color} rounded-2xl mb-6 shadow-lg`}>
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={currentServiceDetails.icon} />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-semibold text-primary-800 mb-4">{currentService.title.rendered}</h3>
+              <p class="text-primary-700">
+                Professional service delivery with certified quality assurance and comprehensive project management.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Related Projects Carousel -->
+  {relatedProjects.length > 0 && (
+    <section class="py-20 bg-neutral-50">
+      <div class="container">
+        <div class="text-center mb-16">
+          <h2 class="heading-md mb-6 animate-on-scroll">Recent {currentService.title.rendered} Projects</h2>
+          <p class="text-xl text-neutral-600 max-w-3xl mx-auto animate-on-scroll">
+            See examples of our recent work and the quality craftsmanship we bring to every project.
+          </p>
+        </div>
+        
+        <!-- Carousel Container -->
+        <div class="relative">
+          <!-- Carousel Wrapper -->
+          <div class="overflow-hidden rounded-2xl shadow-2xl">
+            <div id="projects-carousel" class="flex transition-transform duration-500 ease-in-out">
+              {relatedProjects.slice(0, 8).map((project, index) => (
+                <div class="min-w-full lg:min-w-1/2 xl:min-w-1/3 px-4">
+                  <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg h-full">
+                    <!-- Large Project Image -->
+                    <div class="aspect-video overflow-hidden relative">
+                      {project.acf_fields?.project_image_1?.url ? (
+                        <img 
+                          src={project.acf_fields.project_image_1.url}
+                          alt={project.acf_fields.project_image_1.alt || project.title.rendered}
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                          <svg class="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                      
+                      <!-- Project Badge -->
+                      <div class="absolute top-4 left-4">
+                        <span class="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+                          Project #{index + 1}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <!-- Project Details -->
+                    <div class="p-6 flex-1 flex flex-col">
+                      <h3 class="text-xl font-bold mb-3 text-neutral-900">{project.title.rendered}</h3>
+                      
+                      <p class="text-neutral-600 text-sm mb-4 leading-relaxed line-clamp-3 flex-1">
+                        {project.excerpt?.rendered ? 
+                          project.excerpt.rendered.replace(/<[^>]*>/g, '') : 
+                          project.content.rendered.replace(/<[^>]*>/g, '').slice(0, 150) + '...'
+                        }
+                      </p>
+                      
+                      <!-- Project Metadata -->
+                      <div class="flex items-center justify-between text-sm text-neutral-500 mb-4">
+                        {project.acf?.project_location && (
+                          <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>{project.acf.project_location}</span>
+                          </div>
+                        )}
+                        
+                        {project.acf?.project_duration && (
+                          <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{project.acf.project_duration}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <!-- View Details Button -->
+                      <div class="flex items-center justify-between mt-auto">
+                        <button class="text-primary-600 font-medium hover:text-primary-700 transition-colors flex items-center gap-1 group">
+                          View Details 
+                          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                        
+                        <!-- Project Type Badge -->
+                        {project.acf?.project_category_select && (
+                          <span class="bg-neutral-100 text-neutral-700 px-2 py-1 rounded text-xs font-medium capitalize">
+                            {project.acf.project_category_select}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <!-- Carousel Controls -->
+          <button 
+            id="carousel-prev" 
+            class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm hover:bg-white text-primary-600 p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 disabled:opacity-50 z-10"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          
+          <button 
+            id="carousel-next" 
+            class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm hover:bg-white text-primary-600 p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 disabled:opacity-50 z-10"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          
+          <!-- Carousel Indicators -->
+          <div class="flex justify-center mt-8 space-x-2" id="carousel-indicators">
+            <!-- Indicators will be generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+  
+  <!-- FAQ Section -->
+  <section class="py-20 bg-white">
+    <div class="container max-w-4xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="heading-md mb-6 animate-on-scroll">Frequently Asked Questions</h2>
+        <p class="text-xl text-neutral-600 animate-on-scroll">
+          Common questions about our {currentService.title.rendered.toLowerCase()} services.
+        </p>
+      </div>
+      
+      <!-- FAQ Items -->
+      <div class="space-y-6">
+        <!-- FAQ items would be dynamically generated based on service type -->
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="faq-1">
+            <h3 class="text-lg font-semibold">How long does a typical {currentService.title.rendered.toLowerCase()} project take?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="faq-1" class="faq-content hidden mt-4 text-neutral-600">
+            <p>Project timelines vary based on scope and complexity. Most projects range from 1-4 weeks, with larger renovations taking longer. We provide detailed timeline estimates during consultation.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="faq-2">
+            <h3 class="text-lg font-semibold">Do you provide free estimates?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="faq-2" class="faq-content hidden mt-4 text-neutral-600">
+            <p>Yes! We offer free, detailed consultations and estimates for all our services. Our certified professionals will assess your project and provide transparent pricing with no hidden fees.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="faq-3">
+            <h3 class="text-lg font-semibold">Are you licensed and insured?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="faq-3" class="faq-content hidden mt-4 text-neutral-600">
+            <p>Absolutely. RenovaLink is fully licensed and insured in Florida. Our team includes certified engineers and we carry comprehensive liability insurance for your protection.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="faq-4">
+            <h3 class="text-lg font-semibold">What warranty do you provide?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="faq-4" class="faq-content hidden mt-4 text-neutral-600">
+            <p>We stand behind our work with comprehensive warranties that vary by service type. All work comes with a minimum 1-year warranty, with many services covered for longer periods. Details provided during consultation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Call to Action -->
+  <section class="py-20 bg-gradient-to-br from-primary-600 to-primary-800 text-white">
+    <div class="container text-center">
+      <h2 class="heading-md mb-6 animate-on-scroll">Ready to Start Your {currentService.title.rendered} Project?</h2>
+      <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto animate-on-scroll">
+        Contact us today for a free consultation and detailed estimate. Let's bring your vision to life.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-on-scroll">
+        <a href="/contacto" class="btn-secondary text-lg px-8 py-4 shadow-2xl">
+          Get Free Estimate
+        </a>
+        <a href="tel:+1-305-XXX-XXXX" class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700">
+          Call (305) XXX-XXXX
+        </a>
+      </div>
+    </div>
+  </section>
+  
+</Layout>
+
+<script>
+  // FAQ functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqTriggers = document.querySelectorAll('.faq-trigger');
+    
+    faqTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetId = trigger.getAttribute('data-target');
+        const content = targetId ? document.getElementById(targetId) : null;
+        const arrow = trigger.querySelector('svg');
+        
+        if (content && arrow) {
+          const isHidden = content.classList.contains('hidden');
+          
+          // Close all other FAQs
+          faqTriggers.forEach(otherTrigger => {
+            if (otherTrigger !== trigger) {
+              const otherId = otherTrigger.getAttribute('data-target');
+              const otherContent = otherId ? document.getElementById(otherId) : null;
+              const otherArrow = otherTrigger.querySelector('svg');
+              
+              if (otherContent && otherArrow) {
+                otherContent.classList.add('hidden');
+                otherArrow.classList.remove('rotate-180');
+              }
+            }
+          });
+          
+          // Toggle current FAQ
+          if (isHidden) {
+            content.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+          } else {
+            content.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+          }
+        }
+      });
+    });
+
+    // Projects Carousel functionality
+    const carousel = document.getElementById('projects-carousel');
+    const prevButton = document.getElementById('carousel-prev');
+    const nextButton = document.getElementById('carousel-next');
+    const indicatorsContainer = document.getElementById('carousel-indicators');
+    
+    if (carousel && prevButton && nextButton) {
+      const slides = carousel.children;
+      let currentIndex = 0;
+      const totalSlides = slides.length;
+      
+      // Get slides per view based on screen size
+      function getSlidesPerView() {
+        if (window.innerWidth >= 1280) return 3; // xl screens
+        if (window.innerWidth >= 1024) return 2; // lg screens
+        return 1; // mobile and tablet
+      }
+      
+      // Create indicators
+      function createIndicators() {
+        indicatorsContainer.innerHTML = '';
+        const slidesPerView = getSlidesPerView();
+        const totalPages = Math.ceil(totalSlides / slidesPerView);
+        
+        for (let i = 0; i < totalPages; i++) {
+          const indicator = document.createElement('button');
+          indicator.className = `w-2 h-2 rounded-full transition-all duration-200 ${i === 0 ? 'bg-primary-600 w-6' : 'bg-neutral-300 hover:bg-primary-300'}`;
+          indicator.addEventListener('click', () => goToSlide(i * slidesPerView));
+          indicatorsContainer.appendChild(indicator);
+        }
+      }
+      
+      // Update indicators
+      function updateIndicators() {
+        const indicators = indicatorsContainer.children;
+        const slidesPerView = getSlidesPerView();
+        const currentPage = Math.floor(currentIndex / slidesPerView);
+        
+        Array.from(indicators).forEach((indicator, index) => {
+          if (index === currentPage) {
+            indicator.className = 'w-6 h-2 rounded-full bg-primary-600 transition-all duration-200';
+          } else {
+            indicator.className = 'w-2 h-2 rounded-full bg-neutral-300 hover:bg-primary-300 transition-all duration-200';
+          }
+        });
+      }
+      
+      // Go to specific slide
+      function goToSlide(index) {
+        const slidesPerView = getSlidesPerView();
+        const maxIndex = totalSlides - slidesPerView;
+        currentIndex = Math.max(0, Math.min(index, maxIndex));
+        
+        const slideWidth = carousel.offsetWidth / slidesPerView;
+        const translateX = -(currentIndex * slideWidth);
+        carousel.style.transform = `translateX(${translateX}px)`;
+        
+        // Update button states
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex >= maxIndex;
+        
+        updateIndicators();
+      }
+      
+      // Next slide
+      function nextSlide() {
+        if (currentIndex < totalSlides - getSlidesPerView()) {
+          goToSlide(currentIndex + 1);
+        }
+      }
+      
+      // Previous slide
+      function prevSlide() {
+        if (currentIndex > 0) {
+          goToSlide(currentIndex - 1);
+        }
+      }
+      
+      // Event listeners
+      nextButton.addEventListener('click', nextSlide);
+      prevButton.addEventListener('click', prevSlide);
+      
+      // Auto-advance carousel
+      let autoSlideInterval;
+      function startAutoSlide() {
+        autoSlideInterval = setInterval(() => {
+          if (currentIndex >= totalSlides - getSlidesPerView()) {
+            goToSlide(0);
+          } else {
+            nextSlide();
+          }
+        }, 5000);
+      }
+      
+      function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+      }
+      
+      // Pause auto-slide on hover
+      carousel.addEventListener('mouseenter', stopAutoSlide);
+      carousel.addEventListener('mouseleave', startAutoSlide);
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        createIndicators();
+        goToSlide(0); // Reset to first slide
+      });
+      
+      // Initialize
+      createIndicators();
+      goToSlide(0);
+      startAutoSlide();
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+      });
+    }
+  });
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  
+  .prose p {
+    margin-bottom: 1.5em;
+    line-height: 1.7;
+  }
+  
+  .prose ul, .prose ol {
+    margin: 1.5em 0;
+    padding-left: 1.5em;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5em;
+  }
+  
+  .prose strong {
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .faq-trigger:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  
+  .faq-content {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json" set:html={JSON.stringify(serviceStructuredData)}></script>

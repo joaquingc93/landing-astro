@@ -1,0 +1,183 @@
+---
+import { wordpressClient, getStaticProps } from '@/lib/wordpress-client';
+
+// Fetch site configuration from WordPress
+const siteConfig = await getStaticProps(
+  () => wordpressClient.getSiteConfig(),
+  {
+    hero: {
+      title: 'Transform Your Space with RenovaLink',
+      subtitle: 'Premier Remodeling Services in Florida',
+      description: 'From pool renovations to structural engineering, we bring your vision to life with quality craftsmanship and certified expertise.',
+      background_image: null
+    }
+  }
+);
+
+// Preload hero image for better LCP
+const heroImageSrc = siteConfig?.hero?.background_image?.url || '/images/hero-bg.jpg';
+const heroOverlayOpacity = siteConfig?.hero?.overlay_opacity || 0.7;
+const heroContent = {
+  title: siteConfig?.hero?.title || 'Transform Your Space with RenovaLink',
+  subtitle: siteConfig?.hero?.subtitle || 'Premier Remodeling Services in Florida',
+  description: siteConfig?.hero?.description || 'From pool renovations to structural engineering, we bring your vision to life with quality craftsmanship and certified expertise.',
+  cta_text: 'Get Free Estimate',
+  cta_link: '/contacto',
+  video_url: siteConfig?.hero?.video_url
+};
+---
+
+<!-- Preload hero image -->
+<link rel="preload" as="image" href={heroImageSrc} />
+
+<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800">
+  
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <picture>
+      <source 
+        srcset={`${heroImageSrc}?w=1920&h=1080&fit=crop&format=webp`} 
+        media="(min-width: 1024px)" 
+        type="image/webp"
+      />
+      <source 
+        srcset={`${heroImageSrc}?w=768&h=1024&fit=crop&format=webp`} 
+        media="(max-width: 1023px)" 
+        type="image/webp"
+      />
+      <img 
+        src={heroImageSrc}
+        alt="RenovaLink remodeling projects showcase"
+        class="w-full h-full object-cover opacity-20"
+        loading="eager"
+        decoding="sync"
+      />
+    </picture>
+    
+    <!-- Gradient overlay with dynamic opacity -->
+    <div class="absolute inset-0" style={`background: linear-gradient(to right, rgba(30, 58, 138, ${heroOverlayOpacity * 0.9}), rgba(30, 64, 175, ${heroOverlayOpacity * 0.8}), rgba(59, 130, 246, ${heroOverlayOpacity * 0.7}))`}></div>
+    
+    <!-- Pattern overlay -->
+    <div class="absolute inset-0 opacity-10">
+      <svg width="60" height="60" viewBox="0 0 60 60" class="w-full h-full">
+        <defs>
+          <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="m 60,0 L 0,0 0,60" fill="none" stroke="white" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+    </div>
+  </div>
+  
+  <!-- Content -->
+  <div class="relative z-10 container text-center text-white">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Subtitle -->
+      <div class="mb-6 animate-fade-in">
+        <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-100 border border-white/20">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          {heroContent.subtitle}
+        </span>
+      </div>
+      
+      <!-- Main Title -->
+      <h1 class="heading-xl mb-6 animate-slide-up stagger-1">
+        <span class="block">{heroContent.title.split(' ').slice(0, 3).join(' ')}</span>
+        <span class="block gradient-text font-bold">
+          {heroContent.title.split(' ').slice(3).join(' ')}
+        </span>
+      </h1>
+      
+      <!-- Description -->
+      <p class="text-xl sm:text-2xl text-primary-100 mb-10 max-w-3xl mx-auto animate-slide-up stagger-2">
+        {heroContent.description}
+      </p>
+      
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up stagger-3">
+        <a 
+          href={heroContent.cta_link}
+          class="btn-secondary text-lg px-8 py-4 shadow-2xl hover:shadow-primary-500/25 hover:-translate-y-1 transform transition-all duration-300"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          {heroContent.cta_text}
+        </a>
+        
+        <a 
+          href="/servicios"
+          class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+        >
+          View Our Services
+        </a>
+      </div>
+      
+      <!-- Trust Indicators -->
+      <div class="mt-12 animate-fade-in stagger-4">
+        <div class="flex flex-wrap justify-center items-center gap-8 text-primary-200">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-sm font-medium">Licensed & Insured</span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm font-medium">Certified Engineers</span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-sm font-medium">24/7 Emergency Service</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+  
+  <!-- Floating elements -->
+  <div class="absolute top-1/4 left-10 w-20 h-20 bg-secondary-400/10 rounded-full animate-pulse-slow hidden lg:block"></div>
+  <div class="absolute top-1/3 right-20 w-16 h-16 bg-primary-300/10 rounded-full animate-pulse-slow animation-delay-1000 hidden lg:block"></div>
+  <div class="absolute bottom-1/4 right-10 w-24 h-24 bg-secondary-300/10 rounded-full animate-pulse-slow animation-delay-2000 hidden lg:block"></div>
+</section>
+
+<style>
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.05); }
+  }
+  
+  .animation-delay-1000 { animation-delay: 1s; }
+  .animation-delay-2000 { animation-delay: 2s; }
+  
+  /* Critical path optimization */
+  .hero-section {
+    contain: layout style paint;
+  }
+  
+  /* Improve paint performance */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    z-index: -1;
+  }
+</style>

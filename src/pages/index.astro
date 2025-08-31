@@ -1,0 +1,307 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/Hero.astro';
+import ServicesGrid from '@/components/ServicesGrid.astro';
+import ProjectGallery from '@/components/ProjectGallery.astro';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel.astro';
+import ContactCTA from '@/components/ContactCTA.astro';
+import Footer from '@/components/Footer.astro';
+import { wordpressClient, getStaticProps, createFallbackData } from '@/lib/wordpress-client';
+
+// Fetch all content for the landing page
+const [services, projects, testimonials] = await Promise.all([
+  getStaticProps(
+    () => wordpressClient.getAllServices(),
+    createFallbackData().services
+  ),
+  getStaticProps(
+    () => wordpressClient.getAllProjects(),
+    createFallbackData().projects
+  ),
+  getStaticProps(
+    () => wordpressClient.getFeaturedTestimonials(),
+    createFallbackData().testimonials
+  )
+]);
+
+// Structured data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "RenovaLink",
+  "description": "Premier remodeling services in Florida specializing in pool renovations, concrete work, residential cleaning, and structural engineering.",
+  "url": "https://renovalink.com",
+  "telephone": "+1-305-XXX-XXXX",
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "FL",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "25.7617",
+    "longitude": "-80.1918"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday", 
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "opens": "07:00",
+    "closes": "18:00"
+  },
+  "serviceArea": {
+    "@type": "State",
+    "name": "Florida"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Remodeling Services",
+    "itemListElement": services.map(service => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.title.rendered,
+        "description": service.excerpt.rendered
+      }
+    }))
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": testimonials.length.toString()
+  },
+  "priceRange": "$$",
+  "image": [
+    "https://renovalink.com/images/hero-bg.jpg",
+    "https://renovalink.com/images/services-showcase.jpg"
+  ]
+};
+---
+
+<Layout
+  title="RenovaLink Florida - Premier Pool, Concrete & Remodeling Services | Licensed Engineers"
+  description="Transform your Florida home with RenovaLink's expert remodeling services. Pool renovations, concrete work, residential cleaning & certified structural engineering. Licensed, insured & guaranteed."
+  canonical="https://renovalink.com"
+  type="website"
+  schema={structuredData}
+>
+  
+  <!-- Hero Section -->
+  <Hero />
+  
+  <!-- Services Overview -->
+  <section id="services" class="py-20 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+    <div class="container">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg gradient-text mb-6">Our Specialized Services</h2>
+        <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+          From pool transformations to structural engineering, we bring decades of expertise to every project in Florida.
+        </p>
+      </div>
+      
+      <ServicesGrid services={services} />
+    </div>
+  </section>
+  
+  <!-- Why Choose RenovaLink Section -->
+  <section class="py-20 bg-white">
+    <div class="container">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Content -->
+        <div class="animate-on-scroll">
+          <h2 class="heading-lg mb-8">
+            Why Choose 
+            <span class="gradient-text">RenovaLink?</span>
+          </h2>
+          
+          <div class="space-y-8">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Licensed & Certified Engineers</h3>
+                <p class="text-neutral-600">Our certified civil engineer ensures every project meets Florida building codes and structural requirements.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-secondary-400 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-neutral-900" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Quality Guarantee</h3>
+                <p class="text-neutral-600">We stand behind our work with comprehensive warranties and use only premium materials for lasting results.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Personalized Service</h3>
+                <p class="text-neutral-600">Every project gets dedicated attention from planning to completion, with clear communication throughout.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-secondary-400 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Transparent Pricing</h3>
+                <p class="text-neutral-600">No hidden fees or surprise costs. Get detailed estimates upfront with clear breakdowns of all work.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-10">
+            <a href="/contacto" class="btn-primary text-lg px-8 py-4">
+              Get Your Free Consultation
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Image -->
+        <div class="animate-on-scroll">
+          <div class="relative">
+            <img 
+              src="/images/team-at-work.jpg" 
+              alt="RenovaLink team working on a pool renovation project"
+              class="rounded-2xl shadow-2xl w-full h-[600px] object-cover"
+              loading="lazy"
+            />
+            
+            <!-- Floating stats -->
+            <div class="absolute -bottom-6 -left-6 bg-white rounded-xl p-6 shadow-2xl">
+              <div class="text-3xl font-bold text-primary-600 mb-1">500+</div>
+              <div class="text-sm text-neutral-600">Projects Completed</div>
+            </div>
+            
+            <div class="absolute -top-6 -right-6 bg-secondary-400 text-neutral-900 rounded-xl p-6 shadow-2xl">
+              <div class="text-3xl font-bold mb-1">15+</div>
+              <div class="text-sm font-medium">Years Experience</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Project Gallery -->
+  <section id="projects" class="py-20 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+    <div class="container">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg gradient-text mb-6">Our Recent Projects</h2>
+        <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+          See the quality and craftsmanship that sets RenovaLink apart in every project we complete.
+        </p>
+      </div>
+      
+      <ProjectGallery projects={projects} />
+    </div>
+  </section>
+  
+  <!-- Testimonials -->
+  <section class="py-20 bg-white">
+    <div class="container">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg gradient-text mb-6">What Our Clients Say</h2>
+        <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+          Don't just take our word for it. Here's what homeowners across Florida are saying about RenovaLink.
+        </p>
+      </div>
+      
+      <TestimonialsCarousel testimonials={testimonials} />
+    </div>
+  </section>
+  
+  <!-- Contact CTA -->
+  <ContactCTA />
+  
+  <!-- Footer -->
+  <Footer />
+  
+</Layout>
+
+<style>
+  /* Page-specific optimizations */
+  .container {
+    contain: layout style;
+  }
+  
+  /* Smooth scroll behavior for section navigation */
+  html {
+    scroll-padding-top: 80px;
+  }
+  
+  /* Critical path performance optimization */
+  section {
+    contain: layout style paint;
+  }
+  
+  /* Intersection Observer animation triggers */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-on-scroll.animate-fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Gradient text effect */
+  .gradient-text {
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 50%, #facc15 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  /* Enhanced focus states for accessibility */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  
+  /* Performance: GPU acceleration for animations */
+  .animate-on-scroll,
+  .btn-primary,
+  .btn-secondary {
+    will-change: transform;
+  }
+</style>
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>

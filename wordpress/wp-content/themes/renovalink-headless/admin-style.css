@@ -1,0 +1,195 @@
+/* RenovaLink Admin Styles */
+
+/* Admin bar customization */
+#wpadminbar {
+    background: #2271b1 !important;
+}
+
+/* Custom post type icons */
+#menu-posts-servicios .wp-menu-image:before {
+    content: '\f308' !important; /* hammer icon */
+}
+
+#menu-posts-proyectos .wp-menu-image:before {
+    content: '\f322' !important; /* portfolio icon */
+}
+
+#menu-posts-testimonios .wp-menu-image:before {
+    content: '\f205' !important; /* quote icon */
+}
+
+/* ACF styling improvements */
+.acf-field {
+    margin-bottom: 20px !important;
+}
+
+.acf-field .acf-label {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.acf-field .acf-input {
+    margin-top: 5px;
+}
+
+/* Service type styling in admin */
+.service-type-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+}
+
+.service-type-badge.pool { background-color: #0073aa; }
+.service-type-badge.concrete { background-color: #826eb4; }
+.service-type-badge.cleaning { background-color: #00a32a; }
+.service-type-badge.engineering { background-color: #d63638; }
+
+/* Gallery field styling */
+.acf-gallery .acf-gallery-main {
+    border: 2px dashed #c3c4c7;
+    border-radius: 4px;
+    min-height: 200px;
+}
+
+.acf-gallery .acf-gallery-main.has-value {
+    border-style: solid;
+    border-color: #8c8f94;
+}
+
+/* Image upload styling */
+.acf-image-uploader {
+    background: #f6f7f7;
+    border: 2px dashed #c3c4c7;
+    border-radius: 4px;
+    padding: 40px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.acf-image-uploader:hover {
+    background: #f0f0f1;
+    border-color: #8c8f94;
+}
+
+.acf-image-uploader.has-value {
+    background: white;
+    border-style: solid;
+    border-color: #8c8f94;
+    padding: 10px;
+}
+
+/* Repeater field styling */
+.acf-repeater {
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    background: white;
+}
+
+.acf-repeater .acf-repeater-table {
+    background: white;
+}
+
+.acf-repeater .acf-row {
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.acf-repeater .acf-row:last-child {
+    border-bottom: none;
+}
+
+/* RenovaLink specific admin notices */
+.renovalink-admin-notice {
+    background: #f0f6fc;
+    border-left: 4px solid #2271b1;
+    padding: 12px;
+    margin: 5px 0 15px;
+}
+
+.renovalink-admin-notice h3 {
+    color: #2271b1;
+    margin: 0 0 8px;
+}
+
+/* Dashboard widget styling */
+.renovalink-dashboard-widget {
+    background: white;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.renovalink-dashboard-widget h3 {
+    color: #2271b1;
+    margin: 0 0 15px;
+    border-bottom: 1px solid #f0f0f1;
+    padding-bottom: 10px;
+}
+
+/* Quick stats styling */
+.renovalink-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.renovalink-stat-item {
+    background: #f6f7f7;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.renovalink-stat-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2271b1;
+    display: block;
+}
+
+.renovalink-stat-label {
+    font-size: 12px;
+    color: #646970;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Form field improvements */
+.form-table th {
+    color: #1d2327;
+    font-weight: 600;
+}
+
+.form-table td {
+    padding: 15px 10px !important;
+}
+
+.regular-text {
+    padding: 8px 12px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    background: white;
+    font-size: 14px;
+}
+
+.regular-text:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Button styling */
+.button-primary {
+    background: #2271b1 !important;
+    border-color: #2271b1 !important;
+}
+
+.button-primary:hover {
+    background: #135e96 !important;
+    border-color: #135e96 !important;
+}

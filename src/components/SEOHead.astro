@@ -1,0 +1,163 @@
+---
+import type { WPMedia } from '@/schemas/wordpress';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  image?: WPMedia | string;
+  noindex?: boolean;
+  type?: 'website' | 'article' | 'service';
+  publishedTime?: string;
+  modifiedTime?: string;
+  schema?: any;
+}
+
+const {
+  title = 'RenovaLink - Premier Remodeling Services in Florida',
+  description = 'Transform your space with RenovaLink\'s expert pool remodeling, concrete work, residential cleaning, and technical engineering services in Florida.',
+  canonical,
+  image,
+  noindex = false,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  schema
+} = Astro.props;
+
+const siteName = 'RenovaLink';
+const siteUrl = Astro.site || 'https://renovalink.com';
+
+// Generate canonical URL
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString();
+
+// Handle image URL
+let imageUrl = '';
+if (typeof image === 'string') {
+  imageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).toString();
+} else if (image?.url) {
+  imageUrl = image.url.startsWith('http') ? image.url : new URL(image.url, siteUrl).toString();
+} else {
+  // Default OG image
+  imageUrl = new URL('/images/renovalink-og-default.jpg', siteUrl).toString();
+}
+
+// Generate full title
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+
+// Generate JSON-LD schema
+const defaultSchema = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'Article' : 'LocalBusiness',
+  name: siteName,
+  description,
+  url: canonicalUrl,
+  ...(type === 'LocalBusiness' && {
+    '@type': 'LocalBusiness',
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Florida',
+      'addressRegion': 'FL',
+      'addressCountry': 'US'
+    },
+    'areaServed': 'Florida',
+    'serviceArea': {
+      '@type': 'State',
+      'name': 'Florida'
+    },
+    'priceRange': '$$',
+    'telephone': '+1-XXX-XXX-XXXX',
+    'openingHours': ['Mo-Fr 08:00-18:00', 'Sa 09:00-16:00']
+  }),
+  ...(publishedTime && { datePublished: publishedTime }),
+  ...(modifiedTime && { dateModified: modifiedTime }),
+  ...(imageUrl && { image: imageUrl })
+};
+
+const finalSchema = schema || defaultSchema;
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Robots -->
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={fullTitle} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={imageUrl} />
+
+<!-- Article specific meta tags -->
+{type === 'article' && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{type === 'article' && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime} />
+)}
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#2563eb" />
+<meta name="msapplication-TileColor" content="#2563eb" />
+
+<!-- Preload critical resources -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Critical CSS -->
+<style>
+  /* Critical path CSS for above-the-fold content */
+  body { 
+    font-family: system-ui, -apple-system, sans-serif; 
+    margin: 0;
+  }
+  .hero-loading { 
+    min-height: 50vh; 
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  }
+</style>
+
+<!-- JSON-LD Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(finalSchema)} />
+
+<!-- Performance hints -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<!-- Security headers via meta tags -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+
+<!-- Service Worker registration (optional) -->
+<script is:inline>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
+      // Fail silently if service worker is not available
+    });
+  }
+</script>

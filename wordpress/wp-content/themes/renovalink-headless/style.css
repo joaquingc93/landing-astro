@@ -1,0 +1,52 @@
+/*
+Theme Name: RenovaLink Headless
+Description: Headless WordPress theme for RenovaLink - Florida remodeling company. Optimized for REST API consumption by Astro.js frontend.
+Version: 1.0.0
+Author: Your Name
+Text Domain: renovalink
+*/
+
+/* Minimal styles for WordPress admin - this theme is headless */
+
+body.wp-admin {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Custom post type admin styling */
+.post-type-servicios .dashicons-admin-post:before,
+.post-type-proyectos .dashicons-admin-post:before,
+.post-type-testimonios .dashicons-admin-post:before {
+    color: #2271b1;
+}
+
+/* ACF field styling */
+.acf-field-image .acf-image-uploader {
+    border: 2px dashed #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+.acf-field-gallery .acf-gallery {
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+
+/* Custom admin notices */
+.renovalink-notice {
+    border-left: 4px solid #2271b1;
+    background: #f0f6fc;
+    padding: 12px;
+    margin: 5px 0 15px;
+}
+
+.renovalink-notice h3 {
+    margin: 0 0 10px;
+    color: #2271b1;
+}
+
+/* Service type color coding */
+.service-type-pool { border-left-color: #0073aa; }
+.service-type-concrete { border-left-color: #826eb4; }
+.service-type-cleaning { border-left-color: #00a32a; }
+.service-type-engineering { border-left-color: #d63638; }

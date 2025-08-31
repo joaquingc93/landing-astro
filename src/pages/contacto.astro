@@ -1,0 +1,430 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ContactCTA from '@/components/ContactCTA.astro';
+
+// Page metadata
+const pageTitle = 'Contact Us - Free Consultation & Estimates | RenovaLink Florida';
+const pageDescription = 'Contact RenovaLink for your free consultation and detailed estimate. Professional remodeling services throughout Florida with licensed engineers and quality guarantee.';
+
+// Structured data for contact page
+const contactStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "RenovaLink",
+  "description": pageDescription,
+  "url": "https://renovalink.com",
+  "telephone": "+1-305-XXX-XXXX",
+  "email": "info@renovalink.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "FL",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates", 
+    "latitude": "25.7617",
+    "longitude": "-80.1918"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "07:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification", 
+      "dayOfWeek": "Saturday",
+      "opens": "08:00",
+      "closes": "16:00"
+    }
+  ],
+  "serviceArea": {
+    "@type": "State",
+    "name": "Florida"
+  }
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical="https://renovalink.com/contacto"
+  type="website"
+  schema={contactStructuredData}
+>
+  
+  <!-- Hero Section -->
+  <section class="pt-20 pb-16 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white relative overflow-hidden">
+    
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+      <svg width="60" height="60" viewBox="0 0 60 60" class="w-full h-full">
+        <defs>
+          <pattern id="contact-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="m 60,0 L 0,0 0,60" fill="none" stroke="white" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#contact-grid)" />
+      </svg>
+    </div>
+    
+    <div class="container relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        
+        <!-- Breadcrumb -->
+        <nav class="mb-8" aria-label="Breadcrumb">
+          <ol class="flex items-center justify-center space-x-2 text-sm text-primary-200">
+            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-white font-medium">Contact</li>
+          </ol>
+        </nav>
+        
+        <!-- Contact Badge -->
+        <div class="mb-6">
+          <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-100 border border-white/20">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Get In Touch
+          </span>
+        </div>
+        
+        <!-- Page Title -->
+        <h1 class="heading-xl mb-6 text-white animate-on-scroll">
+          Let's Discuss Your 
+          <span class="block text-secondary-400 mt-2">Dream Project</span>
+        </h1>
+        
+        <!-- Page Description -->
+        <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto animate-on-scroll">
+          Ready to transform your space? Contact our certified professionals for a free consultation 
+          and detailed estimate. We're here to answer all your questions.
+        </p>
+        
+        <!-- Quick Contact Options -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-on-scroll">
+          <a 
+            href="tel:+1-305-XXX-XXXX" 
+            class="btn-secondary text-lg px-8 py-4 shadow-2xl hover:shadow-secondary-500/25 hover:-translate-y-1 transform transition-all duration-300"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Call (305) XXX-XXXX
+          </a>
+          
+          <a 
+            href="mailto:info@renovalink.com" 
+            class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700 shadow-lg"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Send Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Main Contact Form -->
+  <ContactCTA />
+  
+  <!-- Contact Information -->
+  <section class="py-20 bg-white">
+    <div class="container">
+      <div class="grid lg:grid-cols-2 gap-16">
+        
+        <!-- Contact Details -->
+        <div>
+          <h2 class="heading-md mb-8 animate-on-scroll">Get In Touch</h2>
+          
+          <div class="space-y-8">
+            <!-- Phone -->
+            <div class="flex gap-4 animate-on-scroll">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Phone</h3>
+                <p class="text-neutral-600 mb-2">Call us for immediate assistance</p>
+                <a href="tel:+1-305-XXX-XXXX" class="text-primary-600 hover:text-primary-700 font-medium">
+                  (305) XXX-XXXX
+                </a>
+                <p class="text-sm text-neutral-500 mt-1">24/7 Emergency Service Available</p>
+              </div>
+            </div>
+            
+            <!-- Email -->
+            <div class="flex gap-4 animate-on-scroll">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-secondary-400 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Email</h3>
+                <p class="text-neutral-600 mb-2">Send us a detailed message</p>
+                <a href="mailto:info@renovalink.com" class="text-primary-600 hover:text-primary-700 font-medium">
+                  info@renovalink.com
+                </a>
+                <p class="text-sm text-neutral-500 mt-1">We respond within 24 hours</p>
+              </div>
+            </div>
+            
+            <!-- Location -->
+            <div class="flex gap-4 animate-on-scroll">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Service Area</h3>
+                <p class="text-neutral-600 mb-2">We serve throughout Florida</p>
+                <p class="text-primary-600 font-medium">Statewide Coverage</p>
+                <p class="text-sm text-neutral-500 mt-1">Miami-Dade, Broward, Palm Beach & Beyond</p>
+              </div>
+            </div>
+            
+            <!-- Business Hours -->
+            <div class="flex gap-4 animate-on-scroll">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-secondary-400 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Business Hours</h3>
+                <div class="text-neutral-600 space-y-1">
+                  <p><strong>Monday - Friday:</strong> 7:00 AM - 6:00 PM</p>
+                  <p><strong>Saturday:</strong> 8:00 AM - 4:00 PM</p>
+                  <p><strong>Sunday:</strong> Emergency Calls Only</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Why Contact Us -->
+        <div class="animate-on-scroll">
+          <h2 class="heading-md mb-8">Why Contact RenovaLink?</h2>
+          
+          <div class="space-y-6">
+            <div class="card p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-2">Free Detailed Estimates</h3>
+                  <p class="text-neutral-600">Get comprehensive project estimates with no hidden costs or surprises.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8 text-secondary-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-2">Licensed & Certified</h3>
+                  <p class="text-neutral-600">Work with Florida-licensed professionals including certified engineers.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-2">Fast Response</h3>
+                  <p class="text-neutral-600">Quick response times and efficient project scheduling to meet your timeline.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8 text-secondary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-2">Quality Guarantee</h3>
+                  <p class="text-neutral-600">All work comes with comprehensive warranties and quality assurance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Emergency Contact -->
+          <div class="mt-8 p-6 bg-gradient-to-r from-red-500 to-red-600 rounded-xl text-white">
+            <div class="flex items-center gap-4">
+              <div class="flex-shrink-0">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">Emergency Service</h3>
+                <p class="text-red-100 mb-3">Water damage, structural issues, urgent repairs - we're available 24/7</p>
+                <a href="tel:+1-305-XXX-XXXX" class="btn-secondary bg-white text-red-600 hover:bg-red-50 px-6 py-3">
+                  Call Emergency Line
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+    <div class="container max-w-4xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="heading-md mb-6 animate-on-scroll">Contact Questions & Answers</h2>
+        <p class="text-xl text-neutral-600 animate-on-scroll">
+          Common questions about getting started with your project.
+        </p>
+      </div>
+      
+      <div class="space-y-6">
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="contact-faq-1">
+            <h3 class="text-lg font-semibold">How quickly will you respond to my inquiry?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="contact-faq-1" class="faq-content hidden mt-4 text-neutral-600">
+            <p>We typically respond to all inquiries within 24 hours during business hours, often much sooner. For emergency situations, we're available 24/7 and respond immediately.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="contact-faq-2">
+            <h3 class="text-lg font-semibold">What information should I include in my message?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="contact-faq-2" class="faq-content hidden mt-4 text-neutral-600">
+            <p>Please include: the type of service you need, project location, approximate size/scope, your timeline, and any specific requirements. The more details you provide, the more accurate our initial estimate will be.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="contact-faq-3">
+            <h3 class="text-lg font-semibold">Do you provide virtual consultations?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="contact-faq-3" class="faq-content hidden mt-4 text-neutral-600">
+            <p>Yes! We offer virtual consultations via video call for initial project discussions. For detailed estimates and technical assessments, an on-site visit is typically required, but we can often provide preliminary information virtually.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 animate-on-scroll">
+          <button class="faq-trigger flex items-center justify-between w-full text-left" data-target="contact-faq-4">
+            <h3 class="text-lg font-semibold">What areas do you serve?</h3>
+            <svg class="w-5 h-5 text-neutral-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="contact-faq-4" class="faq-content hidden mt-4 text-neutral-600">
+            <p>We serve throughout Florida with primary coverage in Miami-Dade, Broward, Palm Beach, Orange, and surrounding counties. Contact us to confirm service availability in your specific area.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+</Layout>
+
+<script>
+  // FAQ functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqTriggers = document.querySelectorAll('.faq-trigger');
+    
+    faqTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetId = trigger.getAttribute('data-target');
+        const content = document.getElementById(targetId);
+        const arrow = trigger.querySelector('svg');
+        
+        if (content && arrow) {
+          const isHidden = content.classList.contains('hidden');
+          
+          // Close all other FAQs
+          faqTriggers.forEach(otherTrigger => {
+            if (otherTrigger !== trigger) {
+              const otherId = otherTrigger.getAttribute('data-target');
+              const otherContent = document.getElementById(otherId);
+              const otherArrow = otherTrigger.querySelector('svg');
+              
+              if (otherContent && otherArrow) {
+                otherContent.classList.add('hidden');
+                otherArrow.classList.remove('rotate-180');
+              }
+            }
+          });
+          
+          // Toggle current FAQ
+          if (isHidden) {
+            content.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+          } else {
+            content.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .faq-trigger:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  
+  .faq-content {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json" set:html={JSON.stringify(contactStructuredData)}></script>
