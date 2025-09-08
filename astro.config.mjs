@@ -6,7 +6,10 @@ import node from '@astrojs/node';
 
 export default defineConfig({
   site: 'https://renovalink.com',
-  output: 'static',
+  output: 'server',
+  adapter: node({
+    mode: 'standalone'
+  }),
   integrations: [
     tailwind({
       applyBaseStyles: false,

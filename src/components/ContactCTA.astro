@@ -405,17 +405,16 @@
       try {
         // Collect form data
         const formData = new FormData(form!);
-        // In a real implementation, you would send formData to your backend API
-        console.log('Form data ready for submission:', Object.fromEntries(formData));
         
-        // In a real implementation, you would send this to your backend
-        // For demo purposes, we'll simulate an API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Send data using API endpoint
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData,
+        });
         
-        // Simulate success (in production, check actual response)
-        const success = Math.random() > 0.1; // 90% success rate for demo
+        const result = await response.json();
         
-        if (success) {
+        if (result.success) {
           successMessage?.classList.remove('hidden');
           form?.reset();
           
@@ -428,7 +427,7 @@
             });
           }
         } else {
-          throw new Error('Submission failed');
+          throw new Error(result.message || 'Submission failed');
         }
         
       } catch (error) {
