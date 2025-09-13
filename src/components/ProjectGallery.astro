@@ -1,5 +1,4 @@
 ---
-import { getOptimizedImageUrl } from '@/lib/utils';
 import type { Project } from '@/schemas/wordpress';
 
 export interface Props {
@@ -8,7 +7,7 @@ export interface Props {
 
 const { projects } = Astro.props;
 
-// Categories for filtering
+// Categories for filtering with WordPress project_type mapping
 const categories = [
   { id: 'all', name: 'All Projects', icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' },
   { id: 'pool', name: 'Pool Remodeling', icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z' },
@@ -16,6 +15,33 @@ const categories = [
   { id: 'cleaning', name: 'Cleaning', icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' },
   { id: 'technical', name: 'Technical', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' }
 ];
+
+// Map WordPress project_type values to filter categories
+const mapProjectTypeToCategory = (projectType: string | undefined, projectCategory?: string): string => {
+  if (!projectType && !projectCategory) return 'all';
+
+  const typeToCheck = projectType || projectCategory || '';
+  const typeMap: Record<string, string> = {
+    'Pool': 'pool',
+    'Pool Remodeling': 'pool',
+    'pool-remodeling': 'pool',
+    'pool': 'pool',
+    'Floor': 'concrete',
+    'Concrete': 'concrete',
+    'Flooring': 'concrete',
+    'concrete-and-floors': 'concrete',
+    'concrete': 'concrete',
+    'Clean': 'cleaning',
+    'Cleaning': 'cleaning',
+    'residential-cleaning': 'cleaning',
+    'cleaning': 'cleaning',
+    'Technical': 'technical',
+    'Engineering': 'technical',
+    'technical': 'technical'
+  };
+
+  return typeMap[typeToCheck] || typeToCheck.toLowerCase();
+};
 
 // Sample projects for fallback
 const fallbackProjects = [
@@ -58,158 +84,273 @@ const fallbackProjects = [
   }
 ];
 
-const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
+// Process projects to ensure consistent data structure
+const processedProjects = projects.length > 0 ? projects.map(project => {
+  // Ensure we have acf_fields populated for image access
+  if (!(project as any).acf_fields && project.acf) {
+    (project as any).acf_fields = { ...project.acf };
+  }
+  return project;
+}) : fallbackProjects;
+
+const projectsToShow = processedProjects;
+
+// Function to count project images
+function getProjectImageCount(project: any): number {
+  let imageCount = 0;
+
+  // For fallback projects with project_gallery array
+  if (project.acf?.project_gallery && Array.isArray(project.acf.project_gallery)) {
+    return project.acf.project_gallery.length;
+  }
+
+  // For WordPress projects, count non-empty image fields
+  const acfData = project.acf_fields || project.acf || {};
+  for (let i = 1; i <= 6; i++) {
+    const imageField = acfData[`project_image_${i}`];
+    if (imageField &&
+        ((typeof imageField === 'object' && imageField.url) ||
+         (typeof imageField === 'number' && imageField > 0) ||
+         (typeof imageField === 'string' && imageField.trim() !== ''))) {
+      imageCount++;
+    }
+  }
+
+  return imageCount;
+}
+
+// Function to get project category
+function getProjectCategory(project: any): string {
+  const acfData = project.acf_fields || project.acf || {};
+  return mapProjectTypeToCategory(acfData.project_type, acfData.project_category);
+}
+
+// Function to get the best image URL for a project
+function getProjectImageUrl(project: any, imageIndex: number = 1): string | null {
+  const acfData = (project as any).acf_fields || project.acf || {};
+  const imageField = acfData[`project_image_${imageIndex}`];
+
+  if (!imageField) return null;
+
+  // If it's a complete object with URL
+  if (typeof imageField === 'object' && imageField.url) {
+    // Try to get optimized size first, then fallback to original
+    return imageField.sizes?.['project-thumbnail'] ||
+           imageField.sizes?.medium ||
+           imageField.url;
+  }
+
+  // If it's just an ID or string, we can't resolve it here
+  // This should be handled by the wordpress-client enrichment
+  return null;
+}
+
+// Function to get category display name
+function getCategoryDisplayName(categoryId: string): string {
+  const category = categories.find(cat => cat.id === categoryId);
+  return category?.name || 'Project';
+}
 ---
 
+<!-- Projects data for JavaScript -->
+<script type="application/json" id="projects-data" set:html={JSON.stringify(projectsToShow)}></script>
+
 <!-- Category Filter -->
-    <div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll">
-      {categories.map(category => (
-        <button 
-          data-filter={category.id}
-          class={`filter-btn inline-flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
-            category.id === 'all' 
-              ? 'bg-primary-600 text-white shadow-lg' 
-              : 'bg-neutral-100 text-neutral-600 hover:bg-primary-50 hover:text-primary-600'
-          }`}
-        >
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d={category.icon} />
-          </svg>
-          {category.name}
-        </button>
-      ))}
-    </div>
-    
-    <!-- Projects Grid -->
-    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {projectsToShow.map((project, index) => (
-        <div 
-          class={`project-item card-hover animate-on-scroll stagger-${(index % 3) + 1}`}
-          data-category={project.acf?.project_category || 'all'}
-        >
-          <!-- Project Image -->
-          <div class="relative aspect-4-3 overflow-hidden rounded-t-xl">
-            {project.acf?.project_gallery?.[0] ? (
-              <picture>
-                <source 
-                  srcset={`${getOptimizedImageUrl(project.acf.project_gallery[0], 400, 300)}&format=webp`}
-                  type="image/webp"
-                />
-                <img 
-                  src={getOptimizedImageUrl(project.acf.project_gallery[0], 400, 300) || project.acf.project_gallery[0].url}
-                  alt={project.acf.project_gallery[0].alt || project.title.rendered}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </picture>
-            ) : (
+<div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll">
+  {categories.map(category => (
+    <button
+      data-filter={category.id}
+      class={`filter-btn inline-flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+        category.id === 'all'
+          ? 'bg-primary-600 text-white shadow-lg'
+          : 'bg-neutral-100 text-neutral-600 hover:bg-primary-50 hover:text-primary-600'
+      }`}
+    >
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d={category.icon} />
+      </svg>
+      {category.name}
+    </button>
+  ))}
+</div>
+
+<!-- Projects Grid -->
+<div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {projectsToShow.map((project, index) => {
+    const projectCategory = getProjectCategory(project);
+    const imageCount = getProjectImageCount(project);
+    const categoryName = getCategoryDisplayName(projectCategory);
+
+    return (
+      <div
+        class={`project-item card-hover animate-on-scroll stagger-${(index % 3) + 1}`}
+        data-category={projectCategory}
+      >
+        <!-- Project Image -->
+        <div class="relative aspect-4-3 overflow-hidden rounded-t-xl">
+          {(() => {
+            // Try project_gallery first (for fallback projects)
+            if (project.acf?.project_gallery && project.acf.project_gallery.length > 0) {
+              const imageUrl = project.acf.project_gallery[0].url;
+              const altText = project.acf.project_gallery[0].alt || project.title.rendered;
+              return (
+                <picture>
+                  <source
+                    srcset={`${imageUrl}&format=webp`}
+                    type="image/webp"
+                  />
+                  <img
+                    src={imageUrl}
+                    alt={altText}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </picture>
+              );
+            }
+
+            // Try our smart image URL function
+            const imageUrl = getProjectImageUrl(project, 1);
+            if (imageUrl) {
+              const acfData = (project as any).acf_fields || project.acf || {};
+              const imageField = acfData.project_image_1;
+              const altText = (typeof imageField === 'object' && imageField.alt) || project.title.rendered;
+
+              return (
+                <picture>
+                  <source
+                    srcset={`${imageUrl}&format=webp`}
+                    type="image/webp"
+                  />
+                  <img
+                    src={imageUrl}
+                    alt={altText}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </picture>
+              );
+            }
+
+            // Fallback placeholder
+            return (
               <div class="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-300 flex items-center justify-center">
                 <svg class="w-12 h-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z" />
                 </svg>
               </div>
-            )}
-            
-            <!-- Category Badge -->
-            <div class="absolute top-4 left-4">
-              <span class="inline-flex items-center px-3 py-1 bg-white/90 backdrop-blur-sm text-neutral-700 rounded-full text-xs font-medium">
-                {project.acf?.project_category && 
-                  categories.find(cat => cat.id === project.acf?.project_category)?.name || 'Project'
-                }
+            );
+          })()}
+
+          <!-- Category Badge -->
+          <div class="absolute top-4 left-4">
+            <span class="inline-flex items-center px-3 py-1 bg-white/90 backdrop-blur-sm text-neutral-700 rounded-full text-xs font-medium">
+              {categoryName}
+            </span>
+          </div>
+
+          <!-- Gallery Count -->
+          {imageCount > 1 && (
+            <div class="absolute top-4 right-4">
+              <span class="inline-flex items-center px-2 py-1 bg-black/70 text-white rounded text-xs">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z" />
+                </svg>
+                {imageCount}
               </span>
             </div>
-            
-            <!-- Gallery Count -->
-            {project.acf?.project_gallery && project.acf.project_gallery.length > 1 && (
-              <div class="absolute top-4 right-4">
-                <span class="inline-flex items-center px-2 py-1 bg-black/70 text-white rounded text-xs">
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  {project.acf.project_gallery.length}
-                </span>
-              </div>
-            )}
-            
-            <!-- Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            
-            <!-- View Gallery Button -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button 
-                class="gallery-trigger bg-white/90 text-neutral-800 px-4 py-2 rounded-lg font-medium hover:bg-white transition-colors duration-200"
-                data-project-id={project.id}
-              >
-                View Gallery
-              </button>
-            </div>
-          </div>
-          
-          <!-- Project Info -->
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
-              {project.title.rendered}
-            </h3>
-            
-            <p class="text-neutral-600 text-sm mb-4 line-clamp-2">
-              {project.excerpt?.rendered ? project.excerpt.rendered.replace(/<[^>]*>/g, '') : project.content.rendered.replace(/<[^>]*>/g, '').slice(0, 120) + '...'}
-            </p>
-            
-            <!-- Project Details -->
-            <div class="space-y-2 text-sm text-neutral-500">
-              {project.acf?.project_location && (
-                <div class="flex items-center gap-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span>{project.acf.project_location}</span>
-                </div>
-              )}
-              
-              {project.acf?.project_duration && (
-                <div class="flex items-center gap-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>{project.acf.project_duration}</span>
-                </div>
-              )}
-            </div>
+          )}
+
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+          <!-- View Gallery Button -->
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="gallery-trigger bg-white/90 text-neutral-800 px-4 py-2 rounded-lg font-medium hover:bg-white transition-colors duration-200"
+              data-project-id={project.id}
+            >
+              View Gallery
+            </button>
           </div>
         </div>
-      ))}
-    </div>
-    
-    <!-- Load More Button -->
-    {projectsToShow.length > 6 && (
-      <div class="text-center mt-12">
-        <button 
-          id="load-more-projects"
-          class="btn-outline inline-flex items-center px-8 py-4 text-lg"
-        >
-          Load More Projects
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+
+        <!-- Project Info -->
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
+            {project.title.rendered}
+          </h3>
+
+          <p class="text-neutral-600 text-sm mb-4 line-clamp-2">
+            {project.excerpt?.rendered ? project.excerpt.rendered.replace(/<[^>]*>/g, '') : project.content.rendered.replace(/<[^>]*>/g, '').slice(0, 120) + '...'}
+          </p>
+
+          <!-- Project Details -->
+          <div class="space-y-2 text-sm text-neutral-500">
+            {(() => {
+              const acfData = (project as any).acf_fields || project.acf || {};
+              const location = acfData.project_location;
+              const duration = acfData.project_duration;
+
+              return (
+                <>
+                  {location && (
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span>{location}</span>
+                    </div>
+                  )}
+
+                  {duration && (
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{duration}</span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        </div>
       </div>
-    )}
-    
-    <!-- Empty State -->
-    <div id="empty-state" class="hidden text-center py-16">
-      <svg class="w-16 h-16 text-neutral-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    );
+  })}
+</div>
+
+<!-- Load More Button -->
+{projectsToShow.length > 6 && (
+  <div class="text-center mt-12">
+    <button
+      id="load-more-projects"
+      class="btn-outline inline-flex items-center px-8 py-4 text-lg"
+    >
+      Load More Projects
+      <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
-      <h3 class="text-xl font-medium text-neutral-600 mb-2">No projects found</h3>
-      <p class="text-neutral-500">Try selecting a different category or view all projects.</p>
-    </div>
+    </button>
+  </div>
+)}
+
+<!-- Empty State -->
+<div id="empty-state" class="hidden text-center py-16">
+  <svg class="w-16 h-16 text-neutral-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z" />
+  </svg>
+  <h3 class="text-xl font-medium text-neutral-600 mb-2">No projects found</h3>
+  <p class="text-neutral-500">Try selecting a different category or view all projects.</p>
+</div>
 
 <!-- Lightbox Modal -->
 <div id="lightbox-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4">
   <div class="relative max-w-4xl w-full">
     <!-- Close Button -->
-    <button 
+    <button
       id="close-lightbox"
       class="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors duration-200"
     >
@@ -217,7 +358,7 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    
+
     <!-- Image Container -->
     <div id="lightbox-content" class="bg-white rounded-lg overflow-hidden">
       <!-- Dynamic content will be inserted here -->
@@ -231,11 +372,11 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectItems = document.querySelectorAll('.project-item');
     const emptyState = document.getElementById('empty-state');
-    
+
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
         const filter = button.getAttribute('data-filter');
-        
+
         // Update active button
         filterButtons.forEach(btn => {
           btn.classList.remove('bg-primary-600', 'text-white', 'shadow-lg');
@@ -243,7 +384,7 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         });
         button.classList.remove('bg-neutral-100', 'text-neutral-600');
         button.classList.add('bg-primary-600', 'text-white', 'shadow-lg');
-        
+
         // Filter projects
         let visibleCount = 0;
         projectItems.forEach(item => {
@@ -255,7 +396,7 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
             (item as HTMLElement).style.display = 'none';
           }
         });
-        
+
         // Show/hide empty state
         if (visibleCount === 0) {
           emptyState?.classList.remove('hidden');
@@ -264,12 +405,12 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         }
       });
     });
-    
+
     // Lightbox functionality
     const lightboxModal = document.getElementById('lightbox-modal');
     const lightboxContent = document.getElementById('lightbox-content');
     const closeLightbox = document.getElementById('close-lightbox');
-    
+
     // Gallery triggers
     document.querySelectorAll('.gallery-trigger').forEach(trigger => {
       trigger.addEventListener('click', (e) => {
@@ -280,13 +421,13 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         }
       });
     });
-    
+
     // Close lightbox
     closeLightbox?.addEventListener('click', () => {
       lightboxModal?.classList.add('hidden');
       lightboxModal?.classList.remove('flex');
     });
-    
+
     // Close on backdrop click
     lightboxModal?.addEventListener('click', (e) => {
       if (e.target === lightboxModal) {
@@ -294,7 +435,7 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         lightboxModal.classList.remove('flex');
       }
     });
-    
+
     // Close on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !lightboxModal?.classList.contains('hidden')) {
@@ -302,52 +443,82 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
         lightboxModal?.classList.remove('flex');
       }
     });
-    
+
     function openLightbox(projectId: string) {
-      // Find project data (in a real app, this would come from API)
-      const project = findProjectById(projectId);
-      
-      if (project && project.acf?.project_gallery) {
-        const gallery = project.acf.project_gallery;
-        
-        let galleryHTML = `
-          <div class="p-6">
-            <h3 class="text-2xl font-semibold mb-4">${project.title.rendered}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        `;
-        
-        gallery.forEach((image: any) => {
+      // Find project data from the global projects data
+      const project = (window as any).projectsData?.find((p: any) => p.id.toString() === projectId);
+
+      if (project) {
+        let images: any[] = [];
+
+        // Handle fallback projects with project_gallery array
+        if (project.acf?.project_gallery && Array.isArray(project.acf.project_gallery)) {
+          images = project.acf.project_gallery.map((img: any) => ({
+            url: img.url,
+            alt: img.alt || project.title.rendered
+          }));
+        } else {
+          // Handle WordPress projects with ACF image fields
+          const acfData = project.acf_fields || project.acf || {};
+          for (let i = 1; i <= 6; i++) {
+            const imageField = acfData[`project_image_${i}`];
+            if (imageField) {
+              // Handle object format (enriched data from wordpress-client)
+              if (typeof imageField === 'object' && imageField.url) {
+                images.push({
+                  url: imageField.sizes?.large || imageField.sizes?.medium || imageField.url,
+                  alt: imageField.alt || project.title.rendered
+                });
+              }
+              // Handle ID format - this should now be rare due to enrichment
+              // but we'll keep it as a fallback
+              else if (typeof imageField === 'number') {
+                console.warn(`Image field ${i} still has ID format:`, imageField);
+                // Skip ID-only fields as they need additional API calls
+                // This should be handled by the wordpress-client enrichment
+              }
+            }
+          }
+        }
+
+        if (images.length > 0) {
+          let galleryHTML = `
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-4">${project.title.rendered}</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          `;
+
+          images.forEach((image: any) => {
+            galleryHTML += `
+              <div class="aspect-4-3 rounded-lg overflow-hidden">
+                <img
+                  src="${image.url}"
+                  alt="${image.alt}"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            `;
+          });
+
           galleryHTML += `
-            <div class="aspect-4-3 rounded-lg overflow-hidden">
-              <img 
-                src="${image.url}" 
-                alt="${image.alt || project.title.rendered}"
-                class="w-full h-full object-cover"
-              />
+              </div>
+              <div class="mt-4 text-gray-600">
+                <p>${project.excerpt?.rendered?.replace(/<[^>]*>/g, '') || ''}</p>
+              </div>
             </div>
           `;
-        });
-        
-        galleryHTML += `
-            </div>
-            <div class="mt-4 text-gray-600">
-              <p>${project.excerpt?.rendered?.replace(/<[^>]*>/g, '') || ''}</p>
-            </div>
-          </div>
-        `;
-        
-        if (lightboxContent) {
-          lightboxContent.innerHTML = galleryHTML;
-          lightboxModal?.classList.remove('hidden');
-          lightboxModal?.classList.add('flex');
+
+          if (lightboxContent) {
+            lightboxContent.innerHTML = galleryHTML;
+            lightboxModal?.classList.remove('hidden');
+            lightboxModal?.classList.add('flex');
+          }
         }
       }
     }
-    
-    function findProjectById(_id: string): any {
-      // This should be replaced with actual project data
-      return null;
-    }
+
+    // Store projects data globally for lightbox functionality
+    (window as any).projectsData = JSON.parse(document.getElementById('projects-data')?.textContent || '[]');
   });
 </script>
 
@@ -356,7 +527,7 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
   .stagger-3 { animation-delay: 0.3s; }
-  
+
   /* Line clamp for text truncation */
   .line-clamp-2 {
     display: -webkit-box;
@@ -364,21 +535,21 @@ const projectsToShow = projects.length > 0 ? projects : fallbackProjects;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   /* Lightbox animations */
   #lightbox-modal {
     backdrop-filter: blur(8px);
   }
-  
+
   #lightbox-modal.flex {
     animation: fadeIn 0.3s ease-out;
   }
-  
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-  
+
   /* Performance optimizations */
   .project-item {
     will-change: transform;

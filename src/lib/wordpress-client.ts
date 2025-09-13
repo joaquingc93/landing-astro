@@ -275,7 +275,67 @@ class WordPressClient {
   }
 
   async getAllProjects(): Promise<Project[]> {
-    return this.fetchFromAPI('wp/v2/proyectos', ProjectSchema, { status: 'publish' });
+    const projects = await this.fetchFromAPI('wp/v2/proyectos', ProjectSchema, { status: 'publish' });
+
+    // Enrich projects with full image data if we only have IDs
+    const enrichedProjects = await Promise.all(projects.map(async (project) => {
+      // If we already have acf_fields with complete image objects, return as is
+      if (project.acf_fields && this.hasCompleteImageData(project.acf_fields)) {
+        return project;
+      }
+
+      // If we only have IDs in acf, fetch the complete image data
+      if (project.acf) {
+        const enrichedFields: any = { ...project.acf };
+
+        for (let i = 1; i <= 6; i++) {
+          const imageId = project.acf[`project_image_${i}`];
+          if (imageId && typeof imageId === 'number') {
+            try {
+              const media = await this.getMediaById(imageId);
+              if (media) {
+                enrichedFields[`project_image_${i}`] = {
+                  ID: media.id,
+                  id: media.id,
+                  title: media.title?.rendered || '',
+                  filename: media.media_details?.file || '',
+                  url: media.source_url || '',
+                  alt: media.alt_text || '',
+                  width: media.media_details?.width || 0,
+                  height: media.media_details?.height || 0,
+                  sizes: media.media_details?.sizes || {},
+                  mime_type: media.mime_type || ''
+                };
+              }
+            } catch (error) {
+              console.warn(`Failed to enrich project image ${imageId}:`, error);
+            }
+          }
+        }
+
+        // Set both acf and acf_fields to the enriched data
+        return {
+          ...project,
+          acf: enrichedFields,
+          acf_fields: enrichedFields
+        };
+      }
+
+      return project;
+    }));
+
+    return enrichedProjects;
+  }
+
+  private hasCompleteImageData(acfFields: any): boolean {
+    // Check if we have at least one complete image object (not just ID)
+    for (let i = 1; i <= 6; i++) {
+      const imageField = acfFields[`project_image_${i}`];
+      if (imageField && typeof imageField === 'object' && imageField.url) {
+        return true;
+      }
+    }
+    return false;
   }
 
   async getProjectsByCategory(category: string): Promise<Project[]> {
@@ -288,27 +348,25 @@ class WordPressClient {
 
   async getProjectsByService(serviceSlug: string): Promise<Project[]> {
     // First, get the service by slug to get its ID
-    const services = await this.fetchFromAPI('wp/v2/servicios', ServiceSchema, { 
+    const services = await this.fetchFromAPI('wp/v2/servicios', ServiceSchema, {
       status: 'publish',
       slug: serviceSlug
     });
-    
+
     if (services.length === 0) {
       return [];
     }
-    
+
     const serviceId = services[0].id;
-    
-    // Get all projects and filter by related_service ID
-    const allProjects = await this.fetchFromAPI('wp/v2/proyectos', ProjectSchema, { 
-      status: 'publish'
-    });
-    
+
+    // Get all enriched projects
+    const allProjects = await this.getAllProjects();
+
     // Filter projects where related_service ID matches the service ID
     return allProjects.filter(project => {
       const relatedServiceId = project.acf?.related_service || project.acf_fields?.related_service;
-      return relatedServiceId && 
-             (relatedServiceId === serviceId || 
+      return relatedServiceId &&
+             (relatedServiceId === serviceId ||
               relatedServiceId.id === serviceId ||
               relatedServiceId.ID === serviceId);
     });
