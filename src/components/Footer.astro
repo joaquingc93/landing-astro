@@ -2,9 +2,9 @@
 import { wordpressClient, getStaticProps } from '@/lib/wordpress-client';
 import type { CompanyInfo } from '@/schemas/wordpress';
 
-// Fetch company info with fallback
+// Use fallback company info (WordPress endpoint not implemented yet)
 const companyInfo = await getStaticProps<CompanyInfo | null>(
-  () => wordpressClient.getCompanyInfo(),
+  () => Promise.resolve(null), // Skip WordPress call for now
   {
     name: 'RenovaLink',
     description: 'Premier remodeling services in Florida',

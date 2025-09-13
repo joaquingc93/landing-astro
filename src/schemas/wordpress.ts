@@ -82,6 +82,7 @@ export const WPPostSchema = z.object({
   status: z.enum(['publish', 'draft', 'private']),
   featured_media: z.number().optional(),
   acf: WPACFFieldsSchema.optional(),
+  acf_fields: z.record(z.any()).optional(), // For full ACF field objects
   _embedded: z.object({
     'wp:featuredmedia': z.array(WPMediaSchema).optional(),
   }).optional(),
@@ -119,6 +120,8 @@ export const ProjectSchema = WPPostSchema.extend({
     project_type: z.string().optional(), // Project Type field
     project_location: z.string().optional(),
     project_duration: z.string().optional(),
+    project_category: z.string().optional(), // For fallback projects
+    project_gallery: z.array(WPMediaSchema).optional(), // For fallback projects
     related_service: z.union([z.number(), z.string()]).optional(), // Related Service field - can be ID or string
     project_before_image: z.union([z.number(), z.string()]).optional(), // Image ID or empty string
     project_after_image: z.union([z.number(), z.string()]).optional(), // Image ID or empty string
