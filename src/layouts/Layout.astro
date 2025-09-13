@@ -1,5 +1,6 @@
 ---
 import SEOHead from '@/components/SEOHead.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import '@/styles/global.css';
 
 export interface Props {
@@ -143,6 +144,9 @@ const {
         <slot />
       </main>
     </div>
+    
+    <!-- Floating WhatsApp Button -->
+    <FloatingWhatsApp />
     
     <!-- Scripts -->
     <script>
