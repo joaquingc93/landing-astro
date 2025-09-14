@@ -2,24 +2,21 @@
 import Layout from '@/layouts/Layout.astro';
 import { wordpressClient } from '@/lib/wordpress-client';
 
-// Fetch company information from WordPress
-const companyInfo = await wordpressClient.getCompanyInfo();
-
-// Fallback data in case API fails
+// Fallback data in case API is not available
 const fallbackData = {
   company_info: {
     name: 'RenovaLink',
-    description: 'Quality pool remodeling, concrete work, and cleaning services in Florida',
-    logo: null,
+    description: 'Premier remodeling services in Florida specializing in pool renovations, structural engineering, concrete work, and residential cleaning. Our certified team brings 15+ years of experience to transform your space with quality craftsmanship.',
     emergency_phone: '+1(786)643-1254',
     regular_phone: '+1(786)643-1254',
-    email: 'info@renovalink.com'
+    email: 'info@renovalink.com',
+    logo: null
   },
   credentials: {
-    years_experience: 15,
     licensed: true,
     insured: true,
     certified_engineer: true,
+    years_experience: 15,
     certifications: [
       'Florida Professional Engineer',
       'Pool & Spa Contractor License',
@@ -42,19 +39,21 @@ const fallbackData = {
   ]
 };
 
-// Use API data if available, otherwise use fallback
-const data = companyInfo?.data || fallbackData;
-
-// Debug log to verify data source
-console.log('🔍 About page data source:', companyInfo ? 'API (WordPress)' : 'Fallback');
-console.log('📊 Company data loaded:', {
-  name: data.company_info.name,
-  phone: data.company_info.emergency_phone,
-  description: data.company_info.description,
-  logo: data.company_info.logo,
-  stats: data.stats,
-  api_success: !!companyInfo?.success
-});
+// Try to fetch from WordPress API, fallback to static data
+let data;
+try {
+  const companyInfo = await wordpressClient.getCompanyInfo();
+  if (companyInfo?.success && companyInfo?.data) {
+    data = companyInfo.data;
+    console.log('📊 Company info loaded from WordPress API');
+  } else {
+    console.log('⚠️ API response missing data, using fallback');
+    data = fallbackData;
+  }
+} catch (error) {
+  console.warn('⚠️ API error, using fallback company data:', error);
+  data = fallbackData;
+}
 ---
 
 <Layout title="About Us - RenovaLink">

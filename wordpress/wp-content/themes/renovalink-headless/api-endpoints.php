@@ -455,7 +455,139 @@ function get_site_config() {
     return rest_ensure_response($config);
 }
 
-// Company info endpoint moved to functions.php to avoid loading issues
+// Company Info Endpoint
+function register_company_info_endpoint() {
+    register_rest_route('renovalink/v1', '/company-info', array(
+        'methods' => 'GET',
+        'callback' => 'get_company_info',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_company_info() {
+    // Find the company information page
+    $company_page = get_page_by_title('Información de la Empresa');
+
+    if (!$company_page) {
+        $company_page = get_page_by_title('Informacion de la Empresa');
+    }
+
+    if (!$company_page) {
+        // Try by slug
+        $company_page = get_page_by_path('informacion-de-la-empresa');
+    }
+
+    $response = array(
+        'success' => true,
+        'debug' => array(
+            'page_found' => !!$company_page,
+            'acf_active' => function_exists('get_field'),
+            'current_theme' => get_stylesheet(),
+            'plugin_version' => '1.0.0',
+            'available_pages' => get_available_pages_list()
+        )
+    );
+
+    if ($company_page) {
+        $page_id = $company_page->ID;
+
+        // Get ACF fields if available
+        $company_logo = null;
+        $company_description = null;
+        $emergency_phone = null;
+
+        if (function_exists('get_field')) {
+            $company_logo = get_field('company_logo', $page_id);
+            $company_description = get_field('company_description', $page_id);
+            $emergency_phone = get_field('emergency_phone', $page_id);
+        }
+
+        // Prepare logo data
+        $logo_data = null;
+        if ($company_logo && is_array($company_logo)) {
+            $logo_data = array(
+                'url' => isset($company_logo['url']) ? $company_logo['url'] : '',
+                'alt' => isset($company_logo['alt']) ? $company_logo['alt'] : '',
+                'width' => isset($company_logo['width']) ? $company_logo['width'] : null,
+                'height' => isset($company_logo['height']) ? $company_logo['height'] : null,
+                'sizes' => isset($company_logo['sizes']) ? $company_logo['sizes'] : null
+            );
+        }
+
+        $response['data'] = array(
+            'company_info' => array(
+                'name' => get_bloginfo('name'),
+                'description' => $company_description ?: get_bloginfo('description'),
+                'emergency_phone' => $emergency_phone ?: '+1(786)643-1254',
+                'regular_phone' => '+1(786)643-1254',
+                'email' => 'info@renovalink.com',
+                'logo' => $logo_data
+            ),
+            'credentials' => array(
+                'licensed' => true,
+                'insured' => true,
+                'certified_engineer' => true,
+                'years_experience' => 15,
+                'certifications' => array(
+                    'Florida Professional Engineer',
+                    'Pool & Spa Contractor License',
+                    'General Contractor License',
+                    'EPA Certified'
+                )
+            ),
+            'stats' => array(
+                'projects_completed' => 500,
+                'clients_satisfied' => 450,
+                'years_in_business' => 15,
+                'team_members' => 25
+            ),
+            'service_areas' => array(
+                'Miami-Dade',
+                'Broward',
+                'Palm Beach',
+                'Orange',
+                'Hillsborough'
+            )
+        );
+
+        $response['debug']['page_details'] = array(
+            'id' => $page_id,
+            'title' => $company_page->post_title,
+            'slug' => $company_page->post_name,
+            'status' => $company_page->post_status
+        );
+    } else {
+        $response['message'] = 'Company information page not found. Please create a page titled "Información de la Empresa"';
+        $response['suggestions'] = array(
+            'Create a page with title: "Información de la Empresa"',
+            'Or create a page with title: "Informacion de la Empresa"',
+            'Make sure the page is published',
+            'Check available pages in the debug response'
+        );
+    }
+
+    return rest_ensure_response($response);
+}
+
+// Helper function to get available pages for debugging
+function get_available_pages_list() {
+    $pages = get_pages(array(
+        'post_status' => array('publish', 'draft'),
+        'number' => 20
+    ));
+
+    $page_list = array();
+    foreach ($pages as $page) {
+        $page_list[] = array(
+            'id' => $page->ID,
+            'title' => $page->post_title,
+            'slug' => $page->post_name,
+            'status' => $page->post_status
+        );
+    }
+
+    return $page_list;
+}
 
 // Register all additional endpoints
 add_action('rest_api_init', 'register_site_stats_endpoint');
@@ -465,6 +597,7 @@ add_action('rest_api_init', 'register_service_areas_endpoint');
 add_action('rest_api_init', 'register_contact_form_endpoint');
 add_action('rest_api_init', 'register_quote_endpoint');
 add_action('rest_api_init', 'register_site_config_endpoint');
+add_action('rest_api_init', 'register_company_info_endpoint');
 
 /**
  * Add custom headers for caching

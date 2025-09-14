@@ -597,8 +597,46 @@ require_once get_template_directory() . '/api-endpoints.php';
 // Include Sample Content
 require_once get_template_directory() . '/sample-content/sample-data.php';
 
-// Include test endpoints
-require_once get_template_directory() . '/test-endpoint.php';
-
 // Include Security and Performance Optimizations
 require_once get_template_directory() . '/security-performance.php';
+
+// Ultra simple endpoint test
+add_action('rest_api_init', 'register_renovalink_endpoints');
+
+function register_renovalink_endpoints() {
+    register_rest_route('renovalink/v1', '/test', array(
+        'methods' => 'GET',
+        'callback' => 'handle_test_endpoint',
+        'permission_callback' => '__return_true'
+    ));
+
+    register_rest_route('renovalink/v1', '/company-info', array(
+        'methods' => 'GET',
+        'callback' => 'handle_company_info',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function handle_test_endpoint() {
+    return rest_ensure_response(array(
+        'success' => true,
+        'message' => 'Test endpoint is working!',
+        'timestamp' => current_time('mysql')
+    ));
+}
+
+function handle_company_info() {
+    return rest_ensure_response(array(
+        'success' => true,
+        'message' => 'Company info endpoint is working!',
+        'data' => array(
+            'company_info' => array(
+                'name' => get_bloginfo('name'),
+                'description' => get_bloginfo('description'),
+                'phone' => '+1(786)643-1254',
+                'email' => 'info@renovalink.com'
+            )
+        ),
+        'timestamp' => current_time('mysql')
+    ));
+}
