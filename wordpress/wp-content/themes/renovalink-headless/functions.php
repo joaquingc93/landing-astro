@@ -597,5 +597,8 @@ require_once get_template_directory() . '/api-endpoints.php';
 // Include Sample Content
 require_once get_template_directory() . '/sample-content/sample-data.php';
 
+// Include test endpoints
+require_once get_template_directory() . '/test-endpoint.php';
+
 // Include Security and Performance Optimizations
 require_once get_template_directory() . '/security-performance.php';

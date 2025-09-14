@@ -455,6 +455,8 @@ function get_site_config() {
     return rest_ensure_response($config);
 }
 
+// Company info endpoint moved to functions.php to avoid loading issues
+
 // Register all additional endpoints
 add_action('rest_api_init', 'register_site_stats_endpoint');
 add_action('rest_api_init', 'register_featured_content_endpoint');

@@ -1,0 +1,309 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { wordpressClient } from '@/lib/wordpress-client';
+
+// Fetch company information from WordPress
+const companyInfo = await wordpressClient.getCompanyInfo();
+
+// Fallback data in case API fails
+const fallbackData = {
+  company_info: {
+    name: 'RenovaLink',
+    description: 'Quality pool remodeling, concrete work, and cleaning services in Florida',
+    logo: null,
+    emergency_phone: '+1(786)643-1254',
+    regular_phone: '+1(786)643-1254',
+    email: 'info@renovalink.com'
+  },
+  credentials: {
+    years_experience: 15,
+    licensed: true,
+    insured: true,
+    certified_engineer: true,
+    certifications: [
+      'Florida Professional Engineer',
+      'Pool & Spa Contractor License',
+      'General Contractor License',
+      'EPA Certified'
+    ]
+  },
+  stats: {
+    projects_completed: 500,
+    clients_satisfied: 450,
+    years_in_business: 15,
+    team_members: 25
+  },
+  service_areas: [
+    'Miami-Dade',
+    'Broward',
+    'Palm Beach',
+    'Orange',
+    'Hillsborough'
+  ]
+};
+
+// Use API data if available, otherwise use fallback
+const data = companyInfo?.data || fallbackData;
+
+// Debug log to verify data source
+console.log('🔍 About page data source:', companyInfo ? 'API (WordPress)' : 'Fallback');
+console.log('📊 Company data loaded:', {
+  name: data.company_info.name,
+  phone: data.company_info.emergency_phone,
+  description: data.company_info.description,
+  logo: data.company_info.logo,
+  stats: data.stats,
+  api_success: !!companyInfo?.success
+});
+---
+
+<Layout title="About Us - RenovaLink">
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
+      <div class="container mx-auto px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">About {data.company_info.name}</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          {data.company_info.description}
+        </p>
+        <div class="flex flex-wrap justify-center gap-8 text-center">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-3xl font-bold">{data.credentials.years_experience}+</div>
+            <div class="text-sm opacity-90">Years Experience</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-3xl font-bold">{data.stats.projects_completed}+</div>
+            <div class="text-sm opacity-90">Projects Completed</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-3xl font-bold">{data.stats.clients_satisfied}+</div>
+            <div class="text-sm opacity-90">Satisfied Clients</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-3xl font-bold">{data.stats.team_members}+</div>
+            <div class="text-sm opacity-90">Team Members</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            {data.company_info.logo && (
+              <div class="mb-6">
+                <img
+                  src={data.company_info.logo.url}
+                  alt={data.company_info.logo.alt || `${data.company_info.name} logo`}
+                  class="h-16 w-auto"
+                />
+              </div>
+            )}
+            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">Our Story</h2>
+            <p class="text-lg text-neutral-600 mb-6">
+              Founded in {2024 - data.stats.years_in_business} by a certified Florida Professional Engineer, {data.company_info.name} began with a simple mission:
+              to provide exceptional remodeling and construction services that transform spaces and exceed expectations.
+            </p>
+            <p class="text-lg text-neutral-600 mb-6">
+              {data.company_info.description}
+            </p>
+            <p class="text-lg text-neutral-600">
+              Today, we're proud to be a trusted partner for homeowners and businesses throughout {data.service_areas.join(', ')}.
+            </p>
+          </div>
+          <div class="bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-xl p-8">
+            <svg class="w-full h-48 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L3 7L12 12L21 7L12 2Z" opacity="0.3"/>
+              <path d="M3 17L12 22L21 17M3 12L12 17L21 12"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Services Section -->
+    <section class="py-16 bg-neutral-50">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">What We Do</h2>
+          <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
+            Our comprehensive range of services ensures we can handle any project, from small repairs to complete renovations.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Pool Remodeling -->
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Pool Remodeling</h3>
+            <p class="text-neutral-600 mb-4">
+              Complete pool renovations, resurfacing, equipment upgrades, and custom lighting installations.
+            </p>
+            <ul class="text-sm text-neutral-500 space-y-2">
+              <li>" Pool resurfacing & tile work</li>
+              <li>" Equipment modernization</li>
+              <li>" LED lighting systems</li>
+              <li>" Deck renovations</li>
+            </ul>
+          </div>
+
+          <!-- Concrete Work -->
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Concrete & Flooring</h3>
+            <p class="text-neutral-600 mb-4">
+              Professional concrete work, stamped patterns, decorative finishes, and flooring solutions.
+            </p>
+            <ul class="text-sm text-neutral-500 space-y-2">
+              <li>" Stamped concrete patios</li>
+              <li>" Decorative overlays</li>
+              <li>" Polished concrete floors</li>
+              <li>" Repair & restoration</li>
+            </ul>
+          </div>
+
+          <!-- Cleaning Services -->
+          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Professional Cleaning</h3>
+            <p class="text-neutral-600 mb-4">
+              Comprehensive cleaning services for residential and commercial properties.
+            </p>
+            <ul class="text-sm text-neutral-500 space-y-2">
+              <li>" Post-construction cleanup</li>
+              <li>" Deep cleaning services</li>
+              <li>" Regular maintenance</li>
+              <li>" Pressure washing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">Why Choose RenovaLink?</h2>
+          <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
+            Our commitment to quality, professionalism, and customer satisfaction sets us apart in the industry.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-900 mb-2">Licensed & Insured</h3>
+            <p class="text-neutral-600 text-sm">Fully licensed and insured for your peace of mind</p>
+          </div>
+
+          <div class="text-center">
+            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-900 mb-2">Professional Engineer</h3>
+            <p class="text-neutral-600 text-sm">Led by a certified Florida Professional Engineer</p>
+          </div>
+
+          <div class="text-center">
+            <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-900 mb-2">{data.credentials.years_experience}+ Years Experience</h3>
+            <p class="text-neutral-600 text-sm">Over {data.credentials.years_experience > 10 ? 'a decade' : data.credentials.years_experience + ' years'} of excellence in the industry</p>
+          </div>
+
+          <div class="text-center">
+            <div class="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-neutral-900 mb-2">Customer Focused</h3>
+            <p class="text-neutral-600 text-sm">Your satisfaction is our top priority</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Areas -->
+    <section class="py-16 bg-neutral-50">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">Service Areas</h2>
+          <p class="text-lg text-neutral-600 max-w-2xl mx-auto mb-8">
+            Proudly serving communities across Florida with quality remodeling and construction services.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-5 gap-6 text-center">
+          {data.service_areas.map((area: string) => (
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+              <div class="text-primary-600 font-semibold text-lg mb-2">{area}</div>
+              <p class="text-neutral-500 text-sm">
+                {area === 'Miami-Dade' && 'Miami, Coral Gables, Homestead'}
+                {area === 'Broward' && 'Fort Lauderdale, Hollywood, Pompano'}
+                {area === 'Palm Beach' && 'West Palm Beach, Boca Raton, Delray'}
+                {area === 'Orange' && 'Orlando, Winter Park, Apopka'}
+                {area === 'Hillsborough' && 'Tampa, Brandon, Plant City'}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="py-16 bg-primary-600 text-white">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Space?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Contact us today for a free consultation and discover how we can bring your vision to life.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/contacto"
+            class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-neutral-100 transition-colors duration-300 inline-flex items-center justify-center"
+          >
+            Get Free Quote
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a
+            href="https://wa.me/{data.company_info.emergency_phone.replace(/[^0-9]/g, '')}"
+            target="_blank"
+            class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-300 inline-flex items-center justify-center"
+          >
+            WhatsApp Us
+            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.706"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

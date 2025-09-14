@@ -1,14 +1,14 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
-import node from '@astrojs/node';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
+import node from "@astrojs/node";
 
 export default defineConfig({
-  site: 'https://renovalink.com',
-  output: 'server',
+  site: "https://renovalink.com",
+  output: "server",
   adapter: node({
-    mode: 'standalone'
+    mode: "standalone",
   }),
   integrations: [
     tailwind({
@@ -16,73 +16,85 @@ export default defineConfig({
     }),
     react(),
     sitemap({
-      changefreq: 'weekly',
+      changefreq: "weekly",
       priority: 0.7,
       lastmod: new Date(),
     }),
   ],
   image: {
-    domains: ['renovalinksite.local', 'renovalink.local', 'admin.renovalink.com'],
+    domains: [
+      "renovalinksite.local",
+      "renovalink.local",
+      "admin.renovalink.com",
+    ],
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'renovalinksite.local',
+        protocol: "http",
+        hostname: "renovalinksite.local",
       },
       {
-        protocol: 'http',
-        hostname: 'renovalink.local',
+        protocol: "http",
+        hostname: "renovalink.local",
       },
       {
-        protocol: 'https', 
-        hostname: 'renovalink.local',
+        protocol: "https",
+        hostname: "renovalink.local",
       },
       {
-        protocol: 'https',
-        hostname: 'admin.renovalink.com',
-      }
-    ]
+        protocol: "https",
+        hostname: "admin.renovalink.com",
+      },
+    ],
   },
   vite: {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: 'assets/[name].[hash][extname]',
-          chunkFileNames: 'assets/[name].[hash].js',
-          entryFileNames: 'assets/[name].[hash].js',
+          assetFileNames: "assets/[name].[hash][extname]",
+          chunkFileNames: "assets/[name].[hash].js",
+          entryFileNames: "assets/[name].[hash].js",
         },
       },
     },
     ssr: {
-      external: ['node-cache'],
+      external: ["node-cache"],
     },
     server: {
       proxy: {
         // Proxy para las imágenes de WordPress
-        '/wp-content': {
-          target: 'http://renovalinksite.local',
+        "/wp-content": {
+          target: "http://renovalinksite.local",
           changeOrigin: true,
           secure: false,
           configure: (proxy, _options) => {
-            proxy.on('error', (err, _req, _res) => {
-              console.log('Proxy error:', err);
+            proxy.on("error", (err, _req, _res) => {
+              console.log("Proxy error:", err);
             });
-            proxy.on('proxyReq', (proxyReq, req, _res) => {
-              console.log('Sending Request to the Target:', req.method, req.url);
+            proxy.on("proxyReq", (proxyReq, req, _res) => {
+              console.log(
+                "Sending Request to the Target:",
+                req.method,
+                req.url
+              );
             });
-            proxy.on('proxyRes', (proxyRes, req, _res) => {
-              console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+            proxy.on("proxyRes", (proxyRes, req, _res) => {
+              console.log(
+                "Received Response from the Target:",
+                proxyRes.statusCode,
+                req.url
+              );
             });
           },
-        }
-      }
-    }
+        },
+      },
+    },
   },
   compressHTML: true,
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: "auto",
   },
   server: {
-    port: 4321,
-    host: true
-  }
+    port: 4327,
+    host: true,
+  },
 });
