@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { wordpressClient } from '@/lib/wordpress-client';
+import { wordpressClient, getStaticProps } from '@/lib/wordpress-client';
 
 // Fallback data in case API is not available
 const fallbackData = {
@@ -32,168 +32,261 @@ const fallbackData = {
   },
   service_areas: [
     'Miami-Dade',
-    'Broward',
-    'Palm Beach',
-    'Orange',
-    'Hillsborough'
+    'Broward'
+  ],
+  services: [
+    {
+      name: 'Home Remodeling',
+      description: 'Complete home renovations including kitchens, bathrooms, and living spaces.',
+      slug: 'home-remodeling'
+    },
+    {
+      name: 'Pool Construction',
+      description: 'Custom pool design and construction with professional engineering.',
+      slug: 'pool-construction'
+    },
+    {
+      name: 'Commercial Projects',
+      description: 'Office renovations, retail spaces, and commercial construction projects.',
+      slug: 'commercial-projects'
+    },
+    {
+      name: 'Outdoor Living',
+      description: 'Patios, decks, outdoor kitchens, and landscape construction.',
+      slug: 'outdoor-living'
+    },
+    {
+      name: 'Engineering Services',
+      description: 'Structural engineering, permit assistance, and technical consulting.',
+      slug: 'engineering-services'
+    },
+    {
+      name: 'Emergency Repairs',
+      description: '24/7 emergency construction and repair services when you need them most.',
+      slug: 'emergency-repairs'
+    }
   ]
 };
 
-// Try to fetch from WordPress API, fallback to static data
-let data;
-try {
-  const companyInfo = await wordpressClient.getCompanyInfo();
-  if (companyInfo?.success && companyInfo?.data) {
-    data = companyInfo.data;
-    console.log('📊 Company info loaded from WordPress API');
-  } else {
-    console.log('⚠️ API response missing data, using fallback');
-    data = fallbackData;
-  }
-} catch (error) {
-  console.warn('⚠️ API error, using fallback company data:', error);
-  data = fallbackData;
-}
+// Fetch company info from WordPress using getStaticProps pattern
+const data = await getStaticProps(
+  () => wordpressClient.getCompanyInfo(),
+  fallbackData
+);
+
+// Ensure we always have data, use fallback if API fails
+const companyInfo = data || fallbackData;
 ---
 
 <Layout title="About Us - RenovaLink">
   <main class="min-h-screen">
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
-      <div class="container mx-auto px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6">About {data.company_info.name}</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-          {data.company_info.description}
-        </p>
-        <div class="flex flex-wrap justify-center gap-8 text-center">
-          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-            <div class="text-3xl font-bold">{data.credentials.years_experience}+</div>
-            <div class="text-sm opacity-90">Years Experience</div>
-          </div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-            <div class="text-3xl font-bold">{data.stats.projects_completed}+</div>
-            <div class="text-sm opacity-90">Projects Completed</div>
-          </div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-            <div class="text-3xl font-bold">{data.stats.clients_satisfied}+</div>
-            <div class="text-sm opacity-90">Satisfied Clients</div>
-          </div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-            <div class="text-3xl font-bold">{data.stats.team_members}+</div>
-            <div class="text-sm opacity-90">Team Members</div>
-          </div>
+  <section class="hero-section relative min-h-[70vh] overflow-hidden">
+      
+      <!-- About Us Background Image -->
+      <div class="absolute inset-0">
+        <img 
+          src="/images/about-us-background.png" 
+          alt="About Us Background" 
+          class="w-full h-full object-cover object-center"
+        />
+        <!-- Dark overlay for better text readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60"></div>
+      </div>
+
+      <!-- Layered content: badge top, title bottom -->
+  <div class="relative z-10 h-full w-full">
+        <!-- Home link (top-left) -->
+        <a href="/" class="absolute top-4 left-4 md:top-6 md:left-6 inline-flex items-center gap-2 text-white/90 hover:text-white font-medium text-sm md:text-base transition-colors">
+          <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="hidden sm:inline">Home</span>
+        </a>
+        <!-- Badge fixed near top -->
+        <div class="absolute top-6 left-1/2 -translate-x-1/2 text-center">
+          <span class="inline-flex items-center px-6 py-3 bg-white/25 backdrop-blur-md text-white border border-white/40 rounded-full text-sm font-medium shadow-xl">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h3M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            About Our Company
+          </span>
+        </div>
+
+        <!-- Title absolutely at bottom -->
+        <h1 class="heading-xl animate-slide-up stagger-1 text-white drop-shadow-xl font-semibold text-center px-4 max-w-5xl mx-auto
+          absolute inset-x-0 bottom-4 md:bottom-8 lg:bottom-12">
+          <span class="block">Transforming Spaces with</span>
+          <span class="block font-bold text-yellow-300 drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]">Excellence & Expertise</span>
+        </h1>
+      </div>
+
+
+    </section>
+
+    <!-- Company Description Section -->
+    <section class="py-16 bg-gradient-to-br from-slate-50 to-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <p class="text-xl sm:text-2xl text-neutral-700 leading-relaxed font-light">
+            {companyInfo.company_info.description}
+          </p>
         </div>
       </div>
     </section>
 
     <!-- Our Story Section -->
-    <section class="py-16 bg-white">
+    <section class="py-20 bg-white">
       <div class="container mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            {data.company_info.logo && (
-              <div class="mb-6">
-                <img
-                  src={data.company_info.logo.url}
-                  alt={data.company_info.logo.alt || `${data.company_info.name} logo`}
-                  class="h-16 w-auto"
-                />
-              </div>
-            )}
-            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">Our Story</h2>
-            <p class="text-lg text-neutral-600 mb-6">
-              Founded in {2024 - data.stats.years_in_business} by a certified Florida Professional Engineer, {data.company_info.name} began with a simple mission:
-              to provide exceptional remodeling and construction services that transform spaces and exceed expectations.
+        <div class="max-w-4xl mx-auto text-center">
+          {companyInfo.company_info.logo && typeof companyInfo.company_info.logo === 'object' && (
+            <div class="mb-8">
+              <img
+                src={(companyInfo.company_info.logo as any).url}
+                alt={(companyInfo.company_info.logo as any).alt || `${companyInfo.company_info.name} logo`}
+                class="h-20 w-auto mx-auto"
+              />
+            </div>
+          )}
+          
+          <div class="mb-8">
+            <span class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              Our Story
+            </span>
+            <h2 class="heading-lg text-neutral-900 mb-8">Innovation Meets Excellence</h2>
+          </div>
+          
+          <div class="space-y-8 text-lg text-neutral-600 mb-12">
+            <p class="leading-relaxed">
+              Founded by a certified Florida Professional Engineer, <strong class="text-neutral-900">{companyInfo.company_info.name}</strong> began with a simple yet powerful mission: to provide exceptional remodeling and construction services that transform spaces and exceed expectations.
             </p>
-            <p class="text-lg text-neutral-600 mb-6">
-              {data.company_info.description}
+            <p class="leading-relaxed">
+              What started as a vision to bring engineering precision to residential and commercial renovations has evolved into a trusted partnership with hundreds of satisfied clients across Florida.
             </p>
-            <p class="text-lg text-neutral-600">
-              Today, we're proud to be a trusted partner for homeowners and businesses throughout {data.service_areas.join(', ')}.
+            <p class="leading-relaxed">
+              Today, we're proud to serve communities throughout <strong class="text-primary-600">Broward County and Miami-Dade County</strong>, bringing together technical expertise, creative vision, and unwavering commitment to quality.
             </p>
           </div>
-          <div class="bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-xl p-8">
-            <svg class="w-full h-48 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L3 7L12 12L21 7L12 2Z" opacity="0.3"/>
-              <path d="M3 17L12 22L21 17M3 12L12 17L21 12"/>
-            </svg>
+
+          <!-- Key Features - Centered -->
+          <div class="flex justify-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-md">
+              <div class="flex flex-col items-center text-center p-6 bg-neutral-50 rounded-xl">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="font-semibold text-neutral-900 mb-2">Licensed & Insured</div>
+                <div class="text-sm text-neutral-500">Fully protected and certified</div>
+              </div>
+              
+              <div class="flex flex-col items-center text-center p-6 bg-neutral-50 rounded-xl">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H7m14 0a2 2 0 01-2 2H9a2 2 0 01-2-2m14 0V7H7v14" />
+                  </svg>
+                </div>
+                <div class="font-semibold text-neutral-900 mb-2">Professional Engineer</div>
+                <div class="text-sm text-neutral-500">Technical expertise guaranteed</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Our Services Section -->
-    <section class="py-16 bg-neutral-50">
+    <!-- Our Services Section -->
+    <section class="py-20 bg-gradient-to-br from-neutral-50 to-white">
       <div class="container mx-auto px-6">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">What We Do</h2>
-          <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
-            Our comprehensive range of services ensures we can handle any project, from small repairs to complete renovations.
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            Our Expertise
+          </div>
+          <h2 class="heading-lg text-neutral-900 mb-6">What We Do</h2>
+          <p class="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            From concept to completion, we deliver comprehensive solutions that transform your vision into reality with engineering precision and creative excellence.
           </p>
         </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Pool Remodeling -->
-          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {companyInfo.services.map((service: any, index: number) => (
+            <div class="group relative">
+              <!-- Background Card -->
+              <div class="absolute inset-0 bg-gradient-to-br from-white to-neutral-50 rounded-2xl shadow-sm group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1"></div>
+              
+              <!-- Content Card -->
+              <div class="relative bg-white rounded-2xl p-8 border border-neutral-100 group-hover:border-primary-200 transition-all duration-300">
+                <!-- Icon -->
+                <div class="relative mb-6">
+                  <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      {index === 0 && (
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                      )}
+                      {index === 1 && (
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H7m14 0a2 2 0 01-2 2H9a2 2 0 01-2-2m14 0V7H7v14" />
+                      )}
+                      {index === 2 && (
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                      )}
+                      {index > 2 && (
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H7m14 0a2 2 0 01-2 2H9a2 2 0 01-2-2m14 0V7H7v14" />
+                      )}
+                    </svg>
+                  </div>
+                  <!-- Floating Accent -->
+                  <div class="absolute -top-2 -right-2 w-6 h-6 bg-secondary-400 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                </div>
+                
+                <!-- Content -->
+                <h3 class="text-xl font-bold text-neutral-900 mb-4 group-hover:text-primary-600 transition-colors duration-300">
+                  {service.name}
+                </h3>
+                <p class="text-neutral-600 mb-6 leading-relaxed">{service.description}</p>
+                
+                <!-- CTA Link -->
+                <a 
+                  href={`/servicios/${service.slug}`} 
+                  class="inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold group-hover:gap-3 gap-2 transition-all duration-300"
+                >
+                  Learn More
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
             </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Pool Remodeling</h3>
-            <p class="text-neutral-600 mb-4">
-              Complete pool renovations, resurfacing, equipment upgrades, and custom lighting installations.
+          ))}
+        </div>
+        
+        <!-- Bottom CTA -->
+        <div class="text-center mt-16">
+          <div class="bg-white rounded-2xl p-8 border border-neutral-200 max-w-2xl mx-auto">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-4">Don't See Your Project Type?</h3>
+            <p class="text-neutral-600 mb-6">
+              We handle a wide variety of construction and remodeling projects. Contact us to discuss your specific needs.
             </p>
-            <ul class="text-sm text-neutral-500 space-y-2">
-              <li>" Pool resurfacing & tile work</li>
-              <li>" Equipment modernization</li>
-              <li>" LED lighting systems</li>
-              <li>" Deck renovations</li>
-            </ul>
-          </div>
-
-          <!-- Concrete Work -->
-          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z" />
+            <a 
+              href="/contacto" 
+              class="btn-primary inline-flex items-center"
+            >
+              Get Custom Quote
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.172-.276A5.998 5.998 0 016 15l1.138-1.138A8.954 8.954 0 0012 12a8.954 8.954 0 005.862 1.138L19 15a5.998 5.998 0 01-4.828 0A8.955 8.955 0 0121 12z" />
               </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Concrete & Flooring</h3>
-            <p class="text-neutral-600 mb-4">
-              Professional concrete work, stamped patterns, decorative finishes, and flooring solutions.
-            </p>
-            <ul class="text-sm text-neutral-500 space-y-2">
-              <li>" Stamped concrete patios</li>
-              <li>" Decorative overlays</li>
-              <li>" Polished concrete floors</li>
-              <li>" Repair & restoration</li>
-            </ul>
-          </div>
-
-          <!-- Cleaning Services -->
-          <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div class="bg-primary-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-4">Professional Cleaning</h3>
-            <p class="text-neutral-600 mb-4">
-              Comprehensive cleaning services for residential and commercial properties.
-            </p>
-            <ul class="text-sm text-neutral-500 space-y-2">
-              <li>" Post-construction cleanup</li>
-              <li>" Deep cleaning services</li>
-              <li>" Regular maintenance</li>
-              <li>" Pressure washing</li>
-            </ul>
+            </a>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Why Choose Us Section -->
+    </section>    <!-- Why Choose Us Section -->
     <section class="py-16 bg-white">
       <div class="container mx-auto px-6">
         <div class="text-center mb-12">
@@ -203,7 +296,7 @@ try {
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid md:grid-cols-3 gap-8">
           <div class="text-center">
             <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,16 +315,6 @@ try {
             </div>
             <h3 class="text-lg font-semibold text-neutral-900 mb-2">Professional Engineer</h3>
             <p class="text-neutral-600 text-sm">Led by a certified Florida Professional Engineer</p>
-          </div>
-
-          <div class="text-center">
-            <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-neutral-900 mb-2">{data.credentials.years_experience}+ Years Experience</h3>
-            <p class="text-neutral-600 text-sm">Over {data.credentials.years_experience > 10 ? 'a decade' : data.credentials.years_experience + ' years'} of excellence in the industry</p>
           </div>
 
           <div class="text-center">
@@ -257,8 +340,8 @@ try {
           </p>
         </div>
 
-        <div class="grid md:grid-cols-5 gap-6 text-center">
-          {data.service_areas.map((area: string) => (
+        <div class="grid md:grid-cols-2 gap-6 text-center max-w-2xl mx-auto">
+          {companyInfo.service_areas.map((area: string) => (
             <div class="bg-white rounded-lg p-6 shadow-sm">
               <div class="text-primary-600 font-semibold text-lg mb-2">{area}</div>
               <p class="text-neutral-500 text-sm">
@@ -289,16 +372,6 @@ try {
             Get Free Quote
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-          <a
-            href="https://wa.me/{data.company_info.emergency_phone.replace(/[^0-9]/g, '')}"
-            target="_blank"
-            class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-300 inline-flex items-center justify-center"
-          >
-            WhatsApp Us
-            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.706"/>
             </svg>
           </a>
         </div>

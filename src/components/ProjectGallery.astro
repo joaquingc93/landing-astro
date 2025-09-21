@@ -1,5 +1,6 @@
 ---
 import type { Project } from '@/schemas/wordpress';
+import Lightbox from './Lightbox.astro';
 
 export interface Props {
   projects: Project[];
@@ -93,7 +94,16 @@ const processedProjects = projects.length > 0 ? projects.map(project => {
   return project;
 }) : fallbackProjects;
 
-const projectsToShow = processedProjects;
+// Reorder projects to put Pool project first
+const reorderedProjects = [...processedProjects].sort((a, b) => {
+  const aCategory = getProjectCategory(a);
+  const bCategory = getProjectCategory(b);
+  if (aCategory === 'pool') return -1;
+  if (bCategory === 'pool') return 1;
+  return 0;
+});
+
+const projectsToShow = reorderedProjects;
 
 // Function to count project images
 function getProjectImageCount(project: any): number {
@@ -212,8 +222,10 @@ function getCategoryDisplayName(categoryId: string): string {
                 <img
                   src={imageUrl}
                   alt={altText}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer gallery-image-trigger"
                   loading="lazy"
+                  data-project-id={project.id}
+                  data-image-index="0"
                 />
               );
             }
@@ -229,8 +241,10 @@ function getCategoryDisplayName(categoryId: string): string {
                 <img
                   src={imageUrl}
                   alt={altText}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer gallery-image-trigger"
                   loading="lazy"
+                  data-project-id={project.id}
+                  data-image-index="0"
                 />
               );
             }
@@ -300,25 +314,8 @@ function getCategoryDisplayName(categoryId: string): string {
   <p class="text-neutral-500">Try selecting a different category or view all projects.</p>
 </div>
 
-<!-- Lightbox Modal -->
-<div id="lightbox-modal" class="fixed inset-0 bg-transparent z-50 hidden items-center justify-center p-4">
-  <div class="relative max-w-4xl w-full">
-    <!-- Close Button -->
-    <button
-      id="close-lightbox"
-      class="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors duration-200"
-    >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-
-    <!-- Image Container -->
-    <div id="lightbox-content" class="bg-white rounded-lg overflow-hidden">
-      <!-- Dynamic content will be inserted here -->
-    </div>
-  </div>
-</div>
+<!-- Include the consolidated Lightbox component -->
+<Lightbox />
 
 <script>
   // Filter functionality
@@ -360,129 +357,6 @@ function getCategoryDisplayName(categoryId: string): string {
       });
     });
 
-    // Lightbox functionality
-    const lightboxModal = document.getElementById('lightbox-modal');
-    const lightboxContent = document.getElementById('lightbox-content');
-    const closeLightbox = document.getElementById('close-lightbox');
-
-    // Gallery triggers
-    document.querySelectorAll('.gallery-trigger').forEach(trigger => {
-      trigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        const projectId = trigger.getAttribute('data-project-id');
-        if (projectId) {
-          openLightbox(projectId);
-        }
-      });
-    });
-
-    // Close lightbox
-    closeLightbox?.addEventListener('click', () => {
-      lightboxModal?.classList.add('hidden');
-      lightboxModal?.classList.remove('flex');
-    });
-
-    // Close on backdrop click
-    lightboxModal?.addEventListener('click', (e) => {
-      if (e.target === lightboxModal) {
-        lightboxModal.classList.add('hidden');
-        lightboxModal.classList.remove('flex');
-      }
-    });
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !lightboxModal?.classList.contains('hidden')) {
-        lightboxModal?.classList.add('hidden');
-        lightboxModal?.classList.remove('flex');
-      }
-    });
-
-    function openLightbox(projectId: string) {
-      // Find project data from the global projects data
-      const project = (window as any).projectsData?.find((p: any) => p.id.toString() === projectId);
-
-      if (project) {
-        let images: any[] = [];
-
-        // Handle fallback projects with project_gallery array
-        if (project.acf?.project_gallery && Array.isArray(project.acf.project_gallery)) {
-          images = project.acf.project_gallery.map((img: any) => {
-            let imageUrl = img.url;
-            // Convert WordPress local URLs to proxy-friendly paths
-            if (imageUrl && imageUrl.includes('renovalinksite.local')) {
-              imageUrl = imageUrl.replace('http://renovalinksite.local', '');
-            }
-            return {
-              url: imageUrl,
-              alt: img.alt || project.title.rendered
-            };
-          });
-        } else {
-          // Handle WordPress projects with ACF image fields
-          const acfData = project.acf_fields || project.acf || {};
-          for (let i = 1; i <= 6; i++) {
-            const imageField = acfData[`project_image_${i}`];
-            if (imageField) {
-              // Handle object format (enriched data from wordpress-client)
-              if (typeof imageField === 'object' && imageField.url) {
-                let imageUrl = imageField.sizes?.large || imageField.sizes?.medium || imageField.url;
-                // Convert WordPress local URLs to proxy-friendly paths
-                if (imageUrl && imageUrl.includes('renovalinksite.local')) {
-                  imageUrl = imageUrl.replace('http://renovalinksite.local', '');
-                }
-                images.push({
-                  url: imageUrl,
-                  alt: imageField.alt || project.title.rendered
-                });
-              }
-              // Handle ID format - this should now be rare due to enrichment
-              // but we'll keep it as a fallback
-              else if (typeof imageField === 'number') {
-                console.warn(`Image field ${i} still has ID format:`, imageField);
-                // Skip ID-only fields as they need additional API calls
-                // This should be handled by the wordpress-client enrichment
-              }
-            }
-          }
-        }
-
-        if (images.length > 0) {
-          let galleryHTML = `
-            <div class="p-6">
-              <h3 class="text-2xl font-semibold mb-4">${project.title.rendered}</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          `;
-
-          images.forEach((image: any) => {
-            galleryHTML += `
-              <div class="aspect-4-3 rounded-lg overflow-hidden">
-                <img
-                  src="${image.url}"
-                  alt="${image.alt}"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-            `;
-          });
-
-          galleryHTML += `
-              </div>
-              <div class="mt-4 text-gray-600">
-                <p>${project.excerpt?.rendered?.replace(/<[^>]*>/g, '') || ''}</p>
-              </div>
-            </div>
-          `;
-
-          if (lightboxContent) {
-            lightboxContent.innerHTML = galleryHTML;
-            lightboxModal?.classList.remove('hidden');
-            lightboxModal?.classList.add('flex');
-          }
-        }
-      }
-    }
-
     // Store projects data globally for lightbox functionality
     (window as any).projectsData = JSON.parse(document.getElementById('projects-data')?.textContent || '[]');
   });
@@ -502,19 +376,7 @@ function getCategoryDisplayName(categoryId: string): string {
     overflow: hidden;
   }
 
-  /* Lightbox animations */
-  #lightbox-modal {
-    backdrop-filter: blur(8px);
-  }
-
-  #lightbox-modal.flex {
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  /* Lightbox styles now handled by Lightbox.astro component */
 
   /* Performance optimizations */
   .project-item {

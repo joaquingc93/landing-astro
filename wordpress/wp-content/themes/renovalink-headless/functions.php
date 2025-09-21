@@ -249,8 +249,48 @@ function get_hero_content() {
         'cta_text' => get_option('hero_cta_text', 'Get Free Quote'),
         'cta_link' => get_option('hero_cta_link', '#contact'),
         'background_image' => get_option('hero_background_image', ''),
-        'secondary_message' => get_option('hero_secondary_message', 'Certified Florida Engineer • 15+ Years Experience • Licensed & Insured')
+        'secondary_message' => get_option('hero_secondary_message', 'Certified Florida Engineer • 15+ Years Experience • Licensed & Insured'),
+        'debug_test' => 'MODIFIED HERO ENDPOINT - WORKING!'
     );
+    
+    // Add company information from WordPress
+    try {
+        $company_page = get_page_by_path('informacion-de-la-empresa');
+        if ($company_page) {
+            $company_info = array(
+                'name' => 'RenovaLink',
+                'page_found' => true,
+                'page_id' => $company_page->ID
+            );
+            
+            // Try to get ACF fields if available
+            if (function_exists('get_field')) {
+                $company_description = get_field('company_description', $company_page->ID);
+                $emergency_phone = get_field('emergency_phone', $company_page->ID);
+                
+                if (!empty($company_description)) {
+                    $company_info['description'] = $company_description;
+                }
+                if (!empty($emergency_phone)) {
+                    $company_info['emergency_phone'] = $emergency_phone;
+                }
+                
+                $company_info['acf_available'] = true;
+            } else {
+                $company_info['acf_available'] = false;
+            }
+            
+            $hero_data['company_info'] = $company_info;
+        } else {
+            $hero_data['company_info'] = array(
+                'page_found' => false
+            );
+        }
+    } catch (Exception $e) {
+        $hero_data['company_info'] = array(
+            'error' => $e->getMessage()
+        );
+    }
     
     return rest_ensure_response($hero_data);
 }
@@ -591,8 +631,66 @@ add_action('after_setup_theme', 'renovalink_image_sizes');
 // Include ACF Configuration
 // ACF configuration now handled manually in WordPress admin
 
-// Include Additional API Endpoints
-require_once get_template_directory() . '/api-endpoints.php';
+// Include Additional API Endpoints - COMMENTED OUT FOR DEBUGGING
+// require_once get_template_directory() . '/api-endpoints.php';
+
+// Include Test Endpoints (temporary) - COMMENTED OUT FOR DEBUGGING
+// require_once get_template_directory() . '/test-endpoints.php';
+
+// Include Company Endpoints (alternative) - COMMENTED OUT FOR DEBUGGING
+// require_once get_template_directory() . '/company-endpoints.php';
+
+// Include Simple Test (debugging) - COMMENTED OUT FOR DEBUGGING
+// require_once get_template_directory() . '/simple-test.php';
+// require_once get_template_directory() . '/test-simple-endpoint.php';
+// require_once get_template_directory() . '/debug-endpoint.php';
+
+// Force a visible error to test debug - COMMENTED OUT
+// throw new Exception('INTENTIONAL ERROR: Testing if PHP errors are visible');
+
+// SIMPLE TEST: Very basic endpoint directly in functions.php
+function register_simple_functions_test() {
+    register_rest_route('test/v1', '/simple', array(
+        'methods' => 'GET',
+        'callback' => 'get_simple_functions_test',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_simple_functions_test() {
+    return rest_ensure_response(array(
+        'success' => true,
+        'message' => 'Functions.php endpoint works!',
+        'timestamp' => current_time('mysql')
+    ));
+}
+
+add_action('rest_api_init', 'register_simple_functions_test');
+
+// Add company info to site-config directly in functions.php
+add_filter('rest_prepare_renovalink_site_config', 'add_company_info_to_site_config', 10, 1);
+
+function add_company_info_to_site_config($response) {
+    // Get company information from the "informacion-de-la-empresa" page
+    $company_page = get_page_by_path('informacion-de-la-empresa');
+    
+    if ($company_page) {
+        $company_info = array(
+            'name' => function_exists('get_field') ? (get_field('company_name', $company_page->ID) ?: get_bloginfo('name')) : get_bloginfo('name'),
+            'description' => function_exists('get_field') ? (get_field('company_description', $company_page->ID) ?: 'Premier remodeling services in Florida') : 'Premier remodeling services in Florida',
+            'emergency_phone' => function_exists('get_field') ? (get_field('emergency_phone', $company_page->ID) ?: '+1(786)643-1254') : '+1(786)643-1254',
+            'regular_phone' => function_exists('get_field') ? (get_field('regular_phone', $company_page->ID) ?: '+1(786)643-1254') : '+1(786)643-1254',
+            'email' => function_exists('get_field') ? (get_field('email', $company_page->ID) ?: get_option('admin_email')) : get_option('admin_email'),
+            'logo' => null,
+            'page_found' => true,
+            'page_id' => $company_page->ID
+        );
+        
+        $response['company_info'] = $company_info;
+    }
+    
+    return $response;
+}
 
 // Include Sample Content
 require_once get_template_directory() . '/sample-content/sample-data.php';
@@ -600,43 +698,4 @@ require_once get_template_directory() . '/sample-content/sample-data.php';
 // Include Security and Performance Optimizations
 require_once get_template_directory() . '/security-performance.php';
 
-// Ultra simple endpoint test
-add_action('rest_api_init', 'register_renovalink_endpoints');
-
-function register_renovalink_endpoints() {
-    register_rest_route('renovalink/v1', '/test', array(
-        'methods' => 'GET',
-        'callback' => 'handle_test_endpoint',
-        'permission_callback' => '__return_true'
-    ));
-
-    register_rest_route('renovalink/v1', '/company-info', array(
-        'methods' => 'GET',
-        'callback' => 'handle_company_info',
-        'permission_callback' => '__return_true'
-    ));
-}
-
-function handle_test_endpoint() {
-    return rest_ensure_response(array(
-        'success' => true,
-        'message' => 'Test endpoint is working!',
-        'timestamp' => current_time('mysql')
-    ));
-}
-
-function handle_company_info() {
-    return rest_ensure_response(array(
-        'success' => true,
-        'message' => 'Company info endpoint is working!',
-        'data' => array(
-            'company_info' => array(
-                'name' => get_bloginfo('name'),
-                'description' => get_bloginfo('description'),
-                'phone' => '+1(786)643-1254',
-                'email' => 'info@renovalink.com'
-            )
-        ),
-        'timestamp' => current_time('mysql')
-    ));
-}
+// API endpoints are loaded from api-endpoints.php

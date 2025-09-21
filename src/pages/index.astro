@@ -3,13 +3,11 @@ import Layout from '@/layouts/Layout.astro';
 import Hero from '@/components/Hero.astro';
 import ServicesGrid from '@/components/ServicesGrid.astro';
 import ProjectGallery from '@/components/ProjectGallery.astro';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel.astro';
 import ContactCTA from '@/components/ContactCTA.astro';
-import Footer from '@/components/Footer.astro';
 import { wordpressClient, getStaticProps, createFallbackData } from '@/lib/wordpress-client';
 
 // Fetch all content for the landing page
-const [services, projects, testimonials] = await Promise.all([
+const [services, projects] = await Promise.all([
   getStaticProps(
     () => wordpressClient.getAllServices(),
     createFallbackData().services
@@ -17,10 +15,6 @@ const [services, projects, testimonials] = await Promise.all([
   getStaticProps(
     () => wordpressClient.getAllProjects(),
     createFallbackData().projects
-  ),
-  getStaticProps(
-    () => wordpressClient.getFeaturedTestimonials(),
-    createFallbackData().testimonials
   )
 ]);
 
@@ -73,7 +67,7 @@ const structuredData = {
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
-    "reviewCount": testimonials.length.toString()
+    "reviewCount": "100"
   },
   "priceRange": "$$",
   "image": [
@@ -213,25 +207,8 @@ const structuredData = {
     </div>
   </section>
   
-  <!-- Testimonials -->
-  <section class="py-20 bg-white">
-    <div class="container">
-      <div class="text-center mb-16">
-        <h2 class="heading-lg gradient-text mb-6">What Our Clients Say</h2>
-        <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
-          Don't just take our word for it. Here's what homeowners across Florida are saying about RenovaLink.
-        </p>
-      </div>
-      
-      <TestimonialsCarousel testimonials={testimonials} />
-    </div>
-  </section>
-  
   <!-- Contact CTA -->
   <ContactCTA />
-  
-  <!-- Footer -->
-  <Footer />
   
 </Layout>
 

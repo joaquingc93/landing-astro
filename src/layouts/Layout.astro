@@ -1,6 +1,7 @@
 ---
 import SEOHead from '@/components/SEOHead.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import Footer from '@/components/Footer.astro';
 import '@/styles/global.css';
 
 export interface Props {
@@ -14,6 +15,7 @@ export interface Props {
   modifiedTime?: string;
   schema?: any;
   class?: string;
+  hideWhatsApp?: boolean;
 }
 
 const {
@@ -26,8 +28,9 @@ const {
   publishedTime,
   modifiedTime,
   schema,
-  class: className = ''
-} = Astro.props;
+  class: className = '',
+  hideWhatsApp = false
+} = Astro.props as Props;
 ---
 
 <!DOCTYPE html>
@@ -143,10 +146,12 @@ const {
       <main id="main-content" class="flex-1" tabindex="-1">
         <slot />
       </main>
+      <!-- Global Footer -->
+      <Footer />
     </div>
     
-    <!-- Floating WhatsApp Button -->
-    <FloatingWhatsApp />
+  <!-- Floating WhatsApp Button (optional) -->
+  { !hideWhatsApp && <FloatingWhatsApp /> }
     
     <!-- Scripts -->
     <script>
@@ -156,73 +161,77 @@ const {
         document.body.classList.add('page-loaded');
       });
       
-      // View Transitions API support detection
-      if (document.startViewTransition) {
-        document.documentElement.classList.add('view-transitions');
-      }
+      // View Transitions API support detection (guarded)
+      try {
+        if ('startViewTransition' in document) {
+          document.documentElement.classList.add('view-transitions');
+        }
+      } catch {}
       
-      // Performance observer for Core Web Vitals
-      if ('PerformanceObserver' in window) {
-        try {
-          // Observe LCP
+      // Performance observer for Core Web Vitals (with defensive casting)
+      try {
+        if ('PerformanceObserver' in window) {
+          // Largest Contentful Paint
           new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
+            list.getEntries().forEach((entry) => {
               if (entry.entryType === 'largest-contentful-paint') {
                 console.log('LCP:', entry.startTime);
               }
-            }
+            });
           }).observe({ entryTypes: ['largest-contentful-paint'] });
-          
-          // Observe FID
+
+          // First Input Delay (legacy)
           new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
+            list.getEntries().forEach((entry) => {
               if (entry.entryType === 'first-input') {
-                console.log('FID:', entry.processingStart - entry.startTime);
+                const anyEntry: any = entry;
+                if (typeof anyEntry.processingStart === 'number') {
+                  console.log('FID:', anyEntry.processingStart - entry.startTime);
+                }
               }
-            }
+            });
           }).observe({ entryTypes: ['first-input'] });
-          
-          // Observe CLS
-          new PerformanceObserver((list) => {
+
+          // Cumulative Layout Shift
+            new PerformanceObserver((list) => {
             let clsValue = 0;
-            for (const entry of list.getEntries()) {
-              if (!entry.hadRecentInput) {
-                clsValue += entry.value;
+            list.getEntries().forEach((entry) => {
+              const anyEntry: any = entry;
+              if (anyEntry.entryType === 'layout-shift' && !anyEntry.hadRecentInput) {
+                if (typeof anyEntry.value === 'number') {
+                  clsValue += anyEntry.value;
+                }
               }
-            }
+            });
             console.log('CLS:', clsValue);
           }).observe({ entryTypes: ['layout-shift'] });
-        } catch (error) {
-          console.warn('Performance monitoring not available:', error);
         }
+      } catch (error) {
+        console.warn('Performance monitoring not available:', error);
       }
       
       // Enhanced focus management
       let hadKeyboardEvent = true;
-      let keyboardThrottleTimeout;
-      
-      const keyboardUsed = () => {
-        hadKeyboardEvent = true;
-      };
-      
-      const mouseUsed = (event) => {
-        if (hadKeyboardEvent) {
-          hadKeyboardEvent = false;
-        }
-      };
+      const keyboardUsed = () => { hadKeyboardEvent = true; };
+      const mouseUsed = () => { if (hadKeyboardEvent) { hadKeyboardEvent = false; } };
       
       document.addEventListener('keydown', keyboardUsed, true);
       document.addEventListener('mousedown', mouseUsed, true);
       
       // Add focus-visible class for better focus management
-      document.addEventListener('focusin', (event) => {
-        if (hadKeyboardEvent || event.target.matches(':focus-visible')) {
-          event.target.classList.add('focus-visible');
+      document.addEventListener('focusin', (event: Event) => {
+        const target = event.target as HTMLElement | null;
+        if (!target) return;
+        if (hadKeyboardEvent || (target.matches && target.matches(':focus-visible'))) {
+          target.classList.add('focus-visible');
         }
       });
       
-      document.addEventListener('focusout', (event) => {
-        event.target.classList.remove('focus-visible');
+      document.addEventListener('focusout', (event: Event) => {
+        const tgt = event.target;
+        if (tgt && (tgt as any).classList) {
+          (tgt as HTMLElement).classList.remove('focus-visible');
+        }
       });
       
       // Intersection Observer for animations

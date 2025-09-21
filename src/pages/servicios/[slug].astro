@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import Lightbox from '@/components/Lightbox.astro';
 import { wordpressClient, getStaticProps, ACFHelpers } from '@/lib/wordpress-client';
 import { getOptimizedImageUrl, generateMetaDescription } from '@/lib/utils';
 import type { Service, Project } from '@/schemas/wordpress';
@@ -456,7 +457,12 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
                 <div class="w-full lg:w-1/2 xl:w-1/3 flex-shrink-0 px-4">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                     <!-- Project Image -->
-                    <div class="aspect-video overflow-hidden relative">
+                    <div class="aspect-video overflow-hidden relative cursor-pointer gallery-image-trigger"
+                         data-gallery-id="service-projects"
+                         data-image-url={image.url}
+                         data-image-alt={image.alt}
+                         data-image-title={image.projectTitle}
+                         data-image-index={index}>
                       <img 
                         src={image.url}
                         alt={image.alt}
@@ -464,6 +470,15 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
                         loading="lazy"
                       />
                       
+                      <!-- Click to view overlay -->
+                      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <div class="text-white text-center">
+                          <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                          </svg>
+                          <p class="text-sm font-medium">Click to view</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -496,6 +511,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
           </div>
         </div>
       </div>
+      
     </section>
   ) : (
     <!-- No projects fallback -->
@@ -648,6 +664,92 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
       });
     });
 
+    // Lightbox functionality
+    const modal = document.getElementById('lightbox-modal');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    
+    if (modal && lightboxImage && lightboxTitle && lightboxCounter && closeBtn && prevBtn && nextBtn) {
+      // Store gallery images globally
+      window.currentGallery = [];
+      window.currentImageIndex = 0;
+      
+      // Initialize gallery images from page data
+      const galleryTriggers = document.querySelectorAll('.gallery-image-trigger');
+      galleryTriggers.forEach((trigger, index) => {
+        const imageData = {
+          url: trigger.getAttribute('data-image-url'),
+          alt: trigger.getAttribute('data-image-alt'),
+          title: trigger.getAttribute('data-image-title'),
+          index: index
+        };
+        window.currentGallery.push(imageData);
+        
+        // Add click event
+        trigger.addEventListener('click', () => openLightbox(index));
+      });
+      
+      function openLightbox(index) {
+        window.currentImageIndex = index;
+        updateLightboxContent();
+        modal.classList.remove('opacity-0', 'invisible');
+        modal.classList.add('opacity-100', 'visible');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeLightbox() {
+        modal.classList.add('opacity-0', 'invisible');
+        modal.classList.remove('opacity-100', 'visible');
+        document.body.style.overflow = '';
+      }
+      
+      function updateLightboxContent() {
+        const currentImage = window.currentGallery[window.currentImageIndex];
+        if (!currentImage) return;
+        
+        lightboxImage.src = currentImage.url;
+        lightboxImage.alt = currentImage.alt;
+        lightboxTitle.textContent = currentImage.title || 'Project Image';
+        lightboxCounter.textContent = `${window.currentImageIndex + 1} / ${window.currentGallery.length}`;
+        
+        // Update navigation buttons
+        prevBtn.style.display = window.currentGallery.length > 1 ? 'block' : 'none';
+        nextBtn.style.display = window.currentGallery.length > 1 ? 'block' : 'none';
+      }
+      
+      function navigateLightbox(direction) {
+        if (direction === 'next') {
+          window.currentImageIndex = (window.currentImageIndex + 1) % window.currentGallery.length;
+        } else {
+          window.currentImageIndex = (window.currentImageIndex - 1 + window.currentGallery.length) % window.currentGallery.length;
+        }
+        updateLightboxContent();
+      }
+      
+      // Event listeners
+      closeBtn.addEventListener('click', closeLightbox);
+      prevBtn.addEventListener('click', () => navigateLightbox('prev'));
+      nextBtn.addEventListener('click', () => navigateLightbox('next'));
+      
+      // Close on backdrop click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeLightbox();
+      });
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (modal.classList.contains('opacity-100')) {
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') navigateLightbox('prev');
+          if (e.key === 'ArrowRight') navigateLightbox('next');
+        }
+      });
+    }
+
     // Projects Carousel functionality
     const carousel = document.getElementById('projects-carousel');
     const prevButton = document.getElementById('carousel-prev');
@@ -768,6 +870,8 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         if (e.key === 'ArrowRight') nextSlide();
       });
     }
+    
+    // Lightbox functionality is now handled by the Lightbox.astro component
   });
 </script>
 
@@ -819,6 +923,9 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
     to { opacity: 1; transform: translateY(0); }
   }
 </style>
+
+<!-- Include the consolidated Lightbox component -->
+<Lightbox />
 
 <!-- JSON-LD structured data -->
 <script type="application/ld+json" set:html={JSON.stringify(serviceStructuredData)}></script>

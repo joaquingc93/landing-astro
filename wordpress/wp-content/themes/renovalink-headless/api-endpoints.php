@@ -36,6 +36,58 @@ function get_site_stats() {
     return rest_ensure_response($stats);
 }
 
+// Company Info Endpoint (placed directly after stats)
+function register_company_basic_endpoint() {
+    register_rest_route('renovalink/v1', '/company-basic', array(
+        'methods' => 'GET',
+        'callback' => 'get_company_basic',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_company_basic() {
+    $info = array(
+        'success' => true,
+        'data' => array(
+            'company_info' => array(
+                'name' => get_bloginfo('name'),
+                'description' => 'Premier remodeling services in Florida specializing in pool renovations, structural engineering, concrete work, and residential cleaning.',
+                'emergency_phone' => '+1(786)643-1254',
+                'regular_phone' => '+1(786)643-1254',
+                'email' => 'info@renovalink.com',
+                'logo' => null
+            ),
+            'credentials' => array(
+                'licensed' => true,
+                'insured' => true,
+                'certified_engineer' => true,
+                'years_experience' => 15,
+                'certifications' => array(
+                    'Florida Professional Engineer',
+                    'Pool & Spa Contractor License',
+                    'General Contractor License',
+                    'EPA Certified'
+                )
+            ),
+            'stats' => array(
+                'projects_completed' => 500,
+                'clients_satisfied' => 450,
+                'years_in_business' => 15,
+                'team_members' => 25
+            ),
+            'service_areas' => array(
+                'Miami-Dade',
+                'Broward',
+                'Palm Beach',
+                'Orange',
+                'Hillsborough'
+            )
+        )
+    );
+    
+    return rest_ensure_response($info);
+}
+
 // Helper function to get average rating
 function get_average_testimonial_rating() {
     global $wpdb;
@@ -406,6 +458,34 @@ function register_site_config_endpoint() {
     ));
 }
 
+// New endpoint with no cache
+function register_site_config_new_endpoint() {
+    register_rest_route('renovalink/v2', '/site-config-new', array(
+        'methods' => 'GET',
+        'callback' => 'get_site_config',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function register_site_config_test_endpoint() {
+    register_rest_route('renovalink/v1', '/site-config-test', array(
+        'methods' => 'GET',
+        'callback' => 'get_site_config_test',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_site_config_test() {
+    return rest_ensure_response(array(
+        'message' => 'New endpoint working!',
+        'timestamp' => current_time('mysql'),
+        'company_info' => array(
+            'debug_message' => 'Company info test working!',
+            'test' => true
+        )
+    ));
+}
+
 function get_site_config() {
     // Find the "Configuración del Sitio" page
     $config_page = get_page_by_title('Configuración del Sitio');
@@ -433,8 +513,59 @@ function get_site_config() {
         );
     }
     
+    // Simple company info - focusing on getting data from WordPress first
+    $company_info = array(
+        'name' => 'RenovaLink',
+        'description' => 'Premier remodeling services in Florida specializing in pool renovations, structural engineering, concrete work, and residential cleaning.',
+        'emergency_phone' => '+1(786)643-1254',
+        'regular_phone' => '+1(786)643-1254',
+        'email' => get_option('admin_email'),
+        'logo' => null,
+        'page_found' => false,
+        'test_field' => 'Company info is working!'
+    );
+    
+    // Try to get company information from the "informacion-de-la-empresa" page
+    try {
+        $company_page = get_page_by_path('informacion-de-la-empresa');
+        if ($company_page) {
+            $company_info['page_found'] = true;
+            $company_info['page_id'] = $company_page->ID;
+            
+            // Try to get ACF fields if available
+            if (function_exists('get_field')) {
+                $company_description = get_field('company_description', $company_page->ID);
+                $emergency_phone = get_field('emergency_phone', $company_page->ID);
+                $company_logo = get_field('company_logo', $company_page->ID);
+                
+                if (!empty($company_description)) {
+                    $company_info['description'] = $company_description;
+                }
+                if (!empty($emergency_phone)) {
+                    $company_info['emergency_phone'] = $emergency_phone;
+                }
+                if (!empty($company_logo) && is_numeric($company_logo)) {
+                    $attachment = wp_get_attachment_image_src($company_logo, 'full');
+                    if ($attachment) {
+                        $company_info['logo'] = array(
+                            'url' => $attachment[0],
+                            'width' => $attachment[1],
+                            'height' => $attachment[2]
+                        );
+                    }
+                }
+                
+                $company_info['acf_available'] = true;
+            } else {
+                $company_info['acf_available'] = false;
+            }
+        }
+    } catch (Exception $e) {
+        $company_info['error'] = $e->getMessage();
+    }
+
     $config = array(
-        'site_name' => get_option('blogname'),
+        'site_name' => 'DEBUG: ' . get_option('blogname'),
         'site_description' => get_option('blogdescription'),
         'hero' => array(
             'title' => $hero_title,
@@ -447,10 +578,15 @@ function get_site_config() {
         'contact' => array(
             'phone' => '(305) XXX-XXXX',
             'email' => get_option('admin_email'),
-            'address' => 'Florida, USA'
+            'address' => 'Florida, USA - UPDATED NOW'
         ),
-        'config_page_id' => $page_id
+        'company_info' => $company_info,
+        'config_page_id' => $page_id,
+        'debug_timestamp' => current_time('mysql')
     );
+    
+    // Apply the filter that adds company_info (defined in functions.php)
+    $config = apply_filters('rest_prepare_renovalink_site_config', $config);
     
     return rest_ensure_response($config);
 }
@@ -465,63 +601,19 @@ function register_company_info_endpoint() {
 }
 
 function get_company_info() {
-    // Find the company information page
-    $company_page = get_page_by_title('Información de la Empresa');
-
-    if (!$company_page) {
-        $company_page = get_page_by_title('Informacion de la Empresa');
-    }
-
-    if (!$company_page) {
-        // Try by slug
-        $company_page = get_page_by_path('informacion-de-la-empresa');
-    }
-
-    $response = array(
+    // Find the company information page by slug
+    $company_page = get_page_by_path('informacion-de-la-empresa');
+    
+    $company_info = array(
         'success' => true,
-        'debug' => array(
-            'page_found' => !!$company_page,
-            'acf_active' => function_exists('get_field'),
-            'current_theme' => get_stylesheet(),
-            'plugin_version' => '1.0.0',
-            'available_pages' => get_available_pages_list()
-        )
-    );
-
-    if ($company_page) {
-        $page_id = $company_page->ID;
-
-        // Get ACF fields if available
-        $company_logo = null;
-        $company_description = null;
-        $emergency_phone = null;
-
-        if (function_exists('get_field')) {
-            $company_logo = get_field('company_logo', $page_id);
-            $company_description = get_field('company_description', $page_id);
-            $emergency_phone = get_field('emergency_phone', $page_id);
-        }
-
-        // Prepare logo data
-        $logo_data = null;
-        if ($company_logo && is_array($company_logo)) {
-            $logo_data = array(
-                'url' => isset($company_logo['url']) ? $company_logo['url'] : '',
-                'alt' => isset($company_logo['alt']) ? $company_logo['alt'] : '',
-                'width' => isset($company_logo['width']) ? $company_logo['width'] : null,
-                'height' => isset($company_logo['height']) ? $company_logo['height'] : null,
-                'sizes' => isset($company_logo['sizes']) ? $company_logo['sizes'] : null
-            );
-        }
-
-        $response['data'] = array(
+        'data' => array(
             'company_info' => array(
                 'name' => get_bloginfo('name'),
-                'description' => $company_description ?: get_bloginfo('description'),
-                'emergency_phone' => $emergency_phone ?: '+1(786)643-1254',
+                'description' => 'Premier remodeling services in Florida specializing in pool renovations, structural engineering, concrete work, and residential cleaning.',
+                'emergency_phone' => '+1(786)643-1254',
                 'regular_phone' => '+1(786)643-1254',
                 'email' => 'info@renovalink.com',
-                'logo' => $logo_data
+                'logo' => null
             ),
             'credentials' => array(
                 'licensed' => true,
@@ -548,25 +640,10 @@ function get_company_info() {
                 'Orange',
                 'Hillsborough'
             )
-        );
-
-        $response['debug']['page_details'] = array(
-            'id' => $page_id,
-            'title' => $company_page->post_title,
-            'slug' => $company_page->post_name,
-            'status' => $company_page->post_status
-        );
-    } else {
-        $response['message'] = 'Company information page not found. Please create a page titled "Información de la Empresa"';
-        $response['suggestions'] = array(
-            'Create a page with title: "Información de la Empresa"',
-            'Or create a page with title: "Informacion de la Empresa"',
-            'Make sure the page is published',
-            'Check available pages in the debug response'
-        );
-    }
-
-    return rest_ensure_response($response);
+        )
+    );
+    
+    return rest_ensure_response($company_info);
 }
 
 // Helper function to get available pages for debugging
@@ -589,31 +666,74 @@ function get_available_pages_list() {
     return $page_list;
 }
 
+// Test endpoint to verify file changes
+function register_test_endpoint() {
+    register_rest_route('renovalink/v1', '/test', array(
+        'methods' => 'GET',
+        'callback' => 'get_test_response',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_test_response() {
+    return rest_ensure_response(array(
+        'message' => 'File changes are working!',
+        'timestamp' => current_time('mysql'),
+        'file_version' => 'v3'
+    ));
+}
+
+// Debug endpoint
+function register_pages_list_endpoint() {
+    register_rest_route('renovalink/v1', '/pages-list', array(
+        'methods' => 'GET',
+        'callback' => 'get_pages_list',
+        'permission_callback' => '__return_true'
+    ));
+}
+
+function get_pages_list() {
+    $pages = get_pages(array('number' => 100));
+    $page_list = array();
+    
+    foreach ($pages as $page) {
+        $page_list[] = array(
+            'id' => $page->ID,
+            'title' => $page->post_title,
+            'slug' => $page->post_name,
+            'status' => $page->post_status
+        );
+    }
+    
+    return rest_ensure_response($page_list);
+}
+
 // Register all additional endpoints
 add_action('rest_api_init', 'register_site_stats_endpoint');
+add_action('rest_api_init', 'register_company_basic_endpoint');
 add_action('rest_api_init', 'register_featured_content_endpoint');
 add_action('rest_api_init', 'register_search_endpoint');
 add_action('rest_api_init', 'register_service_areas_endpoint');
 add_action('rest_api_init', 'register_contact_form_endpoint');
 add_action('rest_api_init', 'register_quote_endpoint');
 add_action('rest_api_init', 'register_site_config_endpoint');
+add_action('rest_api_init', 'register_site_config_new_endpoint');
+add_action('rest_api_init', 'register_site_config_test_endpoint');
 add_action('rest_api_init', 'register_company_info_endpoint');
+add_action('rest_api_init', 'register_test_endpoint');
+add_action('rest_api_init', 'register_pages_list_endpoint');
 
 /**
  * Add custom headers for caching
  */
 function add_custom_api_headers() {
-    // Add cache headers for API endpoints
+    // DISABLED CACHE FOR DEVELOPMENT
+    // Add no-cache headers for API endpoints during development
     if (strpos($_SERVER['REQUEST_URI'], '/wp-json/renovalink/') !== false) {
-        // Cache static content for 1 hour
-        if (strpos($_SERVER['REQUEST_URI'], '/hero') !== false || 
-            strpos($_SERVER['REQUEST_URI'], '/options') !== false) {
-            header('Cache-Control: public, max-age=3600');
-        }
-        // Cache dynamic content for 5 minutes
-        else {
-            header('Cache-Control: public, max-age=300');
-        }
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Pragma: no-cache');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     }
 }
 add_action('template_redirect', 'add_custom_api_headers');

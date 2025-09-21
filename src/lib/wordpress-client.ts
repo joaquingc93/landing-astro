@@ -4,13 +4,11 @@ import {
   ServiceSchema,
   ProjectSchema,
   TestimonialSchema,
-  CompanyInfoSchema,
   APIErrorSchema,
   type WPPost,
   type Service,
   type Project,
   type Testimonial,
-  type CompanyInfo,
   type APIError,
 } from "@/schemas/wordpress";
 
@@ -267,6 +265,14 @@ class WordPressClient {
     return posts[0] || null;
   }
 
+  async getPageBySlug(slug: string): Promise<WPPost | null> {
+    const pages = await this.fetchFromAPI("wp/v2/pages", WPPostSchema, {
+      slug,
+      status: "publish",
+    });
+    return pages[0] || null;
+  }
+
   async getAllServices(): Promise<Service[]> {
     console.log(
       "🌐 Fetching services from:",
@@ -442,30 +448,78 @@ class WordPressClient {
     }
   }
 
-  async getCompanyInfo(): Promise<CompanyInfo | null> {
+  async getCompanyInfo(): Promise<any | null> {
     const cacheKey = "company_info";
-    const cached = cache.get<CompanyInfo>(cacheKey);
+    const cached = cache.get<any>(cacheKey);
 
     if (cached) {
       return cached;
     }
 
     try {
+      // Fetch raw data directly without schema validation to access ACF fields
       const response = await this.fetchWithErrorHandling(
-        `${this.customUrl}/company-info`
+        `${this.baseUrl}/wp/v2/pages?slug=informacion-de-la-empresa&_embed=true`
       );
-      const data = await response.json();
+      const pages = await response.json();
 
-      const result = CompanyInfoSchema.safeParse(data);
-      if (!result.success) {
-        console.warn("Invalid company info data structure:", result.error);
+      if (!pages || pages.length === 0) {
+        console.warn("Company info page 'informacion-de-la-empresa' not found");
         return null;
       }
 
-      cache.set(cacheKey, result.data);
-      return result.data;
+      const companyPage = pages[0];
+      console.log("📊 Company info page found:", companyPage.title?.rendered);
+      console.log("📊 Raw ACF data:", companyPage.acf);
+
+      // Extract data from ACF fields or content
+      const acfData = companyPage.acf || {};
+
+      // Convert to expected format for About page (skip schema validation, return directly)
+      const companyInfoData = {
+        company_info: {
+          name: acfData.company_name || "RenovaLink",
+          description:
+            acfData.company_description ||
+            companyPage.content?.rendered?.replace(/<[^>]*>/g, "").trim() ||
+            "Transformamos espacios con excelencia. Especializados en renovación de piscinas, ingeniería estructural, trabajo de concreto y limpieza residencial.",
+          emergency_phone: acfData.emergency_phone || "+1(786)643-1254",
+          regular_phone: acfData.regular_phone || "+1(786)643-1254",
+          email: acfData.email || "info@renovalink.com",
+          logo: acfData.company_logo || null,
+        },
+        credentials: {
+          licensed: true,
+          insured: true,
+          certified_engineer: true,
+          years_experience: parseInt(acfData.years_experience || "15"),
+          certifications: acfData.certifications || [
+            "Ingeniero Profesional de Florida",
+            "Licencia de Contratista de Piscinas y Spas",
+            "Licencia de Contratista General",
+            "Certificado EPA",
+          ],
+        },
+        stats: {
+          projects_completed: parseInt(acfData.projects_completed || "500"),
+          clients_satisfied: parseInt(acfData.clients_satisfied || "450"),
+          years_in_business: parseInt(acfData.years_in_business || "15"),
+          team_members: parseInt(acfData.team_members || "25"),
+        },
+        service_areas: acfData.service_areas || ["Miami-Dade", "Broward"],
+        services: [], // Empty array for compatibility with about.astro
+      };
+
+      console.log("📊 Final company info data:", companyInfoData);
+
+      // Skip schema validation for now and return data directly
+      cache.set(cacheKey, companyInfoData);
+      return companyInfoData as any;
     } catch (error) {
-      console.warn("Failed to fetch company info:", error);
+      console.warn(
+        "Failed to fetch company info from page 'informacion-de-la-empresa':",
+        error
+      );
       return null;
     }
   }
