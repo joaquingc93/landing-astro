@@ -2,6 +2,8 @@
 import SEOHead from '@/components/SEOHead.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import Footer from '@/components/Footer.astro';
+// Import global Tailwind layers so a real CSS asset is generated in production
+// (previously only critical inline CSS existed, causing missing stylesheet 404s)
 import '@/styles/global.css';
 
 export interface Props {
@@ -51,86 +53,24 @@ const {
     <!-- View Transitions API -->
     <meta name="view-transition" content="same-origin" />
     
-    <!-- Performance optimization -->
-    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/playfair-display-var.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@400..900&display=swap" rel="stylesheet" />
     
-    <!-- Critical resources -->
+    <!-- Minimal inline CSS (rest is in global.css bundle) -->
     <style>
-      /* Critical CSS for first paint */
-      body {
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        line-height: 1.6;
-        color: #0f172a;
-        background-color: #ffffff;
-      }
-      
-      /* Loading states */
-      .page-loading {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.3s ease-out;
-      }
-      
-      .page-loaded {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      
-      /* Prevent flash of unstyled content */
-      .hero-section {
-        min-height: 60vh;
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      /* Skip to content link for accessibility */
-      .skip-link {
-        position: absolute;
-        top: -40px;
-        left: 6px;
-        background: #2563eb;
-        color: white;
-        padding: 8px;
-        text-decoration: none;
-        z-index: 100;
-        border-radius: 4px;
-        transition: top 0.3s;
-      }
-      
-      .skip-link:focus {
-        top: 6px;
-      }
-      
-      /* Focus management */
-      .focus-visible {
-        outline: 2px solid #2563eb;
-        outline-offset: 2px;
-      }
-      
-      /* Smooth scrolling for reduced motion users */
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-        
-        *,
-        *::before,
-        *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-        }
-      }
-      
-      /* High contrast mode support */
-      @media (prefers-contrast: high) {
-        * {
-          border-color: ButtonText;
-        }
-      }
+      /* Minimal reset subset */
+      *,::before,::after{box-sizing:border-box;}
+      body{margin:0;}
+      /* Loading state fade-in */
+      .page-loading{opacity:0;transform:translateY(12px);transition:all .25s ease-out;}
+      .page-loaded{opacity:1;transform:translateY(0);}
+      /* Accessible skip link */
+      .skip-link{position:absolute;top:-40px;left:6px;background:#2563eb;color:#fff;padding:8px;border-radius:4px;text-decoration:none;z-index:100;transition:top .25s;}
+      .skip-link:focus{top:6px;}
+      /* Reduce motion respect */
+      @media (prefers-reduced-motion:reduce){.page-loading,.page-loaded{transition:none !important;}}
     </style>
   </head>
   

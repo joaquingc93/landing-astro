@@ -383,6 +383,8 @@ const contactStructuredData = {
     faqTriggers.forEach(trigger => {
       trigger.addEventListener('click', () => {
         const targetId = trigger.getAttribute('data-target');
+        if (!targetId) return;
+        
         const content = document.getElementById(targetId);
         const arrow = trigger.querySelector('svg');
         
@@ -393,12 +395,14 @@ const contactStructuredData = {
           faqTriggers.forEach(otherTrigger => {
             if (otherTrigger !== trigger) {
               const otherId = otherTrigger.getAttribute('data-target');
-              const otherContent = document.getElementById(otherId);
-              const otherArrow = otherTrigger.querySelector('svg');
+              if (otherId) {
+                const otherContent = document.getElementById(otherId);
+                const otherArrow = otherTrigger.querySelector('svg');
               
-              if (otherContent && otherArrow) {
-                otherContent.classList.add('hidden');
-                otherArrow.classList.remove('rotate-180');
+                if (otherContent && otherArrow) {
+                  otherContent.classList.add('hidden');
+                  otherArrow.classList.remove('rotate-180');
+                }
               }
             }
           });

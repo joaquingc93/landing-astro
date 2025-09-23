@@ -60,7 +60,12 @@
     console.log('🎯 Lightbox: Modal element found:', !!lightboxModal);
     
     let currentLightboxIndex = 0;
-    let lightboxImages = [];
+    let lightboxImages: Array<{
+      url: string;
+      alt: string;
+      title: string;
+      index: number;
+    }> = [];
     
     // Collect all gallery images with proper selectors
     const galleryTriggers = document.querySelectorAll('.gallery-image-trigger, .project-image, .gallery-trigger');
@@ -70,15 +75,17 @@
     lightboxImages = [];
     
     galleryTriggers.forEach((trigger, index) => {
+      const htmlTrigger = trigger as HTMLElement;
+      
       // Handle project gallery triggers differently (from homepage project cards)
       if (trigger.classList.contains('gallery-trigger')) {
-        const projectId = trigger.dataset.projectId;
+        const projectId = htmlTrigger.dataset.projectId;
         
         // Remove any existing listeners to avoid duplicates
         trigger.removeEventListener('click', handleProjectGalleryClick);
         
         // Add click event listener for project gallery
-        function handleProjectGalleryClick(e) {
+        function handleProjectGalleryClick(e: Event) {
           e.preventDefault();
           e.stopPropagation();
           console.log('🎯 Lightbox: Project gallery clicked for project:', projectId);
@@ -86,15 +93,15 @@
         }
         
         trigger.addEventListener('click', handleProjectGalleryClick);
-        trigger.style.cursor = 'pointer';
+        htmlTrigger.style.cursor = 'pointer';
         return;
       }
       
       // Handle regular image triggers (from service pages)
       const imageData = {
-        url: trigger.dataset.imageUrl || trigger.querySelector('img')?.src || '',
-        alt: trigger.dataset.imageAlt || trigger.querySelector('img')?.alt || '',
-        title: trigger.dataset.imageTitle || trigger.dataset.projectTitle || `Image ${index + 1}`,
+        url: htmlTrigger.dataset.imageUrl || trigger.querySelector('img')?.src || '',
+        alt: htmlTrigger.dataset.imageAlt || trigger.querySelector('img')?.alt || '',
+        title: htmlTrigger.dataset.imageTitle || htmlTrigger.dataset.projectTitle || `Image ${index + 1}`,
         index: index
       };
       
@@ -105,7 +112,7 @@
       trigger.removeEventListener('click', handleImageClick);
       
       // Add click event listener
-      function handleImageClick(e) {
+      function handleImageClick(e: Event) {
         e.preventDefault();
         e.stopPropagation();
         console.log('🎯 Lightbox: Image clicked, opening at index:', index);
@@ -115,18 +122,20 @@
       trigger.addEventListener('click', handleImageClick);
       
       // Make it visually clear it's clickable
-      trigger.style.cursor = 'pointer';
+      htmlTrigger.style.cursor = 'pointer';
     });
     
     console.log('🎯 Lightbox: Total images collected:', lightboxImages.length);
     
     // Open project gallery function for homepage project cards
-    function openProjectGallery(projectId) {
+    function openProjectGallery(projectId: string | undefined) {
       console.log('🎯 Lightbox: Opening project gallery for project:', projectId);
+      
+      if (!projectId) return;
       
       // Get project data from global window object
       const projectsData = (window as any).projectsData || [];
-      const project = projectsData.find(p => p.id.toString() === projectId.toString());
+      const project = projectsData.find((p: any) => p.id.toString() === projectId.toString());
       
       if (!project) {
         console.error('🎯 Lightbox: Project not found:', projectId);
@@ -138,7 +147,7 @@
       
       // For fallback projects with project_gallery array
       if (project.acf?.project_gallery && Array.isArray(project.acf.project_gallery)) {
-        project.acf.project_gallery.forEach((img, index) => {
+        project.acf.project_gallery.forEach((img: any, index: number) => {
           lightboxImages.push({
             url: img.url,
             alt: img.alt || project.title.rendered,
@@ -179,24 +188,28 @@
       currentLightboxIndex = 0;
       updateLightboxContent();
       
-      lightboxModal.classList.remove('opacity-0', 'invisible');
-      lightboxModal.classList.add('opacity-100', 'visible');
-      document.body.style.overflow = 'hidden';
-      
-      console.log('🎯 Lightbox: Project gallery opened successfully');
-      
-      // Force the modal to center properly
-      setTimeout(() => {
-        lightboxModal.scrollIntoView({ 
-          behavior: 'instant', 
-          block: 'center', 
-          inline: 'center' 
-        });
-      }, 100);
+      if (lightboxModal) {
+        lightboxModal.classList.remove('opacity-0', 'invisible');
+        lightboxModal.classList.add('opacity-100', 'visible');
+        document.body.style.overflow = 'hidden';
+        
+        console.log('🎯 Lightbox: Project gallery opened successfully');
+        
+        // Force the modal to center properly
+        setTimeout(() => {
+          if (lightboxModal) {
+            lightboxModal.scrollIntoView({ 
+              behavior: 'instant', 
+              block: 'center', 
+              inline: 'center' 
+            });
+          }
+        }, 100);
+      }
     }
     
     // Open lightbox function
-    function openLightbox(index) {
+    function openLightbox(index: number) {
       console.log('🎯 Lightbox: Opening at index:', index);
       
       if (!lightboxModal || lightboxImages.length === 0) {
@@ -215,11 +228,13 @@
       
       // Force the modal to center properly
       setTimeout(() => {
-        lightboxModal.scrollIntoView({ 
-          behavior: 'instant', 
-          block: 'center', 
-          inline: 'center' 
-        });
+        if (lightboxModal) {
+          lightboxModal.scrollIntoView({ 
+            behavior: 'instant', 
+            block: 'center', 
+            inline: 'center' 
+          });
+        }
       }, 100);
     }
     
@@ -238,15 +253,15 @@
     function updateLightboxContent() {
       const image = lightboxImages[currentLightboxIndex];
       if (image && lightboxImage && lightboxTitle && lightboxCounter) {
-        lightboxImage.src = image.url;
-        lightboxImage.alt = image.alt;
+        (lightboxImage as HTMLImageElement).src = image.url;
+        (lightboxImage as HTMLImageElement).alt = image.alt;
         lightboxTitle.textContent = image.title || '';
         lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
         
         // Update navigation buttons visibility
         if (lightboxPrev && lightboxNext) {
-          lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
-          lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+          (lightboxPrev as HTMLElement).style.display = lightboxImages.length > 1 ? 'block' : 'none';
+          (lightboxNext as HTMLElement).style.display = lightboxImages.length > 1 ? 'block' : 'none';
         }
         
         console.log('🎯 Lightbox: Content updated for:', image.title);
@@ -254,7 +269,7 @@
     }
     
     // Navigate lightbox
-    function navigateLightbox(direction) {
+    function navigateLightbox(direction: 'prev' | 'next') {
       if (direction === 'prev') {
         currentLightboxIndex = currentLightboxIndex > 0 ? currentLightboxIndex - 1 : lightboxImages.length - 1;
       } else {
@@ -284,7 +299,7 @@
     if (lightboxModal) {
       lightboxModal.removeEventListener('click', handleModalClick);
       
-      function handleModalClick(e) {
+      function handleModalClick(e: Event) {
         if (e.target === lightboxModal) {
           closeLightbox();
         }
@@ -294,7 +309,7 @@
     }
     
     // Keyboard navigation for lightbox
-    function handleKeydown(e) {
+    function handleKeydown(e: KeyboardEvent) {
       if (lightboxModal && lightboxModal.classList.contains('visible')) {
         if (e.key === 'Escape') closeLightbox();
         if (e.key === 'ArrowLeft') navigateLightbox('prev');

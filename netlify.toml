@@ -1,0 +1,35 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  # WordPress API Configuration
+  WORDPRESS_API_URL = "http://dodgerblue-rail-758925.hostingersite.com/wp-json"
+  WORDPRESS_CUSTOM_API_URL = "http://dodgerblue-rail-758925.hostingersite.com/wp-json/renovalink/v1"
+  WP_MEDIA_URL = "http://dodgerblue-rail-758925.hostingersite.com/wp-content/uploads"
+  
+  # API Cache Settings
+  API_CACHE_TTL = "300"
+  
+  # Production Settings
+  NODE_ENV = "production"
+  
+  # Email Configuration
+  GMAIL_USER = "la766031@gmail.com"
+  GMAIL_APP_PASSWORD = "jumdqrekmwmqtdis"
+  COMPANY_EMAIL = "la766031@gmail.com"
+
+# Headers para optimización de assets
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Netlify Forms para el formulario de contacto
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+# SSR redirection is handled by @astrojs/netlify adapter

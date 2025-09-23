@@ -11,12 +11,14 @@ Tu frontend de Astro ya tiene todas las páginas necesarias (`/`, `/contacto`, `
 Esta guía está actualizada para usar **Advanced Custom Fields versión GRATUITA**. Los campos han sido convertidos de la versión Pro:
 
 ### **Cambios principales:**
+
 - ❌ **Repeater** → ✅ **Campos individuales** (service_feature_1, service_feature_2, etc.)
-- ❌ **Gallery** → ✅ **Campos image separados** (service_image_1, service_image_2, etc.)  
+- ❌ **Gallery** → ✅ **Campos image separados** (service_image_1, service_image_2, etc.)
 - ❌ **Date Picker** → ✅ **Campo text** (fecha como texto o YYYY-MM-DD)
 - ❌ **Range** → ✅ **Campo select** (opciones predefinidas)
 
 ### **Nombres de campos actualizados:**
+
 - `service_description` → `short_description`
 - `service_features` → `service_feature_1`, `service_feature_2`, etc.
 - `service_gallery` → `service_image_1`, `service_image_2`, etc.
@@ -26,15 +28,16 @@ Esta guía está actualizada para usar **Advanced Custom Fields versión GRATUIT
 ## 📋 **ESTRUCTURA DE CONTENIDO**
 
 ### ✅ **PÁGINAS ASTRO YA IMPLEMENTADAS:**
+
 - 🏠 **Homepage** (`/`) → Landing completa con todos los componentes
-- 📞 **Contacto** (`/contacto`) → Formulario y información de contacto  
+- 📞 **Contacto** (`/contacto`) → Formulario y información de contacto
 - 🔧 **Servicios** (`/servicios`) → Lista de servicios
 - 🔧 **Detalle Servicio** (`/servicios/[slug]`) → Página individual de cada servicio
 
 ### 🔧 **CUSTOM POST TYPES A CREAR:**
-1. **Servicios** (`servicios`) → Pobla `ServicesGrid.astro` 
+
+1. **Servicios** (`servicios`) → Pobla `ServicesGrid.astro`
 2. **Proyectos** (`proyectos`) → Pobla `ProjectGallery.astro`
-3. **Testimonios** (`testimonios`) → Pobla `TestimonialsCarousel.astro`
 
 ---
 
@@ -50,19 +53,19 @@ Título: Remodelación de Piscinas
 Slug: pool-remodeling
 
 CONTENIDO PRINCIPAL:
-Transformamos piscinas antiguas en oasis modernos. Renovación completa de azulejos, 
-sistemas de filtración avanzados, iluminación LED subacuática y acabados 
+Transformamos piscinas antiguas en oasis modernos. Renovación completa de azulejos,
+sistemas de filtración avanzados, iluminación LED subacuática y acabados
 antideslizantes de última generación.
 
-Nuestro equipo especializado maneja desde reparaciones menores hasta 
-remodelaciones completas, siempre con materiales de primera calidad 
+Nuestro equipo especializado maneja desde reparaciones menores hasta
+remodelaciones completas, siempre con materiales de primera calidad
 y técnicas profesionales certificadas.
 
 CAMPOS ACF:
 ✅ service_icon: [Subir imagen/icono que represente piscinas]
 ✅ short_description: Renovación profesional de piscinas con tecnología moderna y acabados de lujo
 ✅ service_feature_1: Renovación completa de azulejos y revestimientos
-✅ service_feature_2: Sistemas de filtración y purificación modernos  
+✅ service_feature_2: Sistemas de filtración y purificación modernos
 ✅ service_feature_3: Iluminación LED subacuática personalizable
 ✅ service_feature_4: Acabados antideslizantes y de seguridad
 ✅ service_feature_5: Mantenimiento y garantía post-instalación
@@ -72,7 +75,7 @@ CAMPOS ACF:
 ✅ cta_text: Solicitar Cotización de Piscina
 ✅ cta_link: #contact
 ✅ service_image_1: [Subir imagen de piscina antes - REQUERIDA]
-✅ service_image_2: [Subir imagen de piscina después - REQUERIDA] 
+✅ service_image_2: [Subir imagen de piscina después - REQUERIDA]
 ✅ service_image_3: [Subir imagen de azulejos modernos]
 ✅ service_image_4: [Subir imagen de iluminación LED]
 
@@ -88,11 +91,11 @@ Título: Concreto y Pisos
 Slug: concrete-flooring
 
 CONTENIDO PRINCIPAL:
-Especialistas en instalación y acabado de pisos de concreto pulido, 
-tratamientos anti-manchas, acabados decorativos y reparación profesional 
+Especialistas en instalación y acabado de pisos de concreto pulido,
+tratamientos anti-manchas, acabados decorativos y reparación profesional
 de grietas y daños estructurales.
 
-Utilizamos técnicas avanzadas de pulido y sellado que garantizan 
+Utilizamos técnicas avanzadas de pulido y sellado que garantizan
 durabilidad y estética superior para espacios residenciales y comerciales.
 
 CAMPOS ACF:
@@ -125,11 +128,11 @@ Título: Limpieza Residencial
 Slug: residential-cleaning
 
 CONTENIDO PRINCIPAL:
-Servicios profesionales de limpieza profunda y mantenimiento residencial. 
-Especialistas en limpieza post-construcción, ventanas, alfombras y 
+Servicios profesionales de limpieza profunda y mantenimiento residencial.
+Especialistas en limpieza post-construcción, ventanas, alfombras y
 desinfección profunda con productos ecológicos certificados.
 
-Nuestro equipo capacitado utiliza equipos profesionales y técnicas 
+Nuestro equipo capacitado utiliza equipos profesionales y técnicas
 especializadas para garantizar resultados impecables en cada servicio.
 
 CAMPOS ACF:
@@ -162,11 +165,11 @@ Título: Soporte Técnico y Planos
 Slug: technical-support
 
 CONTENIDO PRINCIPAL:
-Servicios de ingeniería y consultoría técnica especializada. Desarrollo de 
-planos arquitectónicos, cálculos estructurales, gestión de permisos de 
+Servicios de ingeniería y consultoría técnica especializada. Desarrollo de
+planos arquitectónicos, cálculos estructurales, gestión de permisos de
 construcción y supervisión técnica profesional de obras.
 
-Nuestro equipo de ingenieros certificados garantiza cumplimiento normativo 
+Nuestro equipo de ingenieros certificados garantiza cumplimiento normativo
 y excelencia técnica en cada proyecto.
 
 CAMPOS ACF:
@@ -205,8 +208,8 @@ Título: Remodelación Completa Piscina Coral Gables
 Slug: piscina-coral-gables-2024
 
 CONTENIDO PRINCIPAL:
-Transformación completa de piscina residencial en Coral Gables. 
-Renovación de azulejos, instalación de sistema LED, nuevos acabados 
+Transformación completa de piscina residencial en Coral Gables.
+Renovación de azulejos, instalación de sistema LED, nuevos acabados
 antideslizantes y modernización del sistema de filtración.
 
 Proyecto completado en 4 semanas con materiales premium y garantía de 5 años.
@@ -239,13 +242,13 @@ Título: Piso de Concreto Pulido Residencial Miami
 Slug: piso-concreto-miami-2024
 
 CONTENIDO PRINCIPAL:
-Instalación de 2,500 pies cuadrados de piso de concreto pulido en 
-residencia moderna de Miami. Incluye tratamiento anti-manchas, 
+Instalación de 2,500 pies cuadrados de piso de concreto pulido en
+residencia moderna de Miami. Incluye tratamiento anti-manchas,
 acabado brillante y sellado profesional.
 
 CAMPOS ACF:
 ✅ project_type: concrete (seleccionar de lista desplegable)
-✅ project_location: Miami, FL  
+✅ project_location: Miami, FL
 ✅ project_duration: 2 semanas
 ✅ project_size: 2,500 pies cuadrados
 ✅ before_image: [Subir imagen piso original - REQUERIDA]
@@ -276,8 +279,8 @@ Título: Testimonio María García - Remodelación Piscina
 Slug: testimonio-maria-garcia
 
 CONTENIDO PRINCIPAL:
-"Excelente trabajo en la remodelación de nuestra piscina. El equipo de RenovaLink 
-fue muy profesional, cumplieron los tiempos prometidos y la calidad superó 
+"Excelente trabajo en la remodelación de nuestra piscina. El equipo de RenovaLink
+fue muy profesional, cumplieron los tiempos prometidos y la calidad superó
 nuestras expectativas. Recomendamos sus servicios al 100%."
 
 CAMPOS ACF:
@@ -302,8 +305,8 @@ Título: Testimonio Carlos Mendoza - Piso de Concreto
 Slug: testimonio-carlos-mendoza
 
 CONTENIDO PRINCIPAL:
-"Increíble transformación de nuestros pisos. El concreto pulido quedó espectacular 
-y el proceso fue muy limpio y organizado. Definitivamente volveremos a contratarlos 
+"Increíble transformación de nuestros pisos. El concreto pulido quedó espectacular
+y el proceso fue muy limpio y organizado. Definitivamente volveremos a contratarlos
 para futuros proyectos."
 
 CAMPOS ACF:
@@ -364,13 +367,14 @@ ESTADO: Publicado
 ## 🔗 7. CONFIGURAR MENÚS
 
 ### Menú Principal
+
 1. **Ir a Apariencia > Menús**
 2. **Crear menú "Menú Principal"**
 3. **Agregar elementos**:
    ```
    🏠 Inicio (página)
    🔧 Servicios (página de archivo de servicios)
-   🏗️ Proyectos (página de archivo de proyectos) 
+   🏗️ Proyectos (página de archivo de proyectos)
    💬 Testimonios (página de archivo de testimonios)
    📞 Contacto (página)
    ```
@@ -381,6 +385,7 @@ ESTADO: Publicado
 ## ✅ 8. VERIFICAR TODO FUNCIONA
 
 ### Comprobar URLs:
+
 - `renovalink.local/` → Página de inicio
 - `renovalink.local/servicios/` → Lista de servicios
 - `renovalink.local/servicios/pool-remodeling/` → Detalle servicio
@@ -389,8 +394,9 @@ ESTADO: Publicado
 - `renovalink.local/contacto/` → Página de contacto
 
 ### Comprobar API REST:
+
 - `renovalink.local/wp-json/wp/v2/servicios` → JSON servicios
-- `renovalink.local/wp-json/wp/v2/proyectos` → JSON proyectos  
+- `renovalink.local/wp-json/wp/v2/proyectos` → JSON proyectos
 - `renovalink.local/wp-json/wp/v2/testimonios` → JSON testimonios
 
 ---

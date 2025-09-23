@@ -2,18 +2,15 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import node from "@astrojs/node";
+
+import netlify from "@astrojs/netlify";
 
 export default defineConfig({
   site: "https://renovalink.com",
-  output: "server",
-  adapter: node({
-    mode: "standalone",
-  }),
+  output: "static",
+  adapter: netlify(),
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
+    tailwind(),
     react(),
     sitemap({
       changefreq: "weekly",
@@ -26,6 +23,7 @@ export default defineConfig({
       "renovalinksite.local",
       "renovalink.local",
       "admin.renovalink.com",
+      "dodgerblue-rail-758925.hostingersite.com",
     ],
     remotePatterns: [
       {
@@ -47,52 +45,13 @@ export default defineConfig({
     ],
   },
   vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          assetFileNames: "assets/[name].[hash][extname]",
-          chunkFileNames: "assets/[name].[hash].js",
-          entryFileNames: "assets/[name].[hash].js",
-        },
-      },
-    },
+    // Removed custom rollup output naming to restore default Astro/Vite CSS emission.
+    // (Previous customization appeared to coincide with missing *.css assets in dist.)
     ssr: {
       external: ["node-cache"],
     },
-    server: {
-      proxy: {
-        // Proxy para las imágenes de WordPress
-        "/wp-content": {
-          target: "http://renovalinksite.local",
-          changeOrigin: true,
-          secure: false,
-          configure: (proxy, _options) => {
-            proxy.on("error", (err, _req, _res) => {
-              console.log("Proxy error:", err);
-            });
-            proxy.on("proxyReq", (proxyReq, req, _res) => {
-              console.log(
-                "Sending Request to the Target:",
-                req.method,
-                req.url
-              );
-            });
-            proxy.on("proxyRes", (proxyRes, req, _res) => {
-              console.log(
-                "Received Response from the Target:",
-                proxyRes.statusCode,
-                req.url
-              );
-            });
-          },
-        },
-      },
-    },
   },
   compressHTML: true,
-  build: {
-    inlineStylesheets: "auto",
-  },
   server: {
     port: 4327,
     host: true,

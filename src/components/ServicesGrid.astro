@@ -1,6 +1,5 @@
 ---
 import { stripHtml, truncateText } from '@/lib/utils';
-import { ACFHelpers } from '@/lib/wordpress-client';
 import type { Service } from '@/schemas/wordpress';
 
 export interface Props {
@@ -14,10 +13,11 @@ const processedServices = services.map((service) => {
   if (!service.acf) return service;
   
   // Convert individual feature fields to array
-  const features = [];
+  const features: string[] = [];
   for (let i = 1; i <= 5; i++) {
-    const feature = service.acf[`service_feature_${i}`];
-    if (feature && feature.trim()) {
+    const featureKey = `service_feature_${i}` as keyof typeof service.acf;
+    const feature = service.acf[featureKey];
+    if (feature && typeof feature === 'string' && feature.trim()) {
       features.push(feature);
     }
   }
@@ -45,14 +45,6 @@ const serviceIcons = {
   'residential-cleaning': 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16', // Cleaning
   'technical-support': 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z' // Document/plans
 };
-
-// Service color schemes
-const serviceColors = [
-  'from-blue-500 to-blue-700',
-  'from-green-500 to-green-700', 
-  'from-purple-500 to-purple-700',
-  'from-orange-500 to-orange-700'
-];
 ---
 
 <!-- Services Grid -->
@@ -91,9 +83,9 @@ const serviceColors = [
               </p>
               
               <!-- Service Features -->
-              {service.acf?.service_features && (
+              {service.acf?.service_features && Array.isArray(service.acf.service_features) && (
                 <ul class="text-left space-y-2 mb-6">
-                  {service.acf.service_features.slice(0, 3).map(feature => (
+                  {service.acf.service_features.slice(0, 3).map((feature: string) => (
                     <li class="flex items-center text-sm text-neutral-600">
                       <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />

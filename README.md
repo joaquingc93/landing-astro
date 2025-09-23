@@ -33,7 +33,7 @@ src/
 │   ├── Hero.astro      # Dynamic hero section
 │   ├── ServicesGrid.astro  # Services showcase
 │   ├── ProjectGallery.astro  # Project portfolio with filtering
-│   ├── TestimonialsCarousel.astro  # Client testimonials
+
 │   ├── ContactCTA.astro  # Lead capture form
 │   ├── Footer.astro    # Site footer
 │   └── SEOHead.astro   # SEO meta tags
@@ -99,7 +99,7 @@ The WordPress backend uses custom post types for flexible content management:
 
 1. **Servicios** (Services)
    - Pool Remodeling
-   - Concrete & Flooring  
+   - Concrete & Flooring
    - Residential Cleaning
    - Technical Support & Plans
 
@@ -169,22 +169,26 @@ All WordPress API responses are validated using Zod schemas to ensure type safet
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone [repository-url]
    cd landing-astro
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Configure your WordPress API endpoints:
+
    ```env
    WORDPRESS_API_URL=http://renovalink.local/wp-json
    WORDPRESS_CUSTOM_API_URL=http://renovalink.local/wp-json/renovalink/v1
@@ -202,6 +206,7 @@ All WordPress API responses are validated using Zod schemas to ensure type safet
 **IMPORTANTE**: Este proyecto está configurado para usar únicamente plugins gratuitos de WordPress.
 
 Ver `LOCAL-WORDPRESS-SETUP.md` para instrucciones detalladas que incluyen:
+
 - ✅ Configuración de Local by Flywheel
 - ✅ Advanced Custom Fields (versión gratuita únicamente)
 - ✅ Custom Post Types con Custom Post Type UI (gratuito)
@@ -211,6 +216,7 @@ Ver `LOCAL-WORDPRESS-SETUP.md` para instrucciones detalladas que incluyen:
 - ✅ Variables de entorno para desarrollo local
 
 **Limitaciones importantes**:
+
 - ❌ Sin campos repetidores (Repeater Fields)
 - ❌ Sin galerías nativas ACF
 - ❌ Sin campos flexibles (Flexible Content)
@@ -251,6 +257,7 @@ npm run preview
 ```
 
 Use tools like:
+
 - Lighthouse for Core Web Vitals
 - WebPageTest for detailed analysis
 - GTmetrix for performance insights
@@ -265,6 +272,7 @@ Use tools like:
 ### Cross-Browser Testing
 
 Tested on:
+
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
@@ -303,6 +311,7 @@ npm run preview
 ### Environment Configuration
 
 Production environment variables:
+
 ```env
 WORDPRESS_API_URL=https://admin.renovalink.com/wp-json
 WORDPRESS_CUSTOM_API_URL=https://admin.renovalink.com/wp-json/renovalink/v1
@@ -329,6 +338,7 @@ NODE_ENV=production
 ### Content Management
 
 All content is managed through WordPress:
+
 - **Pages**: Hero content, company information
 - **Services**: Service descriptions and features
 - **Projects**: Portfolio images and details

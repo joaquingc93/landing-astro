@@ -52,7 +52,7 @@ const defaultSchema = {
   name: siteName,
   description,
   url: canonicalUrl,
-  ...(type === 'LocalBusiness' && {
+  ...(type === 'website' && {
     '@type': 'LocalBusiness',
     'address': {
       '@type': 'PostalAddress',

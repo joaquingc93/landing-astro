@@ -1,8 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Lightbox from '@/components/Lightbox.astro';
-import { wordpressClient, getStaticProps, ACFHelpers } from '@/lib/wordpress-client';
-import { getOptimizedImageUrl, generateMetaDescription } from '@/lib/utils';
+import { wordpressClient, getStaticProps } from '@/lib/wordpress-client';
+import { generateMetaDescription } from '@/lib/utils';
 import type { Service, Project } from '@/schemas/wordpress';
 
 // Generate static paths for all services
@@ -88,13 +88,17 @@ if (!currentService) {
   return new Response(null, { status: 404, statusText: 'Service not found' });
 }
 
+// Assert that currentService is not null for TypeScript (we've already checked above)
+currentService = currentService!;
+
 // Process ACF fields - convert individual fields to arrays for template compatibility
 if (currentService.acf) {
   // Convert individual feature fields to array
-  const features = [];
+  const features: string[] = [];
   for (let i = 1; i <= 5; i++) {
-    const feature = currentService.acf[`service_feature_${i}`];
-    if (feature && feature.trim()) {
+    const featureKey = `service_feature_${i}` as keyof typeof currentService.acf;
+    const feature = currentService.acf[featureKey];
+    if (feature && typeof feature === 'string' && feature.trim()) {
       features.push(feature);
     }
   }
@@ -122,8 +126,7 @@ if (currentService.acf) {
     ...currentService,
     acf: {
       ...currentService.acf,
-      service_features: features,
-      service_gallery: gallery
+      service_features: features
     }
   };
 }
@@ -154,14 +157,14 @@ relatedProjects.forEach(project => {
 
 
 // Generate page metadata
-const pageTitle = `${currentService.title.rendered} Services in Florida | RenovaLink`;
-const pageDescription = generateMetaDescription(
+const pageTitle = currentService ? `${currentService.title.rendered} Services in Florida | RenovaLink` : 'Service Not Found | RenovaLink';
+const pageDescription = currentService ? generateMetaDescription(
   currentService.excerpt?.rendered || currentService.content.rendered,
   160
-);
+) : 'Service not found';
 
 // Service details for structured data
-const serviceStructuredData = {
+const serviceStructuredData = currentService ? {
   "@context": "https://schema.org",
   "@type": "Service",
   "name": currentService.title.rendered,
@@ -176,7 +179,7 @@ const serviceStructuredData = {
     "@type": "State",
     "name": "Florida"
   }
-};
+} : null;
 
 // Service icons and colors mapping
 const serviceDetails = {
@@ -238,10 +241,12 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
             <li><span class="mx-2">/</span></li>
             <li><a href="/servicios" class="hover:text-white transition-colors">Services</a></li>
             <li><span class="mx-2">/</span></li>
-            <li class="text-white font-medium">{currentService.title.rendered}</li>
+            <li class="text-white font-medium">{currentService?.title.rendered || 'Service'}</li>
           </ol>
         </nav>
         
+        {currentService && (
+          <>
         <!-- Service Category Badge -->
         <div class="mb-6">
           <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-100 border border-white/20">
@@ -266,6 +271,8 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
               currentService.content.rendered.replace(/<[^>]*>/g, '').slice(0, 200) + '...')
           }
         </p>
+          </>
+        )}
         
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-on-scroll">
@@ -666,7 +673,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
 
     // Lightbox functionality
     const modal = document.getElementById('lightbox-modal');
-    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
     const lightboxTitle = document.getElementById('lightbox-title');
     const lightboxCounter = document.getElementById('lightbox-counter');
     const closeBtn = document.getElementById('lightbox-close');
@@ -693,7 +700,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         trigger.addEventListener('click', () => openLightbox(index));
       });
       
-      function openLightbox(index) {
+      function openLightbox(index: number) {
         window.currentImageIndex = index;
         updateLightboxContent();
         modal.classList.remove('opacity-0', 'invisible');
@@ -721,7 +728,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         nextBtn.style.display = window.currentGallery.length > 1 ? 'block' : 'none';
       }
       
-      function navigateLightbox(direction) {
+      function navigateLightbox(direction: 'next' | 'prev') {
         if (direction === 'next') {
           window.currentImageIndex = (window.currentImageIndex + 1) % window.currentGallery.length;
         } else {
@@ -799,7 +806,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
       }
       
       // Go to specific slide
-      function goToSlide(index) {
+      function goToSlide(index: number) {
         const slidesPerView = getSlidesPerView();
         const maxIndex = totalSlides - slidesPerView;
         currentIndex = Math.max(0, Math.min(index, maxIndex));
@@ -809,8 +816,8 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         carousel.style.transform = `translateX(${translatePercent}%)`;
         
         // Update button states
-        prevButton.disabled = currentIndex === 0;
-        nextButton.disabled = currentIndex >= maxIndex;
+        (prevButton as HTMLButtonElement).disabled = currentIndex === 0;
+        (nextButton as HTMLButtonElement).disabled = currentIndex >= maxIndex;
         
         updateIndicators();
       }
@@ -834,7 +841,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
       prevButton.addEventListener('click', prevSlide);
       
       // Auto-advance carousel
-      let autoSlideInterval;
+      let autoSlideInterval: NodeJS.Timeout;
       function startAutoSlide() {
         autoSlideInterval = setInterval(() => {
           if (currentIndex >= totalSlides - getSlidesPerView()) {

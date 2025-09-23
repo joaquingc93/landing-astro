@@ -3,13 +3,9 @@ import {
   WPPostSchema,
   ServiceSchema,
   ProjectSchema,
-  TestimonialSchema,
-  APIErrorSchema,
   type WPPost,
   type Service,
   type Project,
-  type Testimonial,
-  type APIError,
 } from "@/schemas/wordpress";
 
 // Cache configuration
@@ -168,20 +164,12 @@ class WordPressClient {
           message: `HTTP ${response.status}`,
         }));
 
-        const validatedError = APIErrorSchema.safeParse(errorData);
-        if (validatedError.success) {
-          throw new WordPressAPIError(
-            validatedError.data.message,
-            validatedError.data.code,
-            response.status
-          );
-        } else {
-          throw new WordPressAPIError(
-            `API Error: ${response.status}`,
-            "api_error",
-            response.status
-          );
-        }
+        // Simple error handling without schema validation
+        throw new WordPressAPIError(
+          errorData.message || `API Error: ${response.status}`,
+          errorData.code || "api_error",
+          response.status
+        );
       }
 
       return response;
@@ -242,9 +230,9 @@ class WordPressClient {
           console.warn(`Invalid data structure for ${endpoint}:`, result.error);
           return null;
         }
-        return result.data;
+        return result.data as T;
       })
-      .filter(Boolean);
+      .filter((item: T | null): item is T => item !== null);
 
     cache.set(cacheKey, validatedData);
     return validatedData;
@@ -252,13 +240,13 @@ class WordPressClient {
 
   // Public methods
   async getAllPosts(): Promise<WPPost[]> {
-    return this.fetchFromAPI("wp/v2/posts", WPPostSchema, {
+    return this.fetchFromAPI<WPPost>("wp/v2/posts", WPPostSchema, {
       status: "publish",
     });
   }
 
   async getPostBySlug(slug: string): Promise<WPPost | null> {
-    const posts = await this.fetchFromAPI("wp/v2/posts", WPPostSchema, {
+    const posts = await this.fetchFromAPI<WPPost>("wp/v2/posts", WPPostSchema, {
       slug,
       status: "publish",
     });
@@ -266,7 +254,7 @@ class WordPressClient {
   }
 
   async getPageBySlug(slug: string): Promise<WPPost | null> {
-    const pages = await this.fetchFromAPI("wp/v2/pages", WPPostSchema, {
+    const pages = await this.fetchFromAPI<WPPost>("wp/v2/pages", WPPostSchema, {
       slug,
       status: "publish",
     });
@@ -279,7 +267,7 @@ class WordPressClient {
       `${this.baseUrl}/wp/v2/servicios`
     );
     try {
-      const services = await this.fetchFromAPI(
+      const services = await this.fetchFromAPI<Service>(
         "wp/v2/servicios",
         ServiceSchema,
         { status: "publish" }
@@ -293,17 +281,25 @@ class WordPressClient {
   }
 
   async getServiceBySlug(slug: string): Promise<Service | null> {
-    const services = await this.fetchFromAPI("wp/v2/servicios", ServiceSchema, {
-      slug,
-      status: "publish",
-    });
+    const services = await this.fetchFromAPI<Service>(
+      "wp/v2/servicios",
+      ServiceSchema,
+      {
+        slug,
+        status: "publish",
+      }
+    );
     return services[0] || null;
   }
 
   async getAllProjects(): Promise<Project[]> {
-    const projects = await this.fetchFromAPI("wp/v2/proyectos", ProjectSchema, {
-      status: "publish",
-    });
+    const projects = await this.fetchFromAPI<Project>(
+      "wp/v2/proyectos",
+      ProjectSchema,
+      {
+        status: "publish",
+      }
+    );
 
     // WordPress should return acf_fields with complete image data
     // If it doesn't, we'll enrich manually
@@ -376,7 +372,7 @@ class WordPressClient {
   }
 
   async getProjectsByCategory(category: string): Promise<Project[]> {
-    return this.fetchFromAPI("wp/v2/proyectos", ProjectSchema, {
+    return this.fetchFromAPI<Project>("wp/v2/proyectos", ProjectSchema, {
       status: "publish",
       meta_key: "project_category",
       meta_value: category,
@@ -385,10 +381,14 @@ class WordPressClient {
 
   async getProjectsByService(serviceSlug: string): Promise<Project[]> {
     // First, get the service by slug to get its ID
-    const services = await this.fetchFromAPI("wp/v2/servicios", ServiceSchema, {
-      status: "publish",
-      slug: serviceSlug,
-    });
+    const services = await this.fetchFromAPI<Service>(
+      "wp/v2/servicios",
+      ServiceSchema,
+      {
+        status: "publish",
+        slug: serviceSlug,
+      }
+    );
 
     if (services.length === 0) {
       return [];
@@ -409,19 +409,6 @@ class WordPressClient {
           relatedServiceId.id === serviceId ||
           relatedServiceId.ID === serviceId)
       );
-    });
-  }
-
-  async getAllTestimonials(): Promise<Testimonial[]> {
-    return this.fetchFromAPI("wp/v2/testimonios", TestimonialSchema, {
-      status: "publish",
-    });
-  }
-
-  async getFeaturedTestimonials(): Promise<Testimonial[]> {
-    return this.fetchFromAPI("wp/v2/testimonios", TestimonialSchema, {
-      status: "publish",
-      featured: "true",
     });
   }
 
@@ -668,26 +655,6 @@ export function createFallbackData() {
         date: new Date().toISOString(),
         modified: new Date().toISOString(),
         status: "publish" as const,
-      },
-    ],
-    testimonials: [
-      {
-        id: 1,
-        slug: "testimonial-1",
-        title: { rendered: "Amazing Pool Renovation" },
-        content: {
-          rendered:
-            "RenovaLink transformed our backyard completely. The attention to detail was exceptional.",
-        },
-        excerpt: { rendered: "Excellent service and results" },
-        date: new Date().toISOString(),
-        modified: new Date().toISOString(),
-        status: "publish" as const,
-        acf: {
-          client_name: "Maria Rodriguez",
-          client_location: "Miami, FL",
-          rating: 5,
-        },
       },
     ],
     projects: [],

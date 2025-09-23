@@ -1,22 +1,24 @@
-import { defineAction } from 'astro:actions';
-import { z } from 'astro:content';
-import nodemailer from 'nodemailer';
+import { defineAction } from "astro:actions";
+import { z } from "astro:content";
+import nodemailer from "nodemailer";
 
 // Schema de validación para el formulario de contacto
 export const contactFormSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  service: z.enum(['pool', 'concrete', 'cleaning', 'technical', 'other']),
-  timeline: z.enum(['immediate', '1-3-months', '3-6-months', 'planning']).optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-  preferred_contact: z.enum(['phone', 'email']).optional().default('phone'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  service: z.enum(["pool", "concrete", "cleaning", "technical", "other"]),
+  timeline: z
+    .enum(["immediate", "1-3-months", "3-6-months", "planning"])
+    .optional(),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+  preferred_contact: z.enum(["phone", "email"]).optional().default("phone"),
 });
 
 // Configuración del transportador de email
 function createEmailTransporter() {
-  return nodemailer.createTransporter({
-    service: 'gmail',
+  return nodemailer.createTransport({
+    service: "gmail",
     auth: {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_APP_PASSWORD, // App Password, no la contraseña normal
@@ -26,7 +28,7 @@ function createEmailTransporter() {
 
 // Acción para enviar el formulario de contacto
 export const sendContactForm = defineAction({
-  accept: 'form',
+  accept: "form",
   input: contactFormSchema,
   handler: async (input) => {
     try {
@@ -35,18 +37,18 @@ export const sendContactForm = defineAction({
 
       // Mapear servicios para mejor legibilidad
       const serviceMap = {
-        pool: 'Pool Remodeling',
-        concrete: 'Concrete & Flooring', 
-        cleaning: 'Residential Cleaning',
-        technical: 'Technical Support & Plans',
-        other: 'Other / Multiple Services'
+        pool: "Pool Remodeling",
+        concrete: "Concrete & Flooring",
+        cleaning: "Residential Cleaning",
+        technical: "Technical Support & Plans",
+        other: "Other / Multiple Services",
       };
 
       const timelineMap = {
-        immediate: 'As soon as possible',
-        '1-3-months': '1-3 months',
-        '3-6-months': '3-6 months',
-        planning: 'Still planning'
+        immediate: "As soon as possible",
+        "1-3-months": "1-3 months",
+        "3-6-months": "3-6 months",
+        planning: "Still planning",
       };
 
       // Formatear el contenido del email
@@ -88,12 +90,16 @@ export const sendContactForm = defineAction({
               <p style="margin: 0; padding: 10px; background: #dbeafe; border-radius: 5px; color: #1e40af; font-weight: 500;">${serviceMap[input.service]}</p>
             </div>
 
-            ${input.timeline ? `
+            ${
+              input.timeline
+                ? `
             <div style="margin-bottom: 20px;">
               <h3 style="color: #374151; margin: 0 0 8px 0; font-size: 16px;">⏰ Timeline del Proyecto</h3>
               <p style="margin: 0; padding: 10px; background: #f3f4f6; border-radius: 5px;">${timelineMap[input.timeline]}</p>
             </div>
-            ` : ''}
+            `
+                : ""
+            }
 
             <div style="margin-bottom: 20px;">
               <h3 style="color: #374151; margin: 0 0 8px 0; font-size: 16px;">💬 Detalles del Proyecto</h3>
@@ -111,14 +117,14 @@ export const sendContactForm = defineAction({
               <h3 style="color: #065f46; margin: 0 0 10px 0; font-size: 16px;">📋 Próximos Pasos</h3>
               <ul style="margin: 0; padding-left: 20px; color: #047857;">
                 <li>Responder al cliente dentro de 24 horas</li>
-                <li>Programar consulta ${input.preferred_contact === 'phone' ? 'telefónica' : 'por email'}</li>
+                <li>Programar consulta ${input.preferred_contact === "phone" ? "telefónica" : "por email"}</li>
                 <li>Preparar estimado detallado si es necesario</li>
               </ul>
             </div>
 
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-center; color: #6b7280; font-size: 14px;">
               <p style="margin: 0;">Enviado desde el formulario de contacto de RenovaLink.com</p>
-              <p style="margin: 5px 0 0 0;">Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/New_York' })}</p>
+              <p style="margin: 5px 0 0 0;">Fecha: ${new Date().toLocaleString("es-ES", { timeZone: "America/New_York" })}</p>
             </div>
           </div>
         </div>
@@ -127,8 +133,8 @@ export const sendContactForm = defineAction({
       // Configurar el email
       const mailOptions = {
         from: {
-          name: 'RenovaLink Website',
-          address: process.env.GMAIL_USER!
+          name: "RenovaLink Website",
+          address: process.env.GMAIL_USER!,
         },
         to: process.env.COMPANY_EMAIL!, // Email de la empresa
         subject: `💼 Nueva Consulta: ${serviceMap[input.service]} - ${input.name}`,
@@ -139,21 +145,22 @@ export const sendContactForm = defineAction({
       // Enviar el email
       const info = await transporter.sendMail(mailOptions);
 
-      console.log('Email enviado exitosamente:', info.messageId);
+      console.log("Email enviado exitosamente:", info.messageId);
 
-      return { 
-        success: true, 
-        message: 'Tu mensaje ha sido enviado exitosamente. Te contactaremos dentro de 24 horas.',
-        messageId: info.messageId 
+      return {
+        success: true,
+        message:
+          "Tu mensaje ha sido enviado exitosamente. Te contactaremos dentro de 24 horas.",
+        messageId: info.messageId,
       };
-
     } catch (error) {
-      console.error('Error enviando email:', error);
-      
-      return { 
-        success: false, 
-        message: 'Hubo un error enviando tu mensaje. Por favor intenta de nuevo o llámanos directamente.',
-        error: error instanceof Error ? error.message : 'Error desconocido'
+      console.error("Error enviando email:", error);
+
+      return {
+        success: false,
+        message:
+          "Hubo un error enviando tu mensaje. Por favor intenta de nuevo o llámanos directamente.",
+        error: error instanceof Error ? error.message : "Error desconocido",
       };
     }
   },
