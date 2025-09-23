@@ -15,10 +15,11 @@
   # Production Settings
   NODE_ENV = "production"
   
-  # Email Configuration
-  GMAIL_USER = "la766031@gmail.com"
-  GMAIL_APP_PASSWORD = "jumdqrekmwmqtdis"
-  COMPANY_EMAIL = "la766031@gmail.com"
+  # Email / Secrets (DO NOT commit real credentials)
+  # Set these in Netlify UI (Site > Settings > Environment variables)
+  # GMAIL_USER = "${GMAIL_USER}"          # <-- configure in dashboard
+  # GMAIL_APP_PASSWORD = "${GMAIL_APP_PASSWORD}"  # <-- configure in dashboard
+  # COMPANY_EMAIL = "${COMPANY_EMAIL}"    # <-- configure in dashboard
 
 # Headers para optimización de assets
 [[headers]]

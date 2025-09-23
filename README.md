@@ -378,3 +378,31 @@ Potential improvements and features:
 ✅ **Conversion Focused**: Strategic lead capture and CTAs
 
 This implementation provides RenovaLink with a solid foundation for their digital presence in Florida's competitive remodeling market.
+
+## 🔐 Environment Variables & Deployment Security
+
+Sensitive values (API keys, email credentials) must NOT vivir en el repositorio.
+
+Mover a variables de entorno en Netlify UI:
+
+Requeridas en producción:
+
+- WORDPRESS_API_URL
+- WORDPRESS_CUSTOM_API_URL
+- WP_MEDIA_URL
+- API_CACHE_TTL (opcional, default 300)
+- GMAIL_USER (solo para función contacto)
+- GMAIL_APP_PASSWORD (App Password Gmail - generar y rotar si se filtró antes)
+- COMPANY_EMAIL
+
+Pasos para configurarlas en Netlify:
+
+1. Netlify Dashboard > Site > Site configuration > Environment variables.
+2. Añadir cada nombre exactamente como arriba y su valor.
+3. Redeploy del sitio (trigger manual o commit vacío).
+
+Buenas prácticas:
+
+- Si cambias la contraseña de la cuenta Gmail, genera nuevo App Password y actualiza variable.
+- Nunca echo / console.log valores de estas variables en código cliente.
+- Revisa commits antiguos para asegurarte de que las credenciales expuestas se rotaron.

@@ -85,7 +85,7 @@ if (!currentService && slug) {
 
 // If still no service, return 404
 if (!currentService) {
-  return new Response(null, { status: 404, statusText: 'Service not found' });
+  throw new Error('Service not found during static generation');
 }
 
 // Assert that currentService is not null for TypeScript (we've already checked above)

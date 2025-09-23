@@ -3,12 +3,9 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 
-import netlify from "@astrojs/netlify";
-
 export default defineConfig({
   site: "https://renovalink.com",
-  output: "static",
-  adapter: netlify(),
+  output: "static", // Pure static export (no Netlify adapter / SSR function)
   integrations: [
     tailwind(),
     react(),
@@ -52,6 +49,7 @@ export default defineConfig({
     },
   },
   compressHTML: true,
+  // Dev server config (only used locally)
   server: {
     port: 4327,
     host: true,

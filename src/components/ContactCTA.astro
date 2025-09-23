@@ -378,18 +378,28 @@
       errorMessage?.classList.add('hidden');
       
       try {
-        // Collect form data
+        // Collect form data into plain object
         const formData = new FormData(form!);
-        
-        // Send data using API endpoint
+        const payload: Record<string, any> = {};
+        formData.forEach((value, key) => {
+          payload[key] = value;
+        });
+
+        // Send data as JSON to Netlify function (/api/contact redirected)
         const response = await fetch('/api/contact', {
           method: 'POST',
-          body: formData,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload),
         });
-        
-        const result = await response.json();
-        
-        if (result.success) {
+
+        let result: any = {};
+        try {
+          result = await response.json();
+        } catch {}
+
+        if (response.ok && (result.success || result.message)) {
           successMessage?.classList.remove('hidden');
           form?.reset();
           
@@ -402,7 +412,7 @@
             });
           }
         } else {
-          throw new Error(result.message || 'Submission failed');
+          throw new Error(result?.message || 'Submission failed');
         }
         
       } catch (error) {

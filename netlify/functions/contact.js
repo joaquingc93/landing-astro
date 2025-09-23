@@ -28,7 +28,14 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { name, email, phone, service, message } = JSON.parse(event.body);
+    let parsed;
+    try {
+      parsed = JSON.parse(event.body);
+    } catch (e) {
+      // Fallback: attempt to parse URL-encoded form body
+      parsed = Object.fromEntries(new URLSearchParams(event.body));
+    }
+    const { name, email, phone, service, message } = parsed || {};
 
     // Validación básica
     if (!name || !email || !message) {
@@ -45,8 +52,23 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Configurar nodemailer
-    const transporter = nodemailer.createTransporter({
+    // Configurar nodemailer (typo fix createTransport)
+    if (
+      !process.env.GMAIL_USER ||
+      !process.env.GMAIL_APP_PASSWORD ||
+      !process.env.COMPANY_EMAIL
+    ) {
+      return {
+        statusCode: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ error: "Email service not configured" }),
+      };
+    }
+
+    const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.GMAIL_USER,
