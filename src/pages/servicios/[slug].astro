@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Lightbox from '@/components/Lightbox.astro';
 import { wordpressClient, getStaticProps } from '@/lib/wordpress-client';
+import { buildServiceSchema, buildFaqJsonLD, buildBreadcrumbJsonLD, combineSchemas } from '@/lib/seo';
 import { generateMetaDescription } from '@/lib/utils';
 import type { Service, Project } from '@/schemas/wordpress';
 
@@ -202,23 +203,34 @@ const pageDescription = currentService ? generateMetaDescription(
   160
 ) : 'Service not found';
 
-// Service details for structured data
-const serviceStructuredData = currentService ? {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": currentService.title.rendered,
-  "description": pageDescription,
-  "provider": {
-    "@type": "LocalBusiness",
-    "name": "RenovaLink",
-    "url": "https://renovalink.com"
+// Service structured data + FAQ + breadcrumbs
+const faqItems = [
+  {
+    question: `How long does a typical ${currentService.title.rendered.toLowerCase()} project take?`,
+    answer: 'Project timelines vary based on scope and complexity. Most projects range from 1-4 weeks, with larger renovations taking longer. We provide detailed timeline estimates during consultation.'
   },
-  "serviceType": currentService.title.rendered,
-  "areaServed": {
-    "@type": "State",
-    "name": "Florida"
+  {
+    question: 'Do you provide free estimates?',
+    answer: 'Yes! We offer free, detailed consultations and estimates for all our services. Our certified professionals will assess your project and provide transparent pricing with no hidden fees.'
+  },
+  {
+    question: 'Are you licensed and insured?',
+    answer: 'Absolutely. RenovaLink is fully licensed and insured in Florida. Our team includes certified engineers and we carry comprehensive liability insurance for your protection.'
+  },
+  {
+    question: 'What warranty do you provide?',
+    answer: 'We stand behind our work with comprehensive warranties that vary by service type. Many services are covered for extended periods; specific terms are provided during consultation.'
   }
-} : null;
+];
+
+const serviceSchema = buildServiceSchema(currentService.title.rendered, pageDescription, slug);
+const faqSchema = buildFaqJsonLD(faqItems);
+const breadcrumbSchema = buildBreadcrumbJsonLD([
+  { name: 'Home', item: 'https://renovalink.com/' },
+  { name: 'Services', item: 'https://renovalink.com/servicios' },
+  { name: currentService.title.rendered, item: `https://renovalink.com/servicios/${slug}` }
+]);
+const serviceSchemas = combineSchemas(serviceSchema, faqSchema, breadcrumbSchema);
 
 // Service icons and colors mapping
 const serviceDetails = {
@@ -258,7 +270,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
   description={pageDescription}
   canonical={`https://renovalink.com/servicios/${slug}`}
   type="service"
-  schema={serviceStructuredData}
+  schemas={serviceSchemas}
 >
   
   <!-- Hero Section -->
@@ -638,7 +650,7 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
             </svg>
           </button>
           <div id="faq-4" class="faq-content hidden mt-4 text-neutral-600">
-            <p>We stand behind our work with comprehensive warranties that vary by service type. All work comes with a minimum 1-year warranty, with many services covered for longer periods. Details provided during consultation.</p>
+            <p>We stand behind our work with comprehensive warranties that vary by service type. Many services are covered for extended periods; specific terms are provided during consultation.</p>
           </div>
         </div>
       </div>
@@ -657,13 +669,13 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         <a href="/contacto" class="btn-secondary text-lg px-8 py-4 shadow-2xl">
           Get Free Estimate
         </a>
-        <a href="tel:+1-305-XXX-XXXX" class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700">
-          Call (305) XXX-XXXX
-        </a>
       </div>
     </div>
   </section>
   
+  <!-- Lightbox Modal (restored) -->
+  <Lightbox />
+
 </Layout>
 
 <script>
@@ -705,93 +717,8 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
         }
       });
     });
-
-    // Lightbox functionality
-    const modal = document.getElementById('lightbox-modal');
-    const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
-    const lightboxTitle = document.getElementById('lightbox-title');
-    const lightboxCounter = document.getElementById('lightbox-counter');
-    const closeBtn = document.getElementById('lightbox-close');
-    const prevBtn = document.getElementById('lightbox-prev');
-    const nextBtn = document.getElementById('lightbox-next');
+    // (Lightbox handlers removed: now fully handled by global <Lightbox /> component)
     
-    if (modal && lightboxImage && lightboxTitle && lightboxCounter && closeBtn && prevBtn && nextBtn) {
-      // Store gallery images globally
-      window.currentGallery = [];
-      window.currentImageIndex = 0;
-      
-      // Initialize gallery images from page data
-      const galleryTriggers = document.querySelectorAll('.gallery-image-trigger');
-      galleryTriggers.forEach((trigger, index) => {
-        const imageData = {
-          url: trigger.getAttribute('data-image-url'),
-          alt: trigger.getAttribute('data-image-alt'),
-          title: trigger.getAttribute('data-image-title'),
-          index: index
-        };
-        window.currentGallery.push(imageData);
-        
-        // Add click event
-        trigger.addEventListener('click', () => openLightbox(index));
-      });
-      
-      function openLightbox(index: number) {
-        window.currentImageIndex = index;
-        updateLightboxContent();
-        modal.classList.remove('opacity-0', 'invisible');
-        modal.classList.add('opacity-100', 'visible');
-        document.body.style.overflow = 'hidden';
-      }
-      
-      function closeLightbox() {
-        modal.classList.add('opacity-0', 'invisible');
-        modal.classList.remove('opacity-100', 'visible');
-        document.body.style.overflow = '';
-      }
-      
-      function updateLightboxContent() {
-        const currentImage = window.currentGallery[window.currentImageIndex];
-        if (!currentImage) return;
-        
-        lightboxImage.src = currentImage.url;
-        lightboxImage.alt = currentImage.alt;
-        lightboxTitle.textContent = currentImage.title || 'Project Image';
-        lightboxCounter.textContent = `${window.currentImageIndex + 1} / ${window.currentGallery.length}`;
-        
-        // Update navigation buttons
-        prevBtn.style.display = window.currentGallery.length > 1 ? 'block' : 'none';
-        nextBtn.style.display = window.currentGallery.length > 1 ? 'block' : 'none';
-      }
-      
-      function navigateLightbox(direction: 'next' | 'prev') {
-        if (direction === 'next') {
-          window.currentImageIndex = (window.currentImageIndex + 1) % window.currentGallery.length;
-        } else {
-          window.currentImageIndex = (window.currentImageIndex - 1 + window.currentGallery.length) % window.currentGallery.length;
-        }
-        updateLightboxContent();
-      }
-      
-      // Event listeners
-      closeBtn.addEventListener('click', closeLightbox);
-      prevBtn.addEventListener('click', () => navigateLightbox('prev'));
-      nextBtn.addEventListener('click', () => navigateLightbox('next'));
-      
-      // Close on backdrop click
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeLightbox();
-      });
-      
-      // Keyboard navigation
-      document.addEventListener('keydown', (e) => {
-        if (modal.classList.contains('opacity-100')) {
-          if (e.key === 'Escape') closeLightbox();
-          if (e.key === 'ArrowLeft') navigateLightbox('prev');
-          if (e.key === 'ArrowRight') navigateLightbox('next');
-        }
-      });
-    }
-
     // Projects Carousel functionality
     const carousel = document.getElementById('projects-carousel');
     const prevButton = document.getElementById('carousel-prev');
@@ -966,8 +893,4 @@ const currentServiceDetails = serviceDetails[slug as keyof typeof serviceDetails
   }
 </style>
 
-<!-- Include the consolidated Lightbox component -->
-<Lightbox />
-
 <!-- JSON-LD structured data -->
-<script type="application/ld+json" set:html={JSON.stringify(serviceStructuredData)}></script>

@@ -14,7 +14,7 @@ A high-performance, professional landing page for RenovaLink - a Florida-based r
 
 ## 🏗️ Architecture Overview
 
-This project implements a modern headless CMS architecture using Astro.js as the frontend framework with WordPress as the content management system. The setup provides the performance benefits of static generation with the flexibility of dynamic content management.
+This project implements a modern headless CMS architecture using Astro.js as the frontend framework with WordPress as the content management system. The current deployment target is a 100% static export (sin SSR/Edge en producción) para máxima simplicidad y performance; el contenido se obtiene en build-time mediante la REST API de WordPress.
 
 ### Key Features
 
@@ -247,7 +247,157 @@ Ver `LOCAL-WORDPRESS-SETUP.md` para instrucciones detalladas que incluyen:
 - **Error Tracking**: Client-side error monitoring
 - **A/B Testing**: Component-level testing capability
 
-## 🧪 Testing & Quality Assurance
+## � Detailed SEO Implementation (Meta, Schemas, Sitemap, Robots)
+
+This section documents the full SEO architecture implemented in the project—beyond the high‑level bullet list above—so future contributors can extend it safely without regressions.
+
+### Objectives
+
+- Clean, deterministic meta generation (title, description, canonical, OG/Twitter)
+- Rich, multi‑schema JSON‑LD coverage for entity disambiguation
+- Zero runtime server dependency (works in pure static export)
+- Easy opt‑in for new page types (services, FAQs, future blog)
+- Guardrails against duplicate content (canonical + selective `noindex`)
+
+### Components & Key Files
+
+| Concern                                                                                | Location                                          | Responsibility                                                   |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------- |
+| Meta + OG + Twitter + base JSON‑LD injection                                           | `src/components/SEOHead.astro`                    | Renders all meta tags + iterates provided schema objects         |
+| Schema assembly helpers (title/description truncation, canonical builder, FAQ builder) | `src/lib/utils.ts` (and related helpers)          | Normalizes values passed into `SEOHead`                          |
+| Dynamic sitemap                                                                        | `src/pages/sitemap.xml.ts`                        | Enumerates static + dynamic routes (services)                    |
+| robots.txt                                                                             | `public/robots.txt` (or Astro route if converted) | Crawl directives + sitemap reference                             |
+| Media normalization                                                                    | `src/lib/media-url.ts`                            | Ensures social images resolve in all environments                |
+| Lightbox / Gallery                                                                     | `src/components/Lightbox.astro`                   | Provides UX for images (not SEO directly but feeds OG if reused) |
+
+### Meta Tag Strategy
+
+1. Title Pattern: `Specific Page Title | RenovaLink` (auto‑appended if site name missing)
+2. Description: Truncated (helper) to ~155–160 chars (Google snippet safe zone) without cutting words mid‑token.
+3. Canonical: Built from `Astro.site + Astro.url.pathname` unless explicitly overridden (e.g., aliases, UTM stripping future enhancement).
+4. Open Graph & Twitter: Always present; default OG image fallback lives at `/images/renovalink-og-default.jpg`.
+5. `noindex` Support: Pass `noindex={true}` to `SEOHead` for temporary / experimental pages (keeps them out of index while still testable).
+
+### JSON‑LD Schema Catalog
+
+We deliberately output ONE `<script type="application/ld+json">` PER schema object for clarity & easier debugging. (`SEOHead` accepts either `schema` or `schemas`.)
+
+Implemented Types:
+
+- Organization: Brand identity (name, logo, URL, contact) – usually injected on homepage and high‑authority pages.
+- WebSite + SearchAction: Enables potential sitelinks search box.
+- Service: For each service detail page (`/servicios/[slug]`) describing `@type: Service` with `areaServed`, `provider`, and `offers` fields (where applicable).
+- FAQPage: Injected only when real FAQs exist (service detail pages with Q&A content).
+- BreadcrumbList: Future‑friendly (can be added when multi‑level navigation grows; placeholder support available if needed).
+
+Best Practices Followed:
+
+- Avoid duplicate `@type` objects with conflicting `@id`.
+- Use stable URLs (canonical) for `url` fields.
+- Keep descriptions under ~250 chars to avoid unnecessary truncation by Google.
+- Validate in Search Console → URL Inspection → Test Live URL (see QA Checklist).
+
+### Adding a New Schema
+
+1. Build a plain JS object: `{ '@context': 'https://schema.org', '@type': 'Thing', ... }`.
+2. Supply via the `schemas` prop on `Layout` / page: `<SEOHead schemas={[existingSchemas..., newObject]} />`.
+3. Keep arrays flattened; let `SEOHead` render sequential scripts.
+4. Test locally: View Source → search for `data-schema-index` attributes.
+5. Validate with Rich Results Test.
+
+### Sitemap Generation (`/sitemap.xml`)
+
+The route file (Astro endpoint) collects:
+
+1. Core static pages (`/`, `/about`, `/contacto`, `/servicios`).
+2. Dynamic service detail pages (fetched at build from WordPress via client helper).
+3. (Future) Optionally map projects or blog posts.
+
+Each entry includes: `<loc>`, `<lastmod>` (if available), and may include static `<changefreq>` / `<priority>` if later desired (currently minimalistic).
+
+Extending:
+
+- Add a function in the endpoint to fetch new collection types (e.g., blog posts) and push their URLs into the list.
+- Rebuild; confirm the new paths appear.
+
+### Robots Policy (`/robots.txt`)
+
+Baseline goals:
+
+- Allow full crawl of public marketing pages.
+- Disallow obvious non‑content endpoints (e.g., internal API preview routes if any emerge).
+- Reference the sitemap: `Sitemap: https://renovalink.com/sitemap.xml`.
+
+If a temporary staging environment is deployed publicly, consider adding a `Disallow: /` with `X-Robots-Tag: noindex` at the platform level (Netlify header) instead of editing production robots.txt.
+
+### Image & Social Preview Handling
+
+- OG/Twitter image selected in priority: explicit prop → media object URL → default fallback.
+- All URLs passed through media normalization so dev vs prod domain differences do not break preview tests.
+- Recommended OG image dimensions: 1200×630 (place variants in `/public/images/`).
+
+### Edge Cases & Safeguards
+
+| Scenario                      | Handling                                        |
+| ----------------------------- | ----------------------------------------------- |
+| Missing description           | Fallback default in `SEOHead` (project tagline) |
+| Title already contains brand  | No duplicate brand suffix added                 |
+| Non‑HTTP media (data:, blob:) | Left untouched by normalization                 |
+| Missing schema prop(s)        | Auto‑inserts default WebPage schema             |
+| Experimental page             | Use `noindex` prop to suppress indexing         |
+
+### QA / Validation Checklist
+
+Run this before major releases:
+
+1. View Source: Confirm one `<title>` and a single canonical `<link>`.
+2. Schema Count: Count `<script type="application/ld+json" data-schema-index>` elements → matches expected (e.g., Home: Organization + WebSite + default WebPage).
+3. Rich Results Test: Paste live URL → no critical errors (warnings acceptable if optional fields omitted).
+4. Mobile Friendly Test (optional) → pass.
+5. `curl -I https://site/page` → verify `200` and no unexpected redirects.
+6. Check `robots.txt` includes correct sitemap URL and no accidental `Disallow: /`.
+7. Validate sitemap in browser → ensure dynamic service URLs present.
+8. Lighthouse (SEO category) → aim for 100 (or high 90s) consistently.
+
+### Extending to Blog (Future Example)
+
+When adding a blog:
+
+- Add Post schema: `Article` with `headline`, `datePublished`, `dateModified`, `author`, `image`.
+- Include each post in sitemap with accurate `lastmod`.
+- Generate category listing pages (optional) and include if they add unique value.
+
+### Troubleshooting
+
+| Symptom                            | Likely Cause                                  | Fix                                                                          |
+| ---------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------- |
+| Duplicate canonical URLs in source | Manual `<link rel="canonical">` added in page | Remove manual tag; rely on `SEOHead`                                         |
+| Missing structured data scripts    | `schemas` prop not passed / array empty       | Pass schemas or rely on default; verify array non‑empty                      |
+| Rich Results warning about logo    | Logo URL inaccessible                         | Ensure `/public/images/logo.*` exists & is referenced in Organization schema |
+| Search Console reports soft 404    | Thin content / placeholder page               | Add real content or temporarily `noindex`                                    |
+
+### Quick Reference Snippet
+
+```astro
+<SEOHead
+   title="Pool Renovation Services"
+   description={truncateDescription(service.description)}
+   canonical={`https://renovalink.com/servicios/${service.slug}/`}
+   type="service"
+   schemas={[
+      organizationSchema,
+      buildServiceSchema(service),
+      buildFaqSchema(service.faqs)
+   ]}
+   image={service.heroImage}
+/>
+```
+
+> Keep snippets minimal—heavy logic belongs in helpers, not in page components.
+
+---
+
+## �🧪 Testing & Quality Assurance
 
 ### Performance Testing
 
@@ -319,6 +469,103 @@ WP_MEDIA_URL=https://admin.renovalink.com/wp-content/uploads
 NODE_ENV=production
 ```
 
+### Static Deployment (Arquitectura Final)
+
+La aplicación se exporta como HTML estático (sin SSR / sin Edge Functions) para máxima velocidad y evitar dependencias de runtime. Únicamente la función serverless de contacto (si se mantiene) vive aparte en Netlify Functions.
+
+Pasos Netlify recomendados:
+
+1. Configurar variables de entorno (WordPress + correo) en Site Settings.
+2. Build command: `npm run build`
+3. Publish directory: `dist` (tras Astro build).
+4. (Opcional) Function contact: carpeta `netlify/functions` si existe.
+5. Activar asset compression automática (Netlify lo hace por defecto) y HTTP/2.
+
+Scripts útiles en `package.json` (añadir si faltan):
+
+```jsonc
+{
+  "scripts": {
+    "build": "astro build",
+    "preview": "astro preview",
+    "verify:images": "node scripts/verify-images.mjs",
+  },
+}
+```
+
+Checklist previo a deploy:
+
+- [ ] `npm ci && npm run build` sin errores
+- [ ] `npm run verify:images` retorna 0 imágenes rotas
+- [ ] No quedan referencias a dominio local en `dist` (ver comando en sección medios)
+- [ ] `.env.production` no contiene credenciales reales (solo placeholders)
+- [ ] Variables reales están en panel Netlify
+
+Rollback rápido:
+
+- Usar Deploys > Published deploys > seleccionar deploy anterior > Publish
+
+### Contact Form Function (Resumen)
+
+El formulario envía JSON a un endpoint serverless (Netlify Function) usando Nodemailer. Requiere:
+
+- `GMAIL_USER`
+- `GMAIL_APP_PASSWORD` (App Password de Gmail, no password normal)
+- `COMPANY_EMAIL` (destino principal)
+
+Logs de la función se revisan en Netlify > Functions > Logs. Para test local, puede usarse `netlify dev` si se reintroduce el adapter funcional para functions.
+
+---
+
+## 🛠️ Fix de Imágenes (Causa Raíz + Solución)
+
+### Problema Original
+
+- En Home (ProjectGallery) las imágenes de proyectos aparecían rotas en desarrollo.
+- El HTML mostraba `src="/wp-content/uploads/..."` (ruta relativa) o bien URLs con dominio de producción inaccesible localmente.
+- `naturalWidth` = 0 en inspecciones automatizadas.
+- IDs de imágenes venían como strings ("123") y el enriquecimiento esperaba number, resultando en falta de datos (sin `sizes` / `source_url`).
+
+### Causas Identificadas
+
+1. Normalización manual previa que eliminaba el dominio (dejando rutas relativas) sin un proxy configurado.
+2. Falta de soporte para IDs numéricos en formato string en el enriquecimiento de medios.
+3. Dependencia en un único dominio (producción) durante dev.
+
+### Solución Implementada
+
+1. Creación de `normalizeMediaUrl` centralizando la lógica (estrategia `env-swap`).
+2. Ajuste en `wordpress-client.ts` para tratar IDs string como numéricos válidos al enriquecer.
+3. Uso de la base local (`PUBLIC_WP_LOCAL_MEDIA_BASE`) en dev y dominio público en build.
+4. Integración de la normalización en `ProjectGallery.astro` y `Lightbox.astro`.
+5. Verificación con script post-build para detectar referencias al dominio local residual.
+
+### Resultado
+
+- Imágenes cargan correctamente tanto en dev como en producción.
+- Se evita duplicar lógica de reemplazo en componentes.
+- Fácil cambio de estrategia a `passthrough` o `proxy` sin tocar el resto del código.
+
+### Guía para Nuevos Campos de Imagen (ACF Free)
+
+Si se añaden nuevos campos `project_image_7`, `service_banner_image`, etc.:
+
+1. Asegurar que WordPress retorna el ID (numérico o string numérica).
+2. Extender el loop de enriquecimiento en `wordpress-client.ts` si la estructura cambia.
+3. Aplicar `normalizeMediaUrl` al renderizar.
+4. Verificar en build que no quedan rutas relativas sin dominio.
+
+### Troubleshooting Rápido
+
+| Síntoma                                     | Posible Causa                      | Acción                                        |
+| ------------------------------------------- | ---------------------------------- | --------------------------------------------- |
+| Imagen rota solo en dev                     | Falta `PUBLIC_WP_LOCAL_MEDIA_BASE` | Añadir variable y reiniciar dev               |
+| Imagen rota solo en prod                    | Cache vieja / deploy incompleto    | Redeploy + limpiar caché CDN                  |
+| Todas las imágenes usan dominio prod en dev | Estrategia mal seteada             | Confirmar `PUBLIC_WP_MEDIA_STRATEGY=env-swap` |
+| Algunas imágenes sin tamaños                | Enriquecimiento no encontró media  | Revisar ID en WP y endpoint REST              |
+
+---
+
 ## 🔧 Customization Guide
 
 ### Adding New Services
@@ -378,6 +625,96 @@ Potential improvements and features:
 ✅ **Conversion Focused**: Strategic lead capture and CTAs
 
 This implementation provides RenovaLink with a solid foundation for their digital presence in Florida's competitive remodeling market.
+
+## 🖼️ Estrategia de Medios Multi‑Entorno (WordPress Images)
+
+Para evitar problemas de rutas de imágenes (especialmente en desarrollo local donde el dominio público de WordPress no resuelve) se implementó una normalización centralizada de URLs de medios.
+
+### Objetivo
+
+Usar automáticamente el dominio local de WordPress en `npm run dev` y el dominio público en el build de producción, sin tener que reescribir manualmente rutas en cada componente ni cometer URLs absolutas incorrectas.
+
+### Archivo Clave
+
+`src/lib/media-url.ts` expone:
+
+- `normalizeMediaUrl(raw: string | null)`
+- `normalizeMediaObject(obj)`
+
+Estos helpers se aplican en componentes que renderizan imágenes de proyectos / servicios como:
+
+- `ProjectGallery.astro`
+- `Lightbox.astro`
+
+### Variables de Entorno
+
+```env
+PUBLIC_WP_LOCAL_MEDIA_BASE=http://renovalinksite.local
+PUBLIC_WP_PROD_MEDIA_BASE=https://admin.renovalink.com
+PUBLIC_WP_MEDIA_STRATEGY=env-swap
+```
+
+Colócalas en:
+
+- `.env.local` (para desarrollo – gitignored)
+- Panel de tu hosting (Netlify / Vercel) para producción
+
+### Estrategias Disponibles (`PUBLIC_WP_MEDIA_STRATEGY`)
+
+1. `env-swap` (por defecto)
+   - Dev: fuerza dominio LOCAL cuando detecta URLs con dominio PROD o rutas relativas `/wp-content/...`
+   - Prod: fuerza dominio PROD cuando detecta URLs con dominio LOCAL o rutas relativas
+   - Conserva intactos `data:` / `blob:` y otros dominios externos.
+
+2. `passthrough`
+   - No altera la URL. Útil si tu entorno local puede acceder sin problema al mismo dominio público (por ejemplo túnel o staging en línea).
+
+3. `proxy` (no usado actualmente)
+   - Reescribe cualquier media a la forma `/media/wp-content/...` asumiendo que configuras reglas de reescritura (ej. en `netlify.toml`). Se dejó soportado para un futuro escenario de CDN / caching intermedio.
+
+### Reglas de Normalización
+
+- Si la URL es relativa (`/wp-content/uploads/...`), se le antepone la base adecuada según entorno y estrategia.
+- Si es absoluta y la estrategia es `env-swap`, se sustituye el dominio (local ⇄ prod) según `import.meta.env.DEV`.
+- `data:` y `blob:` se devuelven intactas.
+- En `passthrough` nunca se modifica.
+- En `proxy` se captura el sufijo `/wp-content/...` y se genera `/media/wp-content/...`.
+
+### Ejemplos
+
+| Entorno | raw                                                              | Estrategia  | Resultado                                                         |
+| ------- | ---------------------------------------------------------------- | ----------- | ----------------------------------------------------------------- |
+| Dev     | `/wp-content/uploads/2025/02/img.jpg`                            | env-swap    | `http://renovalinksite.local/wp-content/uploads/2025/02/img.jpg`  |
+| Prod    | `http://renovalinksite.local/wp-content/uploads/2025/02/img.jpg` | env-swap    | `https://admin.renovalink.com/wp-content/uploads/2025/02/img.jpg` |
+| Dev     | `https://admin.renovalink.com/wp-content/uploads/..`             | env-swap    | `http://renovalinksite.local/wp-content/uploads/..`               |
+| Prod    | `https://admin.renovalink.com/wp-content/uploads/...`            | passthrough | (sin cambios)                                                     |
+| Prod    | `https://admin.renovalink.com/wp-content/uploads/...`            | proxy       | `/media/wp-content/uploads/...`                                   |
+
+### Detección de Problemas Típicos
+
+Problema: Imágenes de proyectos no cargan en `npm run dev` (naturalWidth 0) y el `src` muestra dominio de producción.
+
+Solución: Asegúrate de tener `PUBLIC_WP_MEDIA_STRATEGY=env-swap` y `PUBLIC_WP_LOCAL_MEDIA_BASE` apuntando a tu instalación local (ej. `http://renovalinksite.local`). Reinicia el dev server tras ajustar `.env.local`.
+
+### Verificación Post-Build
+
+Tras `npm run build` puedes verificar que no queden rutas al dominio local dentro de `dist/` (excepto si intencionalmente usas `passthrough`). En PowerShell:
+
+```powershell
+Select-String -Path dist\**\*.html -Pattern "renovalinksite.local" | Measure-Object
+```
+
+Si el conteo es > 0 revisa esas referencias.
+
+### Extensión Futura
+
+Se podría añadir:
+
+- Firma / cache-busting de imágenes procesadas
+- CDN directo (Cloudflare R2 / Image Resizing)
+- Modo `proxy` activo con reglas Netlify para uniformar dominios y agregar headers de caché
+
+---
 
 ## 🔐 Environment Variables & Deployment Security
 

@@ -5,6 +5,7 @@ import ServicesGrid from '@/components/ServicesGrid.astro';
 import ProjectGallery from '@/components/ProjectGallery.astro';
 import ContactCTA from '@/components/ContactCTA.astro';
 import { wordpressClient, getStaticProps, createFallbackData } from '@/lib/wordpress-client';
+import { buildOrganizationSchema, buildWebsiteSchema, combineSchemas } from '@/lib/seo';
 
 // Fetch all content for the landing page
 const [services, projects] = await Promise.all([
@@ -18,71 +19,18 @@ const [services, projects] = await Promise.all([
   )
 ]);
 
-// Structured data for SEO
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "RenovaLink",
-  "description": "Premier remodeling services in Florida specializing in pool renovations, concrete work, residential cleaning, and structural engineering.",
-  "url": "https://renovalink.com",
-  "telephone": "+1-305-XXX-XXXX",
-  "address": {
-    "@type": "PostalAddress",
-    "addressRegion": "FL",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "25.7617",
-    "longitude": "-80.1918"
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": [
-      "Monday",
-      "Tuesday", 
-      "Wednesday",
-      "Thursday",
-      "Friday"
-    ],
-    "opens": "07:00",
-    "closes": "18:00"
-  },
-  "serviceArea": {
-    "@type": "State",
-    "name": "Florida"
-  },
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Remodeling Services",
-    "itemListElement": services.map(service => ({
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": service.title.rendered,
-        "description": service.excerpt.rendered
-      }
-    }))
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "100"
-  },
-  "priceRange": "$$",
-  "image": [
-    "https://renovalink.com/images/hero-bg.jpg",
-    "https://renovalink.com/images/services-showcase.jpg"
-  ]
-};
+// Schemas
+const orgSchema = buildOrganizationSchema();
+const websiteSchema = buildWebsiteSchema();
+const schemas = combineSchemas(orgSchema, websiteSchema);
 ---
 
 <Layout
-  title="RenovaLink Florida - Premier Pool, Concrete & Remodeling Services | Licensed Engineers"
-  description="Transform your Florida home with RenovaLink's expert remodeling services. Pool renovations, concrete work, residential cleaning & certified structural engineering. Licensed, insured & guaranteed."
+  title="RenovaLink South Florida Remodeling - Pool, Concrete & Cleaning Services"
+  description="South Florida remodeling specialists serving Miami-Dade & Broward: pool renovations, concrete & flooring, residential cleaning and technical support. Licensed, insured & quality focused."
   canonical="https://renovalink.com"
   type="website"
-  schema={structuredData}
+  schemas={schemas}
 >
   
   <!-- Hero Section -->
@@ -264,6 +212,3 @@ const structuredData = {
     will-change: transform;
   }
 </style>
-
-<!-- JSON-LD structured data -->
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>

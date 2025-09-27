@@ -1,6 +1,7 @@
 ---
 import type { Project } from '@/schemas/wordpress';
 import Lightbox from './Lightbox.astro';
+import { normalizeMediaUrl } from '@/lib/media-url';
 
 export interface Props {
   projects: Project[];
@@ -147,16 +148,11 @@ function getProjectImageUrl(project: any, imageIndex: number = 1): string | null
   // If it's a complete object with URL
   if (typeof imageField === 'object' && imageField.url) {
     // Try to get optimized size first, then fallback to original
-    let imageUrl = imageField.sizes?.['project-thumbnail'] ||
-                   imageField.sizes?.medium ||
-                   imageField.url;
-
-    // Convert WordPress local URLs to proxy-friendly paths
-    if (imageUrl && imageUrl.includes('renovalinksite.local')) {
-      imageUrl = imageUrl.replace('http://renovalinksite.local', '');
-    }
-
-    return imageUrl;
+  let imageUrl = imageField.sizes?.['project-thumbnail'] ||
+           imageField.sizes?.medium ||
+           imageField.url;
+  imageUrl = normalizeMediaUrl(imageUrl) || imageUrl;
+  return imageUrl;
   }
 
   // If it's just an ID or string, we can't resolve it here
@@ -210,13 +206,11 @@ function getCategoryDisplayName(categoryId: string): string {
           {(() => {
             // Try project_gallery first (for fallback projects)
             if (project.acf?.project_gallery && project.acf.project_gallery.length > 0) {
-              let imageUrl = project.acf.project_gallery[0].url;
+              let imageUrl = normalizeMediaUrl(project.acf.project_gallery[0].url) || project.acf.project_gallery[0].url;
               const altText = project.acf.project_gallery[0].alt || project.title.rendered;
 
               // Convert WordPress local URLs to proxy-friendly paths
-              if (imageUrl && imageUrl.includes('renovalinksite.local')) {
-                imageUrl = imageUrl.replace('http://renovalinksite.local', '');
-              }
+              // Preserve absolute URL; stripping domain breaks loading in dev (no /wp-content assets locally)
 
               return (
                 <img

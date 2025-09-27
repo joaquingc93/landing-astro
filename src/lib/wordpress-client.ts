@@ -313,15 +313,25 @@ class WordPressClient {
           return project;
         }
 
-        // If we only have IDs in acf, fetch the complete image data
         if (project.acf) {
           const enrichedFields: any = { ...project.acf };
 
           for (let i = 1; i <= 6; i++) {
-            const imageId = project.acf[`project_image_${i}`];
-            if (imageId && typeof imageId === "number") {
+            const raw = project.acf[`project_image_${i}`];
+            // Accept number or numeric string; skip if already an object with url
+            if (raw && typeof raw === "object" && (raw as any).url) {
+              continue; // already enriched
+            }
+            if (!raw) continue;
+            const isNumericString =
+              typeof raw === "string" && /^\d+$/.test(raw);
+            const isNumber = typeof raw === "number";
+            if (isNumber || isNumericString) {
+              const idNum = isNumber
+                ? (raw as number)
+                : parseInt(raw as string, 10);
               try {
-                const media = await this.getMediaById(imageId);
+                const media = await this.getMediaById(idNum);
                 if (media) {
                   enrichedFields[`project_image_${i}`] = {
                     ID: media.id,
@@ -337,22 +347,17 @@ class WordPressClient {
                   };
                 }
               } catch (error) {
-                console.warn(
-                  `Failed to enrich project image ${imageId}:`,
-                  error
-                );
+                console.warn(`Failed to enrich project image ${raw}:`, error);
               }
             }
           }
 
-          // Set both acf and acf_fields to the enriched data
           return {
             ...project,
             acf: enrichedFields,
             acf_fields: enrichedFields,
           };
         }
-
         return project;
       })
     );

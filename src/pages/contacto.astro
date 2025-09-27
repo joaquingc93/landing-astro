@@ -1,49 +1,31 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ContactCTA from '@/components/ContactCTA.astro';
+import { buildOrganizationSchema, combineSchemas } from '@/lib/seo';
 
 // Page metadata
 const pageTitle = 'Contact Us - Free Consultation & Estimates | RenovaLink Florida';
 const pageDescription = 'Contact RenovaLink for your free consultation and detailed estimate. Professional remodeling services throughout Florida with licensed engineers and quality guarantee.';
 
-// Structured data for contact page
-const contactStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "RenovaLink",
-  "description": pageDescription,
-  "url": "https://renovalink.com",
-  "telephone": "+1-305-XXX-XXXX",
-  "email": "la766031@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "addressRegion": "FL",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates", 
-    "latitude": "25.7617",
-    "longitude": "-80.1918"
-  },
-  "openingHoursSpecification": [
+// Structured data (Organization + 24/7 availability)
+const orgSchema = buildOrganizationSchema();
+const hoursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'RenovaLink',
+  url: 'https://renovalink.com/contacto',
+  openingHoursSpecification: [
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "07:00",
-      "closes": "18:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification", 
-      "dayOfWeek": "Saturday",
-      "opens": "08:00",
-      "closes": "16:00"
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+      ],
+      opens: '00:00',
+      closes: '23:59'
     }
-  ],
-  "serviceArea": {
-    "@type": "State",
-    "name": "Florida"
-  }
+  ]
 };
+const contactSchemas = combineSchemas(orgSchema, hoursSchema);
 ---
 
 <Layout
@@ -51,7 +33,7 @@ const contactStructuredData = {
   description={pageDescription}
   canonical="https://renovalink.com/contacto"
   type="website"
-  schema={contactStructuredData}
+  schemas={contactSchemas}
 >
   
   <!-- Hero Section -->
@@ -215,9 +197,8 @@ const contactStructuredData = {
               <div>
                 <h3 class="text-xl font-semibold mb-2">Business Hours</h3>
                 <div class="text-neutral-600 space-y-1">
-                  <p><strong>Monday - Friday:</strong> 7:00 AM - 6:00 PM</p>
-                  <p><strong>Saturday:</strong> 8:00 AM - 4:00 PM</p>
-                  <p><strong>Sunday:</strong> Emergency Calls Only</p>
+                  <p><strong>Available 24/7:</strong> Continuous support and scheduling every day of the year.</p>
+                  <p class="text-sm text-neutral-500">Emergency response prioritized. Standard inquiries answered promptly.</p>
                 </div>
               </div>
             </div>
@@ -439,4 +420,3 @@ const contactStructuredData = {
 </style>
 
 <!-- JSON-LD structured data -->
-<script type="application/ld+json" set:html={JSON.stringify(contactStructuredData)}></script>

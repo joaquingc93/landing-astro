@@ -10,7 +10,8 @@ export interface Props {
   type?: 'website' | 'article' | 'service';
   publishedTime?: string;
   modifiedTime?: string;
-  schema?: any;
+  schema?: any;          // single schema object (backwards compatible)
+  schemas?: any[];       // multiple schema objects
 }
 
 const {
@@ -22,7 +23,8 @@ const {
   type = 'website',
   publishedTime,
   modifiedTime,
-  schema
+  schema,
+  schemas
 } = Astro.props;
 
 const siteName = 'RenovaLink';
@@ -45,36 +47,21 @@ if (typeof image === 'string') {
 // Generate full title
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
-// Generate JSON-LD schema
+// Default schema now simplified to WebPage with business reference; detailed Organization/Service schemas supplied explicitly via props when needed.
 const defaultSchema = {
   '@context': 'https://schema.org',
-  '@type': type === 'article' ? 'Article' : 'LocalBusiness',
-  name: siteName,
+  '@type': type === 'article' ? 'Article' : type === 'service' ? 'Service' : 'WebPage',
+  name: fullTitle,
   description,
   url: canonicalUrl,
-  ...(type === 'website' && {
-    '@type': 'LocalBusiness',
-    'address': {
-      '@type': 'PostalAddress',
-      'addressLocality': 'Florida',
-      'addressRegion': 'FL',
-      'addressCountry': 'US'
-    },
-    'areaServed': 'Florida',
-    'serviceArea': {
-      '@type': 'State',
-      'name': 'Florida'
-    },
-    'priceRange': '$$',
-    'telephone': '+1-XXX-XXX-XXXX',
-    'openingHours': ['Mo-Fr 08:00-18:00', 'Sa 09:00-16:00']
-  }),
   ...(publishedTime && { datePublished: publishedTime }),
   ...(modifiedTime && { dateModified: modifiedTime }),
   ...(imageUrl && { image: imageUrl })
 };
 
-const finalSchema = schema || defaultSchema;
+const schemaArray: any[] = Array.isArray(schemas) ? schemas : [];
+if (schema) schemaArray.push(schema);
+if (schemaArray.length === 0) schemaArray.push(defaultSchema);
 ---
 
 <!-- Primary Meta Tags -->
@@ -142,8 +129,10 @@ const finalSchema = schema || defaultSchema;
   }
 </style>
 
-<!-- JSON-LD Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(finalSchema)} />
+<!-- JSON-LD Schemas (one script tag per schema for clarity) -->
+{schemaArray.map((s, i) => (
+  <script type="application/ld+json" set:html={JSON.stringify(s)} data-schema-index={i} />
+))}
 
 <!-- Performance hints -->
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />

@@ -2,3 +2,14 @@ node_modules
 
 # Local Netlify folder
 .netlify
+
+# Environment files (keep only examples/templates in git)
+.env.local
+.env.development
+.env.production
+.env.test
+!.env.example
+
+# IDE/editor noise
+.DS_Store
+.vscode/

@@ -16,6 +16,7 @@ export interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   schema?: any;
+  schemas?: any[]; // multiple schemas
   class?: string;
   hideWhatsApp?: boolean;
 }
@@ -30,6 +31,7 @@ const {
   publishedTime,
   modifiedTime,
   schema,
+  schemas,
   class: className = '',
   hideWhatsApp = false
 } = Astro.props as Props;
@@ -48,6 +50,7 @@ const {
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
       schema={schema}
+      schemas={schemas}
     />
     
     <!-- View Transitions API -->

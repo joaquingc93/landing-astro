@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://renovalink.com/sitemap.xml
+
+# Disallow admin & wp includes if proxied
+Disallow: /wp-admin/
+Disallow: /wp-includes/
