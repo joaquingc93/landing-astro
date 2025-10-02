@@ -220,7 +220,7 @@ class WordPressClient {
     useCustomAPI = false
   ): Promise<T[]> {
     const cacheKey = this.getCacheKey(endpoint, params);
-  const cached = cacheGet<T[]>(cacheKey);
+    const cached = cacheGet<T[]>(cacheKey);
 
     if (cached) {
       return cached;
@@ -436,7 +436,7 @@ class WordPressClient {
   // Get media by ID - essential for ACF Free version
   async getMediaById(id: number): Promise<any | null> {
     const cacheKey = `media_${id}`;
-  const cached = cacheGet(cacheKey);
+    const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
@@ -458,7 +458,7 @@ class WordPressClient {
 
   async getCompanyInfo(): Promise<any | null> {
     const cacheKey = "company_info";
-  const cached = cacheGet<any>(cacheKey);
+    const cached = cacheGet<any>(cacheKey);
 
     if (cached) {
       return cached;
@@ -534,7 +534,7 @@ class WordPressClient {
 
   async getSiteConfig(): Promise<any> {
     const cacheKey = "site_config";
-  const cached = cacheGet(cacheKey);
+    const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
@@ -556,7 +556,7 @@ class WordPressClient {
 
   async getHeroContent(): Promise<any> {
     const cacheKey = "hero_content";
-  const cached = cacheGet(cacheKey);
+    const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
