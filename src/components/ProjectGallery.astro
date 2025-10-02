@@ -9,13 +9,13 @@ export interface Props {
 
 const { projects } = Astro.props;
 
-// Categories for filtering with WordPress project_type mapping
+// Category display map (used only for badges now that filters are removed)
 const categories = [
-  { id: 'all', name: 'All Projects', icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' },
-  { id: 'pool', name: 'Pool Remodeling', icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z' },
-  { id: 'concrete', name: 'Concrete & Flooring', icon: 'M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z' },
-  { id: 'cleaning', name: 'Cleaning', icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' },
-  { id: 'technical', name: 'Technical', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' }
+  { id: 'pool', name: 'Pool Remodeling' },
+  { id: 'concrete', name: 'Concrete & Flooring' },
+  { id: 'cleaning', name: 'Cleaning' },
+  { id: 'technical', name: 'Technical' },
+  { id: 'all', name: 'Project' }
 ];
 
 // Map WordPress project_type values to filter categories
@@ -170,24 +170,7 @@ function getCategoryDisplayName(categoryId: string): string {
 <!-- Projects data for JavaScript -->
 <script type="application/json" id="projects-data" set:html={JSON.stringify(projectsToShow)}></script>
 
-<!-- Category Filter -->
-<div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll">
-  {categories.map(category => (
-    <button
-      data-filter={category.id}
-      class={`filter-btn inline-flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
-        category.id === 'all'
-          ? 'bg-primary-600 text-white shadow-lg'
-          : 'bg-neutral-100 text-neutral-600 hover:bg-primary-50 hover:text-primary-600'
-      }`}
-    >
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d={category.icon} />
-      </svg>
-      {category.name}
-    </button>
-  ))}
-</div>
+<!-- Filters removed: all projects shown -->
 
 <!-- Projects Grid -->
 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -299,59 +282,14 @@ function getCategoryDisplayName(categoryId: string): string {
   </div>
 )}
 
-<!-- Empty State -->
-<div id="empty-state" class="hidden text-center py-16">
-  <svg class="w-16 h-16 text-neutral-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z" />
-  </svg>
-  <h3 class="text-xl font-medium text-neutral-600 mb-2">No projects found</h3>
-  <p class="text-neutral-500">Try selecting a different category or view all projects.</p>
-</div>
+<!-- Empty state removed: not needed without filters -->
 
 <!-- Include the consolidated Lightbox component -->
 <Lightbox />
 
 <script>
-  // Filter functionality
+  // Store projects data globally for lightbox functionality (filters removed)
   document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectItems = document.querySelectorAll('.project-item');
-    const emptyState = document.getElementById('empty-state');
-
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
-
-        // Update active button
-        filterButtons.forEach(btn => {
-          btn.classList.remove('bg-primary-600', 'text-white', 'shadow-lg');
-          btn.classList.add('bg-neutral-100', 'text-neutral-600');
-        });
-        button.classList.remove('bg-neutral-100', 'text-neutral-600');
-        button.classList.add('bg-primary-600', 'text-white', 'shadow-lg');
-
-        // Filter projects
-        let visibleCount = 0;
-        projectItems.forEach(item => {
-          const category = item.getAttribute('data-category');
-          if (filter === 'all' || category === filter) {
-            (item as HTMLElement).style.display = 'block';
-            visibleCount++;
-          } else {
-            (item as HTMLElement).style.display = 'none';
-          }
-        });
-
-        // Show/hide empty state
-        if (visibleCount === 0) {
-          emptyState?.classList.remove('hidden');
-        } else {
-          emptyState?.classList.add('hidden');
-        }
-      });
-    });
-
-    // Store projects data globally for lightbox functionality
     (window as any).projectsData = JSON.parse(document.getElementById('projects-data')?.textContent || '[]');
   });
 </script>

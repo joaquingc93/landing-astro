@@ -31,11 +31,19 @@ const processedServices = services.map((service) => {
   };
 });
 
-// Reorder services to put Pool remodeling first
+// Reorder services by explicit priority:
+// 1) residential-cleaning
+// 2) pool-remodeling
+// 3) concrete-and-floors (legacy) OR concrete-flooring (current)
+// Others follow original relative order
+const priority = ['residential-cleaning', 'pool-remodeling', 'concrete-and-floors', 'concrete-flooring'];
 const reorderedServices = [...processedServices].sort((a, b) => {
-  if (a.slug === 'pool-remodeling') return -1;
-  if (b.slug === 'pool-remodeling') return 1;
-  return 0;
+  const ia = priority.indexOf(a.slug);
+  const ib = priority.indexOf(b.slug);
+  const rankA = ia === -1 ? Number.POSITIVE_INFINITY : ia;
+  const rankB = ib === -1 ? Number.POSITIVE_INFINITY : ib;
+  if (rankA === rankB) return 0;
+  return rankA - rankB;
 });
 
 // Service icons mapping

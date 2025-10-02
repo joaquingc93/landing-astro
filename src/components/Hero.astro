@@ -31,44 +31,13 @@ const heroContent = {
 <!-- Preload hero image -->
 <link rel="preload" as="image" href={heroImageSrc} />
 
-<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800">
+<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
   
-  <!-- Background Image -->
-  <div class="absolute inset-0 z-0">
-    <picture>
-      <source 
-        srcset={`${heroImageSrc}?w=1920&h=1080&fit=crop&format=webp`} 
-        media="(min-width: 1024px)" 
-        type="image/webp"
-      />
-      <source 
-        srcset={`${heroImageSrc}?w=768&h=1024&fit=crop&format=webp`} 
-        media="(max-width: 1023px)" 
-        type="image/webp"
-      />
-      <img 
-        src={heroImageSrc}
-        alt="RenovaLink remodeling projects showcase"
-        class="w-full h-full object-cover opacity-20"
-        loading="eager"
-        decoding="sync"
-      />
-    </picture>
-    
-    <!-- Gradient overlay with dynamic opacity -->
-    <div class="absolute inset-0" style={`background: linear-gradient(to right, rgba(30, 58, 138, ${heroOverlayOpacity * 0.9}), rgba(30, 64, 175, ${heroOverlayOpacity * 0.8}), rgba(59, 130, 246, ${heroOverlayOpacity * 0.7}))`}></div>
-    
-    <!-- Pattern overlay -->
-    <div class="absolute inset-0 opacity-10">
-      <svg width="60" height="60" viewBox="0 0 60 60" class="w-full h-full">
-        <defs>
-          <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-            <path d="m 60,0 L 0,0 0,60" fill="none" stroke="white" stroke-width="1"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-    </div>
+  <!-- Background DOF Layers -->
+  <div class="hero-dof-bg absolute inset-0 z-0" style={`--hero-image: url('${heroImageSrc}')`} aria-hidden="true">
+    <div class="hero-dof-blur" />
+    <div class="hero-dof-focus" />
+    <div class="hero-dof-vignette" />
   </div>
   
   <!-- Content -->
@@ -77,7 +46,7 @@ const heroContent = {
       
       <!-- Subtitle -->
       <div class="mb-6 animate-fade-in">
-        <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-100 border border-white/20">
+        <span class="inline-flex items-center px-4 py-2 bg-black/30 backdrop-blur-sm rounded-full text-sm font-medium text-white/90 border border-white/10 shadow-sm">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
@@ -86,7 +55,7 @@ const heroContent = {
       </div>
       
       <!-- Main Title -->
-      <h1 class="heading-xl mb-6 animate-slide-up stagger-1">
+  <h1 class="heading-xl mb-6 animate-slide-up stagger-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
         <span class="block">{heroContent.title.split(' ').slice(0, 3).join(' ')}</span>
         <span class="block gradient-text font-bold">
           {heroContent.title.split(' ').slice(3).join(' ')}
@@ -94,7 +63,7 @@ const heroContent = {
       </h1>
       
       <!-- Description -->
-      <p class="text-xl sm:text-2xl text-primary-100 mb-10 max-w-3xl mx-auto animate-slide-up stagger-2">
+  <p class="text-xl sm:text-2xl text-white/90 mb-10 max-w-3xl mx-auto animate-slide-up stagger-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
         {heroContent.description}
       </p>
       
@@ -112,7 +81,7 @@ const heroContent = {
         
         <a 
           href="/servicios"
-          class="btn-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-primary-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+          class="btn-outline text-lg px-8 py-4 text-white/90 border-white/70 hover:bg-white hover:text-primary-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
         >
           View Our Services
         </a>
@@ -174,11 +143,28 @@ const heroContent = {
   }
   
   /* Improve paint performance */
-  .hero-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    z-index: -1;
+  /* Depth-of-field background system */
+  .hero-dof-bg { position: absolute; inset:0; overflow:hidden; }
+  .hero-dof-blur, .hero-dof-focus, .hero-dof-vignette { position:absolute; inset:0; }
+  .hero-dof-blur {
+    background-image: var(--hero-image);
+    background-size: cover;
+    background-position: center;
+    filter: blur(18px) brightness(0.85) saturate(1.1);
+    transform: scale(1.08); /* avoid edge clipping after blur */
+    will-change: transform, filter;
+  }
+  .hero-dof-focus {
+    background-image: var(--hero-image);
+    background-size: cover;
+    background-position: center;
+    /* Mask so only center area stays sharp */
+    -webkit-mask: radial-gradient(circle at 50% 50%, black 0%, black 46%, transparent 70%);
+    mask: radial-gradient(circle at 50% 50%, black 0%, black 46%, transparent 70%);
+  }
+  .hero-dof-vignette {
+    background: radial-gradient(circle at 50% 55%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.65) 95%);
+    mix-blend-mode: normal;
+    pointer-events: none;
   }
 </style>
