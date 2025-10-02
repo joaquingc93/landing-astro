@@ -8,12 +8,28 @@ import {
   type Project,
 } from "@/schemas/wordpress";
 
-// Cache configuration
+// Cache configuration (in-memory, per-build)
+// NOTE: In a static build environment (e.g. Netlify), each build runs in a fresh
+// process so this cache cannot persist between deploys. If you are seeing stale
+// data after triggering a new build, the root cause is usually upstream (WP host
+// cache / CDN) or browser/CDN caching of the generated HTML. Still, we provide
+// a bypass switch for troubleshooting.
+const CACHE_DISABLED = process.env.WP_DISABLE_CACHE === "true";
 const cache = new NodeCache({
   stdTTL: parseInt(process.env.API_CACHE_TTL || "300"), // 5 minutes default
-  checkperiod: 120, // Check for expired keys every 2 minutes
+  checkperiod: 120,
   useClones: false,
 });
+
+function cacheGet<T>(key: string): T | undefined {
+  if (CACHE_DISABLED) return undefined;
+  return cache.get<T>(key);
+}
+
+function cacheSet<T>(key: string, value: T): void {
+  if (CACHE_DISABLED) return; // Skip storing when disabled
+  cache.set(key, value);
+}
 
 // API Configuration for Local development
 const WORDPRESS_API_URL =
@@ -204,7 +220,7 @@ class WordPressClient {
     useCustomAPI = false
   ): Promise<T[]> {
     const cacheKey = this.getCacheKey(endpoint, params);
-    const cached = cache.get<T[]>(cacheKey);
+  const cached = cacheGet<T[]>(cacheKey);
 
     if (cached) {
       return cached;
@@ -234,7 +250,7 @@ class WordPressClient {
       })
       .filter((item: T | null): item is T => item !== null);
 
-    cache.set(cacheKey, validatedData);
+    cacheSet(cacheKey, validatedData);
     return validatedData;
   }
 
@@ -420,7 +436,7 @@ class WordPressClient {
   // Get media by ID - essential for ACF Free version
   async getMediaById(id: number): Promise<any | null> {
     const cacheKey = `media_${id}`;
-    const cached = cache.get(cacheKey);
+  const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
@@ -432,7 +448,7 @@ class WordPressClient {
       );
       const media = await response.json();
 
-      cache.set(cacheKey, media);
+      cacheSet(cacheKey, media);
       return media;
     } catch (error) {
       console.warn(`Failed to fetch media ${id}:`, error);
@@ -442,7 +458,7 @@ class WordPressClient {
 
   async getCompanyInfo(): Promise<any | null> {
     const cacheKey = "company_info";
-    const cached = cache.get<any>(cacheKey);
+  const cached = cacheGet<any>(cacheKey);
 
     if (cached) {
       return cached;
@@ -505,7 +521,7 @@ class WordPressClient {
       console.log("📊 Final company info data:", companyInfoData);
 
       // Skip schema validation for now and return data directly
-      cache.set(cacheKey, companyInfoData);
+      cacheSet(cacheKey, companyInfoData);
       return companyInfoData as any;
     } catch (error) {
       console.warn(
@@ -518,7 +534,7 @@ class WordPressClient {
 
   async getSiteConfig(): Promise<any> {
     const cacheKey = "site_config";
-    const cached = cache.get(cacheKey);
+  const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
@@ -530,7 +546,7 @@ class WordPressClient {
       );
       const data = await response.json();
 
-      cache.set(cacheKey, data);
+      cacheSet(cacheKey, data);
       return data;
     } catch (error) {
       console.warn("Failed to fetch site config:", error);
@@ -540,7 +556,7 @@ class WordPressClient {
 
   async getHeroContent(): Promise<any> {
     const cacheKey = "hero_content";
-    const cached = cache.get(cacheKey);
+  const cached = cacheGet(cacheKey);
 
     if (cached) {
       return cached;
@@ -552,7 +568,7 @@ class WordPressClient {
       );
       const data = await response.json();
 
-      cache.set(cacheKey, data);
+      cacheSet(cacheKey, data);
       return data;
     } catch (error) {
       console.warn("Failed to fetch hero content:", error);
