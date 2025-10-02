@@ -1,5 +1,5 @@
 ---
-import { getStaticProps } from '@/lib/wordpress-client';
+import { getStaticProps, wordpressClient, createFallbackData } from '@/lib/wordpress-client';
 import type { CompanyInfo } from '@/schemas/wordpress';
 
 // Use fallback company info (WordPress endpoint not implemented yet)
@@ -29,12 +29,36 @@ const companyInfo = await getStaticProps<CompanyInfo | null>(
 
 const currentYear = new Date().getFullYear();
 
-const services = [
-  { name: 'Pool Remodeling', href: '/servicios/pool-remodeling' },
-  { name: 'Concrete & Flooring', href: '/servicios/concrete-flooring' },
-  { name: 'Residential Cleaning', href: '/servicios/residential-cleaning' },
-  { name: 'Technical Support', href: '/servicios/technical-support' },
-];
+// Attempt to fetch real services so footer reflects actual names
+let services: { name: string; href: string; slug: string }[] = [];
+try {
+  const fetched = await getStaticProps(
+    () => wordpressClient.getAllServices(),
+    createFallbackData().services
+  );
+  services = fetched.map((s:any) => ({
+    name: s.title?.rendered || s.slug,
+    href: `/servicios/${s.slug}`,
+    slug: s.slug
+  }));
+  // Optional: enforce display order priority if desired
+  const priority = ['residential-cleaning','pool-remodeling','concrete-and-floors','concrete-flooring'];
+  services.sort((a,b)=>{
+    const ia = priority.indexOf(a.slug); const ib = priority.indexOf(b.slug);
+    const ra = ia === -1 ? Number.POSITIVE_INFINITY : ia;
+    const rb = ib === -1 ? Number.POSITIVE_INFINITY : ib;
+    if (ra === rb) return a.name.localeCompare(b.name);
+    return ra - rb;
+  });
+} catch (e) {
+  // Fallback static list if API fails
+  services = [
+    { name: 'Pool Remodeling', href: '/servicios/pool-remodeling', slug: 'pool-remodeling' },
+    { name: 'Concrete & Flooring', href: '/servicios/concrete-flooring', slug: 'concrete-flooring' },
+    { name: 'Residential Cleaning', href: '/servicios/residential-cleaning', slug: 'residential-cleaning' },
+    { name: 'Technical Support', href: '/servicios/technical-support', slug: 'technical-support' },
+  ];
+}
 
 const quickLinks = [
   { name: 'Home', href: '/' },

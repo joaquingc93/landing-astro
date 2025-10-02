@@ -69,19 +69,14 @@ const {
       /* Loading state fade-in */
       .page-loading{opacity:0;transform:translateY(12px);transition:all .25s ease-out;}
       .page-loaded{opacity:1;transform:translateY(0);}
-      /* Accessible skip link */
-      .skip-link{position:absolute;top:-40px;left:6px;background:#2563eb;color:#fff;padding:8px;border-radius:4px;text-decoration:none;z-index:100;transition:top .25s;}
-      .skip-link:focus{top:6px;}
+  /* (Removed skip-link per request) */
       /* Reduce motion respect */
       @media (prefers-reduced-motion:reduce){.page-loading,.page-loaded{transition:none !important;}}
     </style>
   </head>
   
   <body class={`min-h-screen bg-white text-neutral-900 ${className} page-loading`}>
-    <!-- Skip to main content link for accessibility -->
-    <a href="#main-content" class="skip-link">
-      Skip to main content
-    </a>
+    <!-- Skip link removed -->
     
     <!-- Page wrapper -->
     <div id="page-wrapper" class="flex flex-col min-h-screen">
