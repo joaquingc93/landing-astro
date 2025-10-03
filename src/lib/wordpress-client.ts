@@ -238,7 +238,9 @@ class WordPressClient {
     if (process.env.WP_FETCH_BUST === "true") {
       searchParams.set(
         "_cb",
-        process.env.WP_FETCH_BUST_TOKEN || process.env.NETLIFY_BUILD_ID || Date.now().toString()
+        process.env.WP_FETCH_BUST_TOKEN ||
+          process.env.NETLIFY_BUILD_ID ||
+          Date.now().toString()
       );
     }
 
@@ -302,7 +304,7 @@ class WordPressClient {
       try {
         console.log(
           "🧾 Service titles:",
-          services.map(s => `${s.slug} => ${s.title?.rendered}`)
+          services.map((s) => `${s.slug} => ${s.title?.rendered}`)
         );
       } catch {}
       return services;
