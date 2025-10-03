@@ -233,6 +233,15 @@ class WordPressClient {
       ...params,
     });
 
+    // Optional cache-bust query to avoid upstream WP/CDN stale JSON when builds run quickly after edits
+    // Enable by setting WP_FETCH_BUST=true (adds timestamp) or provide a custom token via WP_FETCH_BUST_TOKEN
+    if (process.env.WP_FETCH_BUST === "true") {
+      searchParams.set(
+        "_cb",
+        process.env.WP_FETCH_BUST_TOKEN || process.env.NETLIFY_BUILD_ID || Date.now().toString()
+      );
+    }
+
     const url = `${baseUrl}/${endpoint}?${searchParams}`;
 
     const response = await this.fetchWithErrorHandling(url);
@@ -289,6 +298,13 @@ class WordPressClient {
         { status: "publish" }
       );
       console.log("✅ Services fetched successfully:", services.length);
+      // Extra diagnostic logging: list slugs and current titles to verify freshness
+      try {
+        console.log(
+          "🧾 Service titles:",
+          services.map(s => `${s.slug} => ${s.title?.rendered}`)
+        );
+      } catch {}
       return services;
     } catch (error) {
       console.error("❌ Error fetching services:", error);
